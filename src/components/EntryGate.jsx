@@ -1,31 +1,71 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import CanvasStage from "./CanvasStage.jsx";
 import { COMPANY, MODULES, MODULE_ORDER } from "../lib/site.js";
+import { stagePropsForModule } from "../lib/scene.js";
 import { rememberEntry } from "../lib/entry.js";
 
+/* The idle house before any choice is made: a plain rotating gable. */
+const IDLE_STAGE = {
+  pitch: 1,
+  hipInset: 0,
+  textureKind: "shingles",
+  roughness: 0.9,
+  metalness: 0,
+  tone: 0.48,
+  spin: 0.13,
+  targetAngle: null,
+  hotspots: [],
+  markerLabel: null,
+  prop: null,
+};
+
 export default function EntryGate({ onChoose }) {
-  const [active, setActive] = useState(null);
+  const [hovered, setHovered] = useState(null);
+  const [armed, setArmed] = useState(null);
   const reduced = useReducedMotion();
   const rootRef = useRef(null);
   const firstRef = useRef(null);
 
-  const focused = active ? MODULES[active] : null;
+  /* the house follows the armed choice; before anything is armed it
+     previews whatever is being hovered or focused */
+  const shownId = armed ?? hovered;
+  const shownModule = shownId ? MODULES[shownId] : null;
+  const armedModule = armed ? MODULES[armed] : null;
 
-  /* Choosing does NOT jump straight into the module page — it drops you
-     at that module's section on the landing, where its own 3D house is
-     waiting. The deeper page is one more click from there.
+  const stage = shownId
+    ? (() => {
+        const base = stagePropsForModule(shownId);
+        // face the choice's own angle when its scene doesn't already
+        // orient toward a marked slope
+        return { ...base, targetAngle: base.targetAngle ?? MODULES[shownId].viewAngle };
+      })()
+    : IDLE_STAGE;
 
-     Dismissing unmounts immediately so the page mounts underneath while
-     the gate fades off the top of it; App owns the AnimatePresence, so
-     the exit still plays. */
-  const close = useCallback(
+  const enter = useCallback(
     (moduleId) => {
       rememberEntry();
       onChoose(moduleId);
     },
     [onChoose],
+  );
+
+  /* First interaction with a choice arms it (the house dresses itself
+     for that module and a confirm appears). The second interaction with
+     the SAME choice enters. This is the "press twice" the brief asks
+     for: a preview step before you commit. */
+  const pick = useCallback(
+    (moduleId) => {
+      setArmed((current) => {
+        if (current === moduleId) {
+          enter(moduleId);
+          return current;
+        }
+        return moduleId;
+      });
+    },
+    [enter],
   );
 
   /* lock the page behind the gate */
@@ -41,19 +81,25 @@ export default function EntryGate({ onChoose }) {
     firstRef.current?.focus();
   }, []);
 
-  /* keyboard: 1/2/3 to choose, Escape to browse, Tab stays inside */
+  /* keyboard: 1/2/3 arm then enter, Enter confirms, Escape browses,
+     Tab stays inside */
   useEffect(() => {
     const onKey = (event) => {
       if (event.key === "Escape") {
         event.preventDefault();
-        close(null);
+        enter(null);
+        return;
+      }
+      if (event.key === "Enter" && armed) {
+        event.preventDefault();
+        enter(armed);
         return;
       }
 
       const index = ["1", "2", "3"].indexOf(event.key);
       if (index !== -1) {
         event.preventDefault();
-        close(MODULE_ORDER[index]);
+        pick(MODULE_ORDER[index]);
         return;
       }
 
@@ -74,7 +120,7 @@ export default function EntryGate({ onChoose }) {
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [close]);
+  }, [armed, enter, pick]);
 
   return (
     <motion.div
@@ -116,18 +162,20 @@ export default function EntryGate({ onChoose }) {
             <ul className="gate__list">
               {MODULE_ORDER.map((id, i) => {
                 const module = MODULES[id];
-                const isActive = active === id;
+                const isArmed = armed === id;
+                const isShown = shownId === id;
                 return (
                   <li key={id}>
                     <button
                       type="button"
                       ref={i === 0 ? firstRef : null}
-                      className={`gate__row ${isActive ? "is-active" : ""}`}
-                      onMouseEnter={() => setActive(id)}
-                      onMouseLeave={() => setActive(null)}
-                      onFocus={() => setActive(id)}
-                      onBlur={() => setActive(null)}
-                      onClick={() => close(id)}
+                      className={`gate__row ${isShown ? "is-active" : ""} ${isArmed ? "is-armed" : ""}`}
+                      aria-pressed={isArmed}
+                      onMouseEnter={() => setHovered(id)}
+                      onMouseLeave={() => setHovered(null)}
+                      onFocus={() => setHovered(id)}
+                      onBlur={() => setHovered(null)}
+                      onClick={() => pick(id)}
                     >
                       <span className="gate__row-key anno--dim" aria-hidden="true">
                         {i + 1}
@@ -140,7 +188,7 @@ export default function EntryGate({ onChoose }) {
                         </span>
                       </span>
                       <span className="gate__row-arrow" aria-hidden="true">
-                        →
+                        {isArmed ? "↵" : "→"}
                       </span>
                     </button>
                   </li>
@@ -149,32 +197,58 @@ export default function EntryGate({ onChoose }) {
             </ul>
 
             <div className="gate__foot">
-              <button type="button" className="btn btn--ghost gate__skip" onClick={() => close(null)}>
+              <button type="button" className="btn btn--ghost gate__skip" onClick={() => enter(null)}>
                 Or browse the whole site
               </button>
-              <span className="anno--dim gate__hint">Press 1, 2 or 3</span>
+              <span className="anno--dim gate__hint">Pick to preview · again to enter</span>
             </div>
           </div>
 
           <div className="gate__right">
             <CanvasStage
               className="gate__stage"
-              tagLeft={focused ? `Mode · ${focused.label}` : "Idle · rotating"}
-              tagRight="WCG-STD-01"
+              tagLeft={shownModule ? `${shownModule.code} · ${shownModule.label}` : "Idle · rotating"}
+              tagRight={armed ? "Selected" : "WCG-STD-01"}
               fallbackNote="Wise Co Group — standard gable, chimney to the east"
               assemble
-              targetAngle={focused ? focused.viewAngle : null}
-              tone={focused ? focused.roofTone : 0.48}
-              textureKind="shingles"
-              roughness={0.9}
-              metalness={0}
-              pitch={1}
-              hipInset={0}
-              spin={0.13}
+              {...stage}
             />
-            <p className="gate__readout anno--dim" aria-live="polite">
-              {focused ? focused.hoverLine : "One house, three roles — pick a route to orient it."}
-            </p>
+
+            {/* confirm step: the second action lives here, made explicit,
+                and mirrors clicking the armed row a second time */}
+            <div className="gate__confirm">
+              <AnimatePresence mode="wait" initial={false}>
+                {armedModule ? (
+                  <motion.button
+                    key={armed}
+                    type="button"
+                    className="btn btn--solid gate__enter"
+                    onClick={() => enter(armed)}
+                    initial={{ opacity: 0, y: reduced ? 0 : 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: reduced ? 0 : -6 }}
+                    transition={{ duration: reduced ? 0.12 : 0.28, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    Enter {armedModule.label}
+                    <span className="btn-arrow" aria-hidden="true">
+                      →
+                    </span>
+                  </motion.button>
+                ) : (
+                  <motion.p
+                    key="readout"
+                    className="gate__readout anno--dim"
+                    aria-live="polite"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: reduced ? 0.12 : 0.24 }}
+                  >
+                    {shownModule ? shownModule.hoverLine : "One house, three roles — pick a route to see it change."}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>

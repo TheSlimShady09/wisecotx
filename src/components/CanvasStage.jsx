@@ -1,21 +1,31 @@
 import { Suspense, lazy } from "react";
 
 import StaticHouse from "./StaticHouse.jsx";
-import { useIsVisible, useNearViewport, usePrefersReducedMotion, useWebGL } from "../lib/hooks.js";
+import { useIsVisible, useMediaQuery, useNearViewport, usePrefersReducedMotion, useWebGL } from "../lib/hooks.js";
 
 /* The entire three.js dependency tree lives behind this import, so
    it is fetched only once the stage is close to the viewport. */
 const Scene = lazy(() => import("../three/Scene.jsx"));
 
-export default function CanvasStage({ tagLeft, tagRight, className = "", fallbackNote, forceStatic = false, ...house }) {
+export default function CanvasStage({
+  tagLeft,
+  tagRight,
+  className = "",
+  fallbackNote,
+  forceStatic = false,
+  staticOnPhone = false,
+  ...house
+}) {
   const [ref, near] = useNearViewport();
   const visible = useIsVisible(ref);
   const webgl = useWebGL();
   const reducedMotion = usePrefersReducedMotion();
+  const phone = useMediaQuery("(max-width: 640px)");
 
-  // forceStatic keeps the frame and tags but renders the drawing — used
-  // where the chrome is wanted without spending a WebGL context on it
-  const canRender3D = !forceStatic && webgl === true && near;
+  // On phones we render at most one live canvas at a time: decorative
+  // stages (the landing sections) fall back to the drawing, and the ones
+  // that stay 3D run in a lighter power profile.
+  const canRender3D = !forceStatic && !(phone && staticOnPhone) && webgl === true && near;
 
   return (
     <div ref={ref} className={`stage ${className}`}>
@@ -30,7 +40,12 @@ export default function CanvasStage({ tagLeft, tagRight, className = "", fallbac
         <Suspense fallback={<StaticHouse note={fallbackNote} />}>
           {/* the loop parks itself when the canvas scrolls away or the
               tab is backgrounded — no GPU burn for something nobody sees */}
-          <Scene {...house} reducedMotion={reducedMotion} frameloop={visible ? "always" : "never"} />
+          <Scene
+            {...house}
+            reducedMotion={reducedMotion}
+            lowPower={phone}
+            frameloop={visible ? "always" : "never"}
+          />
         </Suspense>
       ) : (
         <StaticHouse note={fallbackNote} />

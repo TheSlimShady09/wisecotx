@@ -4,32 +4,8 @@ import { Link } from "react-router-dom";
 import CanvasStage from "../components/CanvasStage.jsx";
 import Reveal from "../components/Reveal.jsx";
 import { WhatsAppButton } from "../components/WhatsApp.jsx";
-import {
-  ACCREDITATIONS,
-  CREDENTIALS,
-  DAMAGE,
-  MODULES,
-  MODULE_ORDER,
-  MODULE_PREVIEW,
-  PERILS,
-  PROJECTS,
-  TESTIMONIALS,
-} from "../lib/site.js";
-
-/** Resolve a preview's marker set from the same data the modules use. */
-function hotspotsFor(scene) {
-  if (!scene.hotspotsFrom) return [];
-  const { set, id } = scene.hotspotsFrom;
-  const source = set === "perils" ? PERILS : DAMAGE;
-  return source.find((item) => item.id === id)?.hotspots ?? [];
-}
-
-function markerLabelFor(scene) {
-  if (!scene.hotspotsFrom) return null;
-  const { set, id } = scene.hotspotsFrom;
-  const source = set === "perils" ? PERILS : DAMAGE;
-  return source.find((item) => item.id === id)?.code ?? null;
-}
+import { stagePropsForModule } from "../lib/scene.js";
+import { ACCREDITATIONS, CREDENTIALS, MODULES, MODULE_ORDER, MODULE_PREVIEW, PROJECTS, TESTIMONIALS } from "../lib/site.js";
 
 function ChoiceCard({ id, active, onEnter, onLeave }) {
   const module = MODULES[id];
@@ -71,7 +47,6 @@ function ChoiceCard({ id, active, onEnter, onLeave }) {
 function ModuleSection({ id, index }) {
   const module = MODULES[id];
   const preview = MODULE_PREVIEW[id];
-  const { scene } = preview;
 
   return (
     <section id={id} className={`mpreview ${index % 2 ? "mpreview--flip" : ""}`} aria-labelledby={`${id}-title`}>
@@ -82,16 +57,8 @@ function ModuleSection({ id, index }) {
             tagLeft={`${module.code} · ${module.label}`}
             tagRight={preview.scene.hotspotsFrom ? "Marked up" : "Specimen"}
             fallbackNote={`${module.label} — ${module.tagline}`}
-            pitch={scene.pitch}
-            hipInset={scene.hipInset}
-            textureKind={scene.textureKind}
-            roughness={scene.roughness}
-            metalness={scene.metalness}
-            tone={scene.tone}
-            spin={scene.spin}
-            targetAngle={scene.targetAngle ?? null}
-            hotspots={hotspotsFor(scene)}
-            markerLabel={markerLabelFor(scene)}
+            staticOnPhone
+            {...stagePropsForModule(id)}
           />
         </div>
 

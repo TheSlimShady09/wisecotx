@@ -194,6 +194,93 @@ function Marker({ spot, pitch, hipInset, label, delay = 0 }) {
   );
 }
 
+/* ------------------------------------------------------------
+   Characterizing props — one telling object per module, so the
+   three choices read as three different jobs, not one recoloured
+   house. Drawn in the same white-line idiom as everything else.
+   ------------------------------------------------------------ */
+
+/** Construction: a scaffold cage wrapping the near two corners. */
+function Scaffold() {
+  const mat = useMemo(
+    () => new THREE.MeshStandardMaterial({ color: "#6d6d74", roughness: 0.6, metalness: 0.4, flatShading: true }),
+    [],
+  );
+  useEffect(() => () => mat.dispose(), [mat]);
+
+  const H = WALL + 0.55;
+  const posts = [
+    [BODY_W + 0.16, BODY_D + 0.16],
+    [-BODY_W - 0.16, BODY_D + 0.16],
+    [BODY_W + 0.16, -BODY_D - 0.16],
+  ];
+  const rails = [0.35, 0.95, H - 0.1];
+
+  return (
+    <group>
+      {posts.map(([x, z], i) => (
+        <mesh key={i} position={[x, H / 2, z]} material={mat}>
+          <cylinderGeometry args={[0.028, 0.028, H, 6]} />
+        </mesh>
+      ))}
+      {/* horizontal rails along the front face */}
+      {rails.map((y, i) => (
+        <mesh key={`f${i}`} position={[0.16, y, BODY_D + 0.16]} rotation={[0, 0, Math.PI / 2]} material={mat}>
+          <cylinderGeometry args={[0.02, 0.02, BODY_W * 2 + 0.36, 6]} />
+        </mesh>
+      ))}
+      {/* rails along the right return */}
+      {rails.map((y, i) => (
+        <mesh key={`r${i}`} position={[BODY_W + 0.16, y, 0]} rotation={[Math.PI / 2, 0, 0]} material={mat}>
+          <cylinderGeometry args={[0.02, 0.02, BODY_D * 2 + 0.36, 6]} />
+        </mesh>
+      ))}
+      {/* a working plank */}
+      <mesh position={[0.16, 0.95, BODY_D + 0.16]} castShadow>
+        <boxGeometry args={[BODY_W * 2, 0.04, 0.34]} />
+        <meshStandardMaterial color="#4a4a50" roughness={0.9} flatShading />
+      </mesh>
+    </group>
+  );
+}
+
+/** Insurance: a magnifier hovering over the roof, gently sweeping. */
+function Magnifier() {
+  const ref = useRef();
+  const t = useRef(0);
+
+  useFrame((_, dt) => {
+    if (!ref.current) return;
+    t.current += dt;
+    // hovers just above the ridge; sweep kept tight so it never leaves frame
+    ref.current.position.x = Math.sin(t.current * 0.6) * 0.5;
+    ref.current.position.z = Math.cos(t.current * 0.45) * 0.35;
+    ref.current.position.y = WALL + 1.6 + Math.sin(t.current * 0.9) * 0.05;
+  });
+
+  return (
+    <group ref={ref} position={[0, WALL + 1.6, 0]} rotation={[Math.PI * 0.32, 0, Math.PI * 0.16]}>
+      {/* rim */}
+      <mesh castShadow>
+        <torusGeometry args={[0.34, 0.045, 10, 28]} />
+        <meshStandardMaterial color="#9a9aa0" roughness={0.4} metalness={0.6} flatShading />
+      </mesh>
+      {/* glass */}
+      <mesh>
+        <circleGeometry args={[0.32, 28]} />
+        <meshStandardMaterial color="#c9d2d8" roughness={0.05} metalness={0.1} transparent opacity={0.28} side={THREE.DoubleSide} />
+      </mesh>
+      {/* handle */}
+      <mesh position={[0, -0.6, 0]}>
+        <cylinderGeometry args={[0.045, 0.045, 0.55, 8]} />
+        <meshStandardMaterial color="#3a3a40" roughness={0.7} flatShading />
+      </mesh>
+    </group>
+  );
+}
+
+const PROPS = { scaffold: Scaffold, magnifier: Magnifier };
+
 /* ------------------------------------------------------------ */
 export default function House({
   pitch = 1,
@@ -206,9 +293,12 @@ export default function House({
   spin = 0.12,
   hotspots = [],
   markerLabel = null,
+  prop = null,
+  modelScale = 1,
   reducedMotion = false,
   assemble = false,
 }) {
+  const Prop = prop ? PROPS[prop] : null;
   const group = useRef();
   const bodyRef = useRef();
   const roofRef = useRef();
@@ -266,7 +356,7 @@ export default function House({
   });
 
   return (
-    <group ref={group} position={[0, BASE_Y, 0]}>
+    <group ref={group} position={[0, BASE_Y, 0]} scale={modelScale}>
       {/* plinth */}
       <Drawn
         args={[BODY_W * 2.14, 0.1, BODY_D * 2.14]}
@@ -288,37 +378,80 @@ export default function House({
           receiveShadow
         />
 
-        {/* door, with a reveal around it */}
-        <Drawn args={[0.56, 0.98, 0.05]} position={[-0.55, 0.49, BODY_D + 0.005]} color="#2a2a2e" edgeMaterial={edgeMaterial} />
-        <mesh position={[-0.55, 0.44, BODY_D + 0.04]}>
-          <boxGeometry args={[0.42, 0.86, 0.04]} />
+        {/* foundation course — a proud darker band grounds the walls */}
+        <Drawn
+          args={[BODY_W * 2 + 0.07, 0.18, BODY_D * 2 + 0.07]}
+          position={[0, 0.09, 0]}
+          color="#28282c"
+          edgeMaterial={edgeMaterial}
+          receiveShadow
+        />
+        {/* string course — a thin ledge just under the eaves, catches the rim light */}
+        <Drawn
+          args={[BODY_W * 2 + 0.05, 0.05, BODY_D * 2 + 0.05]}
+          position={[0, WALL - 0.07, 0]}
+          color="#46464c"
+          edgeMaterial={edgeMaterial}
+        />
+
+        {/* door: reveal, leaf, handle, a step and a small canopy */}
+        <Drawn args={[0.6, 1.04, 0.05]} position={[-0.55, 0.52, BODY_D + 0.005]} color="#2a2a2e" edgeMaterial={edgeMaterial} />
+        <mesh position={[-0.55, 0.47, BODY_D + 0.04]}>
+          <boxGeometry args={[0.44, 0.9, 0.04]} />
           <meshStandardMaterial color="#141417" roughness={0.8} flatShading />
         </mesh>
+        <mesh position={[-0.41, 0.47, BODY_D + 0.07]}>
+          <boxGeometry args={[0.03, 0.11, 0.03]} />
+          <meshStandardMaterial color="#8a8a90" roughness={0.35} metalness={0.7} flatShading />
+        </mesh>
+        <Drawn args={[0.82, 0.1, 0.3]} position={[-0.55, 0.06, BODY_D + 0.15]} color="#33333a" edgeMaterial={edgeMaterial} receiveShadow />
+        <Drawn
+          args={[0.94, 0.05, 0.36]}
+          position={[-0.55, 1.11, BODY_D + 0.12]}
+          rotation={[-0.2, 0, 0]}
+          color="#43434a"
+          edgeMaterial={edgeMaterial}
+          castShadow
+        />
 
-        {/* windows: a lighter reveal, then a dark glazed pane */}
+        {/* windows: reveal, glazed pane, a cross of glazing bars, sill and lintel */}
         {[
-          [0.52, 0.86, BODY_D + 0.005, 0],
-          [1.3, 0.86, BODY_D + 0.005, 0],
-          [BODY_W + 0.005, 0.86, 0.45, Math.PI / 2],
-          [-BODY_W - 0.005, 0.86, -0.4, Math.PI / 2],
+          [0.55, 0.9, BODY_D + 0.005, 0],
+          [1.32, 0.9, BODY_D + 0.005, 0],
+          [BODY_W + 0.005, 0.9, 0.45, Math.PI / 2],
+          [-BODY_W - 0.005, 0.9, -0.4, Math.PI / 2],
         ].map(([x, y, z, ry], i) => (
           <group key={i} position={[x, y, z]} rotation={[0, ry, 0]}>
-            <Drawn args={[0.56, 0.62, 0.05]} position={[0, 0, 0]} color="#4a4a50" edgeMaterial={edgeMaterial} />
+            <Drawn args={[0.56, 0.64, 0.05]} position={[0, 0, 0]} color="#4c4c52" edgeMaterial={edgeMaterial} />
             <mesh position={[0, 0, 0.035]}>
-              <boxGeometry args={[0.44, 0.5, 0.03]} />
-              <meshStandardMaterial color="#0d0d10" roughness={0.22} metalness={0.35} flatShading />
+              <boxGeometry args={[0.44, 0.52, 0.03]} />
+              <meshStandardMaterial color="#0d0d10" roughness={0.2} metalness={0.4} flatShading />
             </mesh>
-            {/* glazing bar */}
+            {/* glazing bars, a full cross */}
             <mesh position={[0, 0, 0.055]}>
-              <boxGeometry args={[0.025, 0.5, 0.01]} />
-              <meshStandardMaterial color="#4a4a50" roughness={0.9} flatShading />
+              <boxGeometry args={[0.028, 0.52, 0.01]} />
+              <meshStandardMaterial color="#54545a" roughness={0.9} flatShading />
             </mesh>
+            <mesh position={[0, 0, 0.055]}>
+              <boxGeometry args={[0.44, 0.028, 0.01]} />
+              <meshStandardMaterial color="#54545a" roughness={0.9} flatShading />
+            </mesh>
+            {/* sill and lintel */}
+            <Drawn args={[0.68, 0.07, 0.11]} position={[0, -0.38, 0.03]} color="#4a4a50" edgeMaterial={edgeMaterial} />
+            <Drawn args={[0.64, 0.06, 0.08]} position={[0, 0.38, 0.02]} color="#45454b" edgeMaterial={edgeMaterial} />
           </group>
         ))}
       </group>
 
       {/* roof, craned into place */}
       <group ref={roofRef} position={[0, WALL, 0]}>
+        {/* eave fascia — a hairline band ringing the roof foot, so the
+            covering reads as sitting on a built edge, not floating */}
+        <Drawn args={[W * 2 + 0.05, 0.08, 0.06]} position={[0, -0.02, D]} color="#33333a" edgeMaterial={edgeMaterial} />
+        <Drawn args={[W * 2 + 0.05, 0.08, 0.06]} position={[0, -0.02, -D]} color="#33333a" edgeMaterial={edgeMaterial} />
+        <Drawn args={[0.06, 0.08, D * 2]} position={[W, -0.02, 0]} color="#33333a" edgeMaterial={edgeMaterial} />
+        <Drawn args={[0.06, 0.08, D * 2]} position={[-W, -0.02, 0]} color="#33333a" edgeMaterial={edgeMaterial} />
+
         <Roof
           pitch={pitch}
           hipInset={hipInset}
@@ -330,11 +463,19 @@ export default function House({
         />
       </group>
 
-      {/* chimney */}
+      {/* chimney: stack, corbelled cap, and two pots */}
       <group ref={chimneyRef} position={[0, WALL - 0.15, 0]}>
         <Drawn args={[0.34, 1.55, 0.34]} position={[1.15, 0.775, -0.28]} color="#2e2e32" edgeMaterial={edgeMaterial} castShadow />
         <Drawn args={[0.46, 0.11, 0.46]} position={[1.15, 1.6, -0.28]} color="#43434a" edgeMaterial={edgeMaterial} castShadow />
+        {[-0.08, 0.08].map((dx) => (
+          <mesh key={dx} position={[1.15 + dx, 1.75, -0.28]} castShadow>
+            <cylinderGeometry args={[0.055, 0.065, 0.18, 10]} />
+            <meshStandardMaterial color="#1b1b1e" roughness={1} flatShading />
+          </mesh>
+        ))}
       </group>
+
+      {Prop ? <Prop /> : null}
 
       {hotspots.map((spot, i) => (
         <Marker

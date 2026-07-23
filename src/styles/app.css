@@ -1338,6 +1338,78 @@ main {
   }
 }
 
+/* ============================================================
+   PHONE — compress the desktop rhythm and firm up touch targets.
+   The vertical scale is generous on a laptop and cavernous on a
+   phone, so the spacing tokens themselves shrink here and every
+   layout that leans on them follows.
+   ============================================================ */
+@media (max-width: 640px) {
+  :root {
+    --gap-xl: 2.75rem;
+    --gap-2xl: 4rem;
+    --gap-3xl: 5.5rem;
+    --step-5: clamp(2.5rem, 11vw, 3.25rem);
+  }
+
+  /* comfortable thumb targets on the tightest controls */
+  .nav__link,
+  .foot__list a,
+  .faq__q,
+  .switch__card {
+    min-height: 44px;
+  }
+  .btn {
+    padding: 0.9rem 1.4rem;
+  }
+  .estimate__actions .btn,
+  .mhero__actions .btn,
+  .mpreview__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* the configurator panel is the whole width now; give the estimate
+     room to breathe and keep the two CTAs stacked and full-width */
+  .config {
+    padding-block: var(--gap-s) var(--gap-xl);
+  }
+  .config__stage {
+    height: 44vh;
+    min-height: 15rem;
+  }
+
+  /* module preview stages become the drawing on phones (set via
+     staticOnPhone); keep them a sensible height */
+  .mpreview {
+    padding-block: var(--gap-xl);
+  }
+  .mpreview__stage {
+    height: 40vh;
+    min-height: 14rem;
+  }
+  .mpreview__title {
+    font-size: var(--step-2);
+  }
+
+  /* gate: model first, tighter type, full-width confirm */
+  .gate__inner {
+    padding-block: 1rem 1.25rem;
+  }
+  .gate__stage {
+    min-height: 32vh;
+  }
+  .gate__row {
+    padding-block: var(--gap-s);
+  }
+  .gate__enter {
+    width: 100%;
+  }
+  .gate__licence {
+    display: none;
+  }
+}
+
 /* Cards that lift on hover shouldn't move at all under reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .choice.is-active {
@@ -1440,7 +1512,18 @@ main {
   background: none;
   text-align: left;
   cursor: pointer;
-  transition: padding-inline-start var(--dur) var(--ease);
+}
+/* the "indent on select" nudge is done with transform, not padding, so
+   it never triggers layout */
+.gate__row-key,
+.gate__row-main {
+  transition: transform var(--dur) var(--ease);
+}
+.gate__row.is-active .gate__row-key,
+.gate__row.is-active .gate__row-main,
+.gate__row.is-armed .gate__row-key,
+.gate__row.is-armed .gate__row-main {
+  transform: translateX(0.5rem);
 }
 /* a wash that wipes in from the left on hover */
 .gate__row::before {
@@ -1452,9 +1535,6 @@ main {
   transform-origin: left;
   transition: transform var(--dur) var(--ease);
   z-index: -1;
-}
-.gate__row.is-active {
-  padding-inline-start: 1rem;
 }
 .gate__row.is-active::before {
   transform: scaleX(1);
@@ -1521,6 +1601,29 @@ main {
   color: var(--ink);
 }
 
+/* armed = picked once, previewing. A full-width wash and a return
+   glyph tell you the next click commits. */
+.gate__row.is-armed::before {
+  transform: scaleX(1);
+  background: var(--surface-2);
+}
+.gate__row.is-armed .gate__row-key {
+  color: var(--ink);
+}
+.gate__row.is-armed .gate__row-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--bg);
+  background: var(--accent);
+  width: 1.5rem;
+  height: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.85rem;
+}
+
 .gate__foot {
   display: flex;
   flex-wrap: wrap;
@@ -1547,10 +1650,21 @@ main {
   min-height: min(58vh, 30rem);
 }
 .gate__readout {
-  flex: none;
-  margin-top: var(--gap-m);
   text-align: center;
   min-height: 1.2em;
+  margin: 0;
+}
+/* fixed-height slot so the house does not jump when the readout is
+   swapped for the confirm button */
+.gate__confirm {
+  flex: none;
+  margin-top: var(--gap-m);
+  min-height: 3rem;
+  display: grid;
+  place-items: center;
+}
+.gate__enter {
+  justify-content: center;
 }
 
 @media (max-width: 900px) {
@@ -1698,8 +1812,11 @@ main {
   .wa-fab:hover {
     transform: none;
   }
-  .gate__row.is-active {
-    padding-inline-start: 0;
+  .gate__row.is-active .gate__row-key,
+  .gate__row.is-active .gate__row-main,
+  .gate__row.is-armed .gate__row-key,
+  .gate__row.is-armed .gate__row-main {
+    transform: none;
   }
 }
 
@@ -1799,4 +1916,42 @@ main {
   .mpreview__title {
     max-width: none;
   }
+}
+
+/* ---------- construction: what we build ---------- */
+.builds {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  gap: 0;
+  margin-top: var(--gap-l);
+  border-top: 1px solid var(--line);
+}
+.build {
+  padding: var(--gap-l) var(--gap-l) var(--gap-l) 0;
+  border-bottom: 1px solid var(--line-faint);
+}
+/* a light vertical rule between columns, drawn only where two sit side by side */
+.build:nth-child(odd) {
+  padding-right: var(--gap-xl);
+}
+@media (min-width: 44rem) {
+  .build:nth-child(odd) {
+    border-right: 1px solid var(--line-faint);
+    padding-left: 0;
+  }
+  .build:nth-child(even) {
+    padding-left: var(--gap-l);
+  }
+}
+.build__code {
+  display: block;
+  margin-bottom: var(--gap-s);
+}
+.build__label {
+  font-size: var(--step-2);
+  margin-bottom: var(--gap-s);
+}
+.build__detail {
+  font-size: var(--step--1);
+  max-width: 46ch;
 }

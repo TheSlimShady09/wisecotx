@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { ContactShadows, Grid, OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
@@ -6,6 +6,22 @@ import * as THREE from "three";
 import House from "./House.jsx";
 
 const GROUND_Y = -0.55;
+/* framed a touch high so tall props — the scaffold, the hovering
+   magnifier — sit inside the frame instead of poking out the top */
+const LOOK_AT = [0, 0.7, 0];
+
+/* Without OrbitControls a drei camera keeps its default orientation and
+   stares down -Z, leaving the house off to one side. On the still stages
+   (the gate, the landing sections) we aim it at the house ourselves. */
+function CameraRig({ interactive }) {
+  const ref = useRef();
+
+  useEffect(() => {
+    if (!interactive && ref.current) ref.current.lookAt(...LOOK_AT);
+  }, [interactive]);
+
+  return <PerspectiveCamera ref={ref} makeDefault fov={36} position={[6.0, 3.25, 7.3]} near={0.1} far={60} />;
+}
 
 /* ============================================================
    The lazy-loaded 3D chunk. Nothing here is imported by the
@@ -17,27 +33,34 @@ export default function Scene({
   reducedMotion = false,
   frameloop = "always",
   showGround = true,
+  lowPower = false,
   ...house
 }) {
   return (
     <Canvas
       className="canvas-host"
-      shadows
+      shadows={!lowPower}
       frameloop={frameloop}
-      dpr={[1, 1.75]}
-      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+      // phones cap the pixel ratio and drop real-time shadow maps; the
+      // contact shadow below carries the grounding either way
+      dpr={lowPower ? [1, 1.3] : [1, 1.75]}
+      gl={{
+        antialias: !lowPower,
+        alpha: true,
+        powerPreference: lowPower ? "low-power" : "high-performance",
+      }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping;
         gl.toneMappingExposure = 1.05;
       }}
     >
-      <PerspectiveCamera makeDefault fov={34} position={[5.4, 2.9, 6.6]} near={0.1} far={60} />
+      <CameraRig interactive={interactive} />
 
       {/* key */}
       <directionalLight
         position={[6, 8, 5]}
         intensity={2.2}
-        castShadow
+        castShadow={!lowPower}
         shadow-mapSize={[1024, 1024]}
         shadow-camera-left={-8}
         shadow-camera-right={8}
@@ -85,7 +108,7 @@ export default function Scene({
         scale={12}
         blur={2.8}
         far={4.5}
-        resolution={512}
+        resolution={lowPower ? 256 : 512}
         color="#000000"
       />
 
@@ -94,7 +117,7 @@ export default function Scene({
           makeDefault
           enablePan={false}
           enableZoom={false}
-          target={[0, 0.35, 0]}
+          target={[0, 0.5, 0]}
           minPolarAngle={Math.PI * 0.18}
           maxPolarAngle={Math.PI * 0.49}
           rotateSpeed={0.6}

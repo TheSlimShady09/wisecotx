@@ -31,11 +31,11 @@ export const MODULES = {
     code: "M-01",
     label: "Construction",
     audience: "b2c",
-    title: "A new roof, drawn before it is built.",
-    tagline: "New roofs, built from the deck up.",
+    title: "We build the whole thing, then we roof it.",
+    tagline: "Houses, apartment blocks and new roofs.",
     blurb:
-      "Full tear-off and new build. Structure, decking, underlayment, flashing and finish — installed by our own crews, not brokered out.",
-    hoverLine: "You are building new, replacing an old roof, or roofing an extension.",
+      "Full builds from the foundations up — detached houses, apartment blocks, extensions and commercial units — and the roof that finishes them, installed by our own crews rather than brokered out.",
+    hoverLine: "You are building a house, an apartment block, an extension, or a new roof.",
     /* the angle the house turns to when this card is focused (radians) */
     viewAngle: -0.55,
     roofTone: 0.82,
@@ -81,12 +81,12 @@ export const MODULE_ORDER = ["construction", "repair", "insurance"];
    ============================================================ */
 export const MODULE_PREVIEW = {
   construction: {
-    heading: "Specify the roof before anyone climbs a ladder.",
-    lead: "Pick the shape, the covering and the finish. The model rebuilds as you choose, and the price moves with it.",
+    heading: "From an empty plot to a finished roof.",
+    lead: "We build houses, apartment blocks and extensions, then roof them. Configure the roof below, or ask us about the whole build.",
     highlights: [
-      "Three roof shapes, three coverings, live pricing",
-      "Written quote with the deck rate stated up front",
-      "Our own crews — nothing brokered out",
+      "New houses, apartment blocks & extensions",
+      "Roof configurator with live pricing",
+      "One crew from foundations to ridge — nothing brokered out",
     ],
     cta: "Open the configurator",
     scene: {
@@ -97,6 +97,8 @@ export const MODULE_PREVIEW = {
       metalness: 0.85,
       tone: 0.88,
       spin: 0.1,
+      // a big, finished new build — no scaffold
+      modelScale: 1.18,
     },
   },
   repair: {
@@ -139,6 +141,7 @@ export const MODULE_PREVIEW = {
       targetAngle: -0.38,
       hotspotsFrom: { set: "perils", id: "hail" },
       spin: 0,
+      prop: "magnifier",
     },
   },
 };
@@ -150,6 +153,31 @@ export const MODULE_PREVIEW = {
    pitch    -> ridge height multiplier
    hipInset -> how far the ridge is pulled in from the gable ends
    ============================================================ */
+/* What Construction actually builds — not just roofs. Shown on the
+   construction page above the configurator. */
+export const BUILD_TYPES = [
+  {
+    code: "B-01",
+    label: "Detached & family homes",
+    detail: "Single builds from the foundations up: groundworks, structure, roof and weathertight envelope, handed over ready to fit out.",
+  },
+  {
+    code: "B-02",
+    label: "Apartment blocks",
+    detail: "Low- and mid-rise residential blocks. Structured programme, phased handovers, and the roof and drainage detailed for a shared building.",
+  },
+  {
+    code: "B-03",
+    label: "Extensions & conversions",
+    detail: "Extra rooms, second storeys and loft conversions tied cleanly into the existing structure and roofline so nothing looks bolted on.",
+  },
+  {
+    code: "B-04",
+    label: "Commercial & mixed-use",
+    detail: "Units, workshops and small commercial shells, with long-span or flat-roof systems specified for the use and the span.",
+  },
+];
+
 export const ROOF_SHAPES = [
   {
     id: "gable",

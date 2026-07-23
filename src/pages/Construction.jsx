@@ -5,7 +5,7 @@ import Figure from "../components/Figure.jsx";
 import Reveal from "../components/Reveal.jsx";
 import { WhatsAppButton } from "../components/WhatsApp.jsx";
 import { Faq, ModuleHero, ModuleSwitch, OptionSet, Process, SpecTable, TakeToQuote } from "../components/ModuleKit.jsx";
-import { AREA, FAQ, FINISHES, MATERIALS, MODULES, MODULE_ORDER, ROOF_SHAPES, estimateBuild } from "../lib/site.js";
+import { AREA, BUILD_TYPES, FAQ, FINISHES, MATERIALS, MODULES, MODULE_ORDER, ROOF_SHAPES, estimateBuild } from "../lib/site.js";
 
 const BUILD_STEPS = [
   { step: "Survey", detail: "We measure the roof properly, check the structure can carry your chosen covering, and photograph what is already there." },
@@ -42,6 +42,28 @@ export default function Construction() {
   return (
     <>
       <ModuleHero module={MODULES.construction} />
+
+      <section className="band band--tight" aria-labelledby="build-title">
+        <div className="shell">
+          <Reveal className="head">
+            <h2 id="build-title">What we build.</h2>
+            <p>
+              The roof is where we started and where we finish, but we take on the whole build. The configurator below is
+              for the roof — for anything larger, tell us the plot.
+            </p>
+          </Reveal>
+
+          <ol className="builds">
+            {BUILD_TYPES.map((type, i) => (
+              <Reveal key={type.code} delay={i * 0.06} as="li" className="build">
+                <span className="build__code anno--dim">{type.code}</span>
+                <h3 className="build__label">{type.label}</h3>
+                <p className="build__detail prose">{type.detail}</p>
+              </Reveal>
+            ))}
+          </ol>
+        </div>
+      </section>
 
       <section className="config" aria-labelledby="config-title">
         <div className="shell shell--wide config__grid">
