@@ -295,10 +295,14 @@ export default function House({
   markerLabel = null,
   prop = null,
   modelScale = 1,
+  complex = false,
   reducedMotion = false,
   assemble = false,
 }) {
   const Prop = prop ? PROPS[prop] : null;
+  // a complex build is two storeys, so the walls are twice as tall and
+  // the roof and chimney ride up to meet them
+  const bodyH = complex ? WALL * 2 : WALL;
   const group = useRef();
   const bodyRef = useRef();
   const roofRef = useRef();
@@ -347,7 +351,7 @@ export default function House({
     }
     if (roofRef.current) {
       const s = seg(p, 0.45, 0.92);
-      roofRef.current.position.y = WALL + (1 - s) * 2.6;
+      roofRef.current.position.y = bodyH + (1 - s) * 2.6;
       roofRef.current.scale.setScalar(Math.max(0.0001, seg(p, 0.4, 0.7)));
     }
     if (chimneyRef.current) {
@@ -369,8 +373,8 @@ export default function House({
       {/* body: walls and openings extrude upward together */}
       <group ref={bodyRef}>
         <Drawn
-          args={[BODY_W * 2, WALL, BODY_D * 2]}
-          position={[0, WALL / 2, 0]}
+          args={[BODY_W * 2, bodyH, BODY_D * 2]}
+          position={[0, bodyH / 2, 0]}
           color="#3a3a3e"
           roughness={0.95}
           edgeMaterial={edgeMaterial}
@@ -389,10 +393,55 @@ export default function House({
         {/* string course — a thin ledge just under the eaves, catches the rim light */}
         <Drawn
           args={[BODY_W * 2 + 0.05, 0.05, BODY_D * 2 + 0.05]}
-          position={[0, WALL - 0.07, 0]}
+          position={[0, bodyH - 0.07, 0]}
           color="#46464c"
           edgeMaterial={edgeMaterial}
         />
+
+        {/* two-storey build: a floor band, an upper window row and a balcony */}
+        {complex ? (
+          <>
+            <Drawn
+              args={[BODY_W * 2 + 0.05, 0.07, BODY_D * 2 + 0.05]}
+              position={[0, WALL, 0]}
+              color="#3f3f45"
+              edgeMaterial={edgeMaterial}
+            />
+
+            {[
+              [-1.15, WALL + 0.86, BODY_D + 0.005, 0],
+              [1.15, WALL + 0.86, BODY_D + 0.005, 0],
+              [BODY_W + 0.005, WALL + 0.86, 0.45, Math.PI / 2],
+              [BODY_W + 0.005, WALL + 0.86, -0.55, Math.PI / 2],
+              [-BODY_W - 0.005, WALL + 0.86, 0, Math.PI / 2],
+            ].map(([x, y, z, ry], i) => (
+              <group key={`u${i}`} position={[x, y, z]} rotation={[0, ry, 0]}>
+                <Drawn args={[0.56, 0.6, 0.05]} position={[0, 0, 0]} color="#4c4c52" edgeMaterial={edgeMaterial} />
+                <mesh position={[0, 0, 0.035]}>
+                  <boxGeometry args={[0.44, 0.48, 0.03]} />
+                  <meshStandardMaterial color="#0d0d10" roughness={0.2} metalness={0.4} flatShading />
+                </mesh>
+                <mesh position={[0, 0, 0.055]}>
+                  <boxGeometry args={[0.028, 0.48, 0.01]} />
+                  <meshStandardMaterial color="#54545a" roughness={0.9} flatShading />
+                </mesh>
+                <Drawn args={[0.66, 0.06, 0.1]} position={[0, -0.36, 0.03]} color="#4a4a50" edgeMaterial={edgeMaterial} />
+              </group>
+            ))}
+
+            {/* balcony over the entrance, with a simple railing */}
+            <group position={[-0.55, WALL + 0.05, BODY_D + 0.24]}>
+              <Drawn args={[1.2, 0.07, 0.48]} position={[0, 0, 0]} color="#33333a" edgeMaterial={edgeMaterial} castShadow />
+              <Drawn args={[1.2, 0.42, 0.04]} position={[0, 0.24, 0.22]} color="#3d3d43" edgeMaterial={edgeMaterial} />
+              {[-0.58, -0.29, 0, 0.29, 0.58].map((x) => (
+                <mesh key={x} position={[x, 0.24, 0.22]}>
+                  <boxGeometry args={[0.03, 0.42, 0.03]} />
+                  <meshStandardMaterial color="#55555b" roughness={0.7} flatShading />
+                </mesh>
+              ))}
+            </group>
+          </>
+        ) : null}
 
         {/* door: reveal, leaf, handle, a step and a small canopy */}
         <Drawn args={[0.6, 1.04, 0.05]} position={[-0.55, 0.52, BODY_D + 0.005]} color="#2a2a2e" edgeMaterial={edgeMaterial} />
@@ -441,10 +490,35 @@ export default function House({
             <Drawn args={[0.64, 0.06, 0.08]} position={[0, 0.38, 0.02]} color="#45454b" edgeMaterial={edgeMaterial} />
           </group>
         ))}
+
+        {/* garage wing: a single-storey mass on the right with a lean-to
+            roof and a wide door — reads as a bigger, more complex build */}
+        {complex ? (
+          <group position={[BODY_W + 0.9, 0, 0]}>
+            <Drawn args={[1.8, 1.15, BODY_D * 1.5]} position={[0, 0.575, 0]} color="#37373c" edgeMaterial={edgeMaterial} castShadow receiveShadow />
+            {/* lean-to roof, sloping down away from the house */}
+            <Drawn
+              args={[1.95, 0.08, BODY_D * 1.5 + 0.2]}
+              position={[0, 1.2, 0]}
+              rotation={[0, 0, -0.12]}
+              color="#2c2c30"
+              edgeMaterial={edgeMaterial}
+              castShadow
+            />
+            {/* garage door */}
+            <Drawn args={[1.3, 0.86, 0.05]} position={[0, 0.5, BODY_D * 0.75 + 0.01]} color="#26262a" edgeMaterial={edgeMaterial} />
+            {[-0.4, -0.13, 0.14, 0.41].map((y) => (
+              <mesh key={y} position={[0, 0.5 + y * 0.5, BODY_D * 0.75 + 0.03]}>
+                <boxGeometry args={[1.24, 0.02, 0.02]} />
+                <meshStandardMaterial color="#3a3a40" roughness={0.9} flatShading />
+              </mesh>
+            ))}
+          </group>
+        ) : null}
       </group>
 
       {/* roof, craned into place */}
-      <group ref={roofRef} position={[0, WALL, 0]}>
+      <group ref={roofRef} position={[0, bodyH, 0]}>
         {/* eave fascia — a hairline band ringing the roof foot, so the
             covering reads as sitting on a built edge, not floating */}
         <Drawn args={[W * 2 + 0.05, 0.08, 0.06]} position={[0, -0.02, D]} color="#33333a" edgeMaterial={edgeMaterial} />
@@ -464,7 +538,7 @@ export default function House({
       </group>
 
       {/* chimney: stack, corbelled cap, and two pots */}
-      <group ref={chimneyRef} position={[0, WALL - 0.15, 0]}>
+      <group ref={chimneyRef} position={[0, bodyH - 0.15, 0]}>
         <Drawn args={[0.34, 1.55, 0.34]} position={[1.15, 0.775, -0.28]} color="#2e2e32" edgeMaterial={edgeMaterial} castShadow />
         <Drawn args={[0.46, 0.11, 0.46]} position={[1.15, 1.6, -0.28]} color="#43434a" edgeMaterial={edgeMaterial} castShadow />
         {[-0.08, 0.08].map((dx) => (

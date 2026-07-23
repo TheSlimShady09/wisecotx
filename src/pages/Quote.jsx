@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 import Reveal from "../components/Reveal.jsx";
 import { SpecTable } from "../components/ModuleKit.jsx";
-import { WhatsAppButton } from "../components/WhatsApp.jsx";
 import { COMPANY, MODULES, MODULE_ORDER } from "../lib/site.js";
+import { mailtoLink, sendEnquiry } from "../lib/contact.js";
 import { useQuote } from "../lib/QuoteContext.jsx";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -27,6 +27,9 @@ export default function Quote() {
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [reference, setReference] = useState(null);
+  const [sending, setSending] = useState(false);
+  const [via, setVia] = useState("mailto");
+  const [sendError, setSendError] = useState(false);
   const successRef = useRef(null);
 
   const isB2B = values.module === "insurance";
@@ -50,7 +53,7 @@ export default function Quote() {
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
   };
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     const found = validate(values);
     setErrors(found);
@@ -61,9 +64,20 @@ export default function Quote() {
       return;
     }
 
-    // No backend is wired yet — swap this for your CRM / form endpoint.
-    setReference(`WCG-${Math.floor(100000 + Math.random() * 899999)}`);
-    setSubmitted(true);
+    setSending(true);
+    setSendError(false);
+    try {
+      // Delivers by email — server-side if an endpoint is configured,
+      // otherwise via the visitor's mail client. Never WhatsApp.
+      const result = await sendEnquiry(values, summaryRows);
+      setVia(result.via);
+      setReference(`WCG-${Math.floor(100000 + Math.random() * 899999)}`);
+      setSubmitted(true);
+    } catch {
+      setSendError(true);
+    } finally {
+      setSending(false);
+    }
   };
 
   if (submitted) {
@@ -72,18 +86,21 @@ export default function Quote() {
         <div className="shell">
           <div className="done" tabIndex={-1} ref={successRef}>
             <span className="anno--dim">{reference}</span>
-            <h1 className="done__title">Received. We will be in touch.</h1>
+            <h1 className="done__title">
+              {via === "mailto" ? "Almost there — send the email." : "Received. We will be in touch."}
+            </h1>
             <p className="prose">
-              {isB2B
-                ? "Your enquiry is with our carrier services desk. Expect a reply with certificates, sample scopes and capacity within one business day."
-                : `A member of the estimating team will call you within one business day to arrange the site visit. If it is urgent, call ${COMPANY.phone} and quote that reference.`}
+              {via === "mailto"
+                ? `We have opened your email app with everything filled in, addressed to ${COMPANY.email}. Press send and it lands with our team.`
+                : isB2B
+                  ? "Your enquiry is in our inbox. Expect a reply by email with certificates, sample scopes and capacity within one business day."
+                  : `Your request is in our inbox. A member of the team will reply by email within one business day. If it is urgent, call ${COMPANY.phone}.`}
             </p>
             {summaryRows.length ? <SpecTable className="done__spec" rows={summaryRows} /> : null}
             <div className="btn-row done__actions">
               <Link to="/" className="btn">
                 Back to the start
               </Link>
-              <WhatsAppButton module={values.module} summary={summaryRows} label="Continue on WhatsApp" />
               <a className="btn" href={`tel:${COMPANY.phone.replace(/[^\d+]/g, "")}`}>
                 {COMPANY.phone}
               </a>
@@ -99,7 +116,7 @@ export default function Quote() {
       <div className="shell quote">
         <div className="quote__intro">
           <Reveal>
-            <h1 className="quote__title">{isB2B ? "Open a subcontractor account." : "Get a free estimate."}</h1>
+            <h1 className="quote__title">{isB2B ? "Open a subcontractor account." : "Request a free inspection."}</h1>
             <p className="lede">
               {isB2B
                 ? "Tell us what you place and where. We will come back with certificates, sample scopes, capacity and rates."
@@ -278,23 +295,24 @@ export default function Quote() {
             </label>
             {errors.consent ? <span className="field__error">{errors.consent}</span> : null}
 
-            <button type="submit" className="btn btn--solid btn--lg quote__submit">
-              {isB2B ? "Send enquiry" : "Request my free estimate"}
+            <button type="submit" className="btn btn--solid btn--lg quote__submit" disabled={sending}>
+              {sending ? "Sending…" : isB2B ? "Email enquiry" : "Email my inspection request"}
               <span className="btn-arrow" aria-hidden="true">
                 →
               </span>
             </button>
-            <p className="quote__small anno--dim">Typical reply time: under one business day</p>
 
-            <div className="quote__alt">
-              <span className="quote__alt-rule anno--dim">or</span>
-              <WhatsAppButton
-                module={values.module}
-                summary={summaryRows}
-                label="Send it on WhatsApp instead"
-                className="quote__alt-btn"
-              />
-            </div>
+            {sendError ? (
+              <p className="field__error quote__send-error">
+                Something blocked the send. You can{" "}
+                <a className="link" href={mailtoLink(values, summaryRows)}>
+                  email us directly
+                </a>{" "}
+                or call {COMPANY.phone}.
+              </p>
+            ) : (
+              <p className="quote__small anno--dim">Goes straight to our inbox · reply within one business day</p>
+            )}
           </form>
         </Reveal>
       </div>

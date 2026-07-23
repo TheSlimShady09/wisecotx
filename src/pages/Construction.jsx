@@ -3,9 +3,8 @@ import { useMemo, useState } from "react";
 import CanvasStage from "../components/CanvasStage.jsx";
 import Figure from "../components/Figure.jsx";
 import Reveal from "../components/Reveal.jsx";
-import { WhatsAppButton } from "../components/WhatsApp.jsx";
 import { Faq, ModuleHero, ModuleSwitch, OptionSet, Process, SpecTable, TakeToQuote } from "../components/ModuleKit.jsx";
-import { AREA, BUILD_TYPES, FAQ, FINISHES, MATERIALS, MODULES, MODULE_ORDER, ROOF_SHAPES, estimateBuild } from "../lib/site.js";
+import { AREA, FAQ, FINISHES, MATERIALS, MODULES, MODULE_ORDER, ROOF_SHAPES, estimateBuild } from "../lib/site.js";
 
 const BUILD_STEPS = [
   { step: "Survey", detail: "We measure the roof properly, check the structure can carry your chosen covering, and photograph what is already there." },
@@ -34,7 +33,7 @@ export default function Construction() {
     ["Roof shape", shape.label],
     ["Covering", material.label],
     ["Finish", finish.label],
-    ["Roof area", `${area} ft²`],
+    ["Roof area", `${area.toLocaleString("en-US")} ft²`],
     ["Tear-off", tearOff ? "Yes — strip existing" : "No — new structure"],
     ["Indicative range", `$${est.low.toLocaleString("en-US")} – $${est.high.toLocaleString("en-US")}`],
   ];
@@ -42,28 +41,6 @@ export default function Construction() {
   return (
     <>
       <ModuleHero module={MODULES.construction} />
-
-      <section className="band band--tight" aria-labelledby="build-title">
-        <div className="shell">
-          <Reveal className="head">
-            <h2 id="build-title">What we build.</h2>
-            <p>
-              The roof is where we started and where we finish, but we take on the whole build. The configurator below is
-              for the roof — for anything larger, tell us the plot.
-            </p>
-          </Reveal>
-
-          <ol className="builds">
-            {BUILD_TYPES.map((type, i) => (
-              <Reveal key={type.code} delay={i * 0.06} as="li" className="build">
-                <span className="build__code anno--dim">{type.code}</span>
-                <h3 className="build__label">{type.label}</h3>
-                <p className="build__detail prose">{type.detail}</p>
-              </Reveal>
-            ))}
-          </ol>
-        </div>
-      </section>
 
       <section className="config" aria-labelledby="config-title">
         <div className="shell shell--wide config__grid">
@@ -74,6 +51,7 @@ export default function Construction() {
               tagRight={shape.spec}
               fallbackNote={`${shape.label} roof — ${material.label}`}
               interactive
+              complex
               pitch={shape.pitch}
               hipInset={shape.hipInset}
               textureKind={material.texture}
@@ -123,7 +101,7 @@ export default function Construction() {
                   Roof area
                 </label>
                 <output className="slider__value mono-num" htmlFor="area">
-                  {area} ft²
+                  {area.toLocaleString("en-US")} ft²
                 </output>
               </div>
               <input
@@ -136,9 +114,9 @@ export default function Construction() {
                 onChange={(e) => setArea(Number(e.target.value))}
               />
               <div className="slider__scale anno--dim">
-                <span>{AREA.min}</span>
-                <span>Typical detached · 160–220</span>
-                <span>{AREA.max}</span>
+                <span>{AREA.min.toLocaleString("en-US")}</span>
+                <span>Home 1,500–3,000 · commercial 5,000+</span>
+                <span>{AREA.max.toLocaleString("en-US")}</span>
               </div>
             </div>
 
@@ -170,10 +148,7 @@ export default function Construction() {
                 A real range from current material and crew rates — not a placeholder. It lands within about 10% on a
                 straightforward roof. Valleys, deck condition and access move it, which is what the site visit is for.
               </p>
-              <div className="estimate__actions">
-                <TakeToQuote module="construction" summary={summary} label="Send this spec for a fixed quote" />
-                <WhatsAppButton module="construction" summary={summary} label="Send it on WhatsApp" />
-              </div>
+              <TakeToQuote module="construction" summary={summary} label="Request an inspection for this spec" />
             </div>
           </div>
         </div>

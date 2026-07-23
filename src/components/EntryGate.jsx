@@ -21,9 +21,14 @@ const IDLE_STAGE = {
   prop: null,
 };
 
+const EASE = [0.22, 1, 0.36, 1];
+
 export default function EntryGate({ onChoose }) {
   const [hovered, setHovered] = useState(null);
   const [armed, setArmed] = useState(null);
+  // the gate opens on a WCG intro, then reveals the three choices, none
+  // pre-selected — you arm one yourself
+  const [phase, setPhase] = useState("intro");
   const reduced = useReducedMotion();
   const rootRef = useRef(null);
   const firstRef = useRef(null);
@@ -77,14 +82,28 @@ export default function EntryGate({ onChoose }) {
     };
   }, []);
 
+  // the intro plays, then hands over to the choices; focus lands on the
+  // first choice only once they are on screen
   useEffect(() => {
-    firstRef.current?.focus();
-  }, []);
+    if (phase !== "intro") return undefined;
+    const id = window.setTimeout(() => setPhase("choose"), reduced ? 500 : 2200);
+    return () => window.clearTimeout(id);
+  }, [phase, reduced]);
+
+  useEffect(() => {
+    if (phase === "choose") firstRef.current?.focus();
+  }, [phase]);
 
   /* keyboard: 1/2/3 arm then enter, Enter confirms, Escape browses,
      Tab stays inside */
   useEffect(() => {
     const onKey = (event) => {
+      // any key during the intro just skips it
+      if (phase === "intro") {
+        event.preventDefault();
+        setPhase("choose");
+        return;
+      }
       if (event.key === "Escape") {
         event.preventDefault();
         enter(null);
@@ -120,7 +139,7 @@ export default function EntryGate({ onChoose }) {
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [armed, enter, pick]);
+  }, [phase, armed, enter, pick]);
 
   return (
     <motion.div
@@ -132,10 +151,77 @@ export default function EntryGate({ onChoose }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, scale: reduced ? 1 : 1.03 }}
-      transition={{ duration: reduced ? 0.15 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: reduced ? 0.15 : 0.45, ease: EASE }}
     >
-      <div className="gate__inner">
-        <header className="gate__head">
+      <AnimatePresence mode="wait">
+        {phase === "intro" ? (
+          <motion.button
+            key="intro"
+            type="button"
+            className="gate__intro"
+            onClick={() => setPhase("choose")}
+            aria-label={`Enter — ${COMPANY.fullName}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: reduced ? 1 : 0.985 }}
+            transition={{ duration: reduced ? 0.15 : 0.55, ease: EASE }}
+          >
+            <motion.span
+              className="gate__intro-mark"
+              aria-hidden="true"
+              initial={{ opacity: 0, y: reduced ? 0 : 14, scale: reduced ? 1 : 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.7, ease: EASE }}
+            >
+              <svg viewBox="0 0 28 22">
+                <path d="M2 12 L14 2 L26 12" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                <path
+                  d="M6 20 L14 8 L22 20"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinejoin="round"
+                  opacity="0.45"
+                />
+              </svg>
+            </motion.span>
+
+            <motion.span
+              className="gate__intro-word"
+              initial={{ opacity: 0, y: reduced ? 0 : 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: reduced ? 0 : 0.14, duration: 0.75, ease: EASE }}
+            >
+              WCG
+            </motion.span>
+
+            <motion.span
+              className="gate__intro-line"
+              aria-hidden="true"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: reduced ? 0 : 0.5, duration: 0.8, ease: EASE }}
+            />
+
+            <motion.span
+              className="gate__intro-full"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: reduced ? 0 : 0.72, duration: 0.6 }}
+            >
+              {COMPANY.fullName}
+            </motion.span>
+          </motion.button>
+        ) : (
+          <motion.div
+            key="choose"
+            className="gate__inner"
+            initial={{ opacity: 0, y: reduced ? 0 : 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reduced ? 0.15 : 0.5, ease: EASE }}
+          >
+            <header className="gate__head">
           <span className="gate__mark">
             <svg viewBox="0 0 28 22" aria-hidden="true">
               <path d="M2 12 L14 2 L26 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
@@ -209,7 +295,7 @@ export default function EntryGate({ onChoose }) {
               className="gate__stage"
               tagLeft={shownModule ? `${shownModule.code} · ${shownModule.label}` : "Idle · rotating"}
               tagRight={armed ? "Selected" : "WCG-STD-01"}
-              fallbackNote="Wise Co Group — standard gable, chimney to the east"
+              fallbackNote="WCG — standard gable, chimney to the east"
               assemble
               {...stage}
             />
@@ -251,7 +337,9 @@ export default function EntryGate({ onChoose }) {
             </div>
           </div>
         </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

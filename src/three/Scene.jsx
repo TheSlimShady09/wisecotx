@@ -6,21 +6,26 @@ import * as THREE from "three";
 import House from "./House.jsx";
 
 const GROUND_Y = -0.55;
-/* framed a touch high so tall props — the scaffold, the hovering
-   magnifier — sit inside the frame instead of poking out the top */
-const LOOK_AT = [0, 0.7, 0];
+
+/* Two framings. The standard one is set a touch high so tall props — the
+   scaffold, the hovering magnifier — sit inside the frame. The "tall" one
+   pulls back and lifts the look point for the two-storey complex build. */
+const FRAMES = {
+  standard: { position: [6.0, 3.25, 7.3], look: [0, 0.7, 0], fov: 36, target: [0, 0.5, 0] },
+  tall: { position: [7.6, 4.4, 9.0], look: [0, 1.55, 0], fov: 34, target: [0, 1.4, 0] },
+};
 
 /* Without OrbitControls a drei camera keeps its default orientation and
    stares down -Z, leaving the house off to one side. On the still stages
    (the gate, the landing sections) we aim it at the house ourselves. */
-function CameraRig({ interactive }) {
+function CameraRig({ interactive, frame }) {
   const ref = useRef();
 
   useEffect(() => {
-    if (!interactive && ref.current) ref.current.lookAt(...LOOK_AT);
-  }, [interactive]);
+    if (!interactive && ref.current) ref.current.lookAt(...frame.look);
+  }, [interactive, frame]);
 
-  return <PerspectiveCamera ref={ref} makeDefault fov={36} position={[6.0, 3.25, 7.3]} near={0.1} far={60} />;
+  return <PerspectiveCamera ref={ref} makeDefault fov={frame.fov} position={frame.position} near={0.1} far={60} />;
 }
 
 /* ============================================================
@@ -34,8 +39,10 @@ export default function Scene({
   frameloop = "always",
   showGround = true,
   lowPower = false,
+  complex = false,
   ...house
 }) {
+  const frame = complex ? FRAMES.tall : FRAMES.standard;
   return (
     <Canvas
       className="canvas-host"
@@ -54,7 +61,7 @@ export default function Scene({
         gl.toneMappingExposure = 1.05;
       }}
     >
-      <CameraRig interactive={interactive} />
+      <CameraRig interactive={interactive} frame={frame} />
 
       {/* key */}
       <directionalLight
@@ -80,7 +87,7 @@ export default function Scene({
       <directionalLight position={[5.5, 2, -6.5]} intensity={0.9} color="#ffffff" />
 
       <Suspense fallback={null}>
-        <House {...house} reducedMotion={reducedMotion} />
+        <House {...house} complex={complex} reducedMotion={reducedMotion} />
       </Suspense>
 
       {/* the drawing sheet the house stands on. Outside the house
@@ -117,7 +124,7 @@ export default function Scene({
           makeDefault
           enablePan={false}
           enableZoom={false}
-          target={[0, 0.5, 0]}
+          target={frame.target}
           minPolarAngle={Math.PI * 0.18}
           maxPolarAngle={Math.PI * 0.49}
           rotateSpeed={0.6}

@@ -4,16 +4,25 @@
    ============================================================ */
 
 export const COMPANY = {
-  name: "Wise Co Group",
+  name: "WCG",
   short: "WCG",
-  phone: "(555) 248-0119",
-  /* Full international form, digits only — this is what wa.me needs.
-     REPLACE with the real business WhatsApp number before launch. */
-  whatsapp: "15552480119",
-  whatsappLabel: "+1 555 248 0119",
-  email: "estimates@wisecogroup.com",
+  fullName: "Wise Construction Group",
+  tagline: "Roofing & Construction",
+  phone: "214-500-7360",
+  /* No public email was supplied — this is a placeholder, replace it. */
+  email: "info@wiseconstructiongroup.com",
+  address: {
+    line1: "5810 Long Prairie Rd, Suite 700-367",
+    city: "Flower Mound, TX 75028",
+  },
+  region: "DFW Metroplex",
   hours: "Mon–Sat, 7:00–19:00",
-  license: "GC #  4471-RF",
+  license: "Serving Dallas–Fort Worth, TX",
+  social: {
+    facebook: "#",
+    instagram: "#",
+    youtube: "#",
+  },
 };
 
 /* ---------- house geometry constants (shared by 3D + fallback) ---------- */
@@ -31,11 +40,11 @@ export const MODULES = {
     code: "M-01",
     label: "Construction",
     audience: "b2c",
-    title: "We build the whole thing, then we roof it.",
-    tagline: "Houses, apartment blocks and new roofs.",
+    title: "A new roof, drawn before it is built.",
+    tagline: "New roofs, built from the deck up.",
     blurb:
-      "Full builds from the foundations up — detached houses, apartment blocks, extensions and commercial units — and the roof that finishes them, installed by our own crews rather than brokered out.",
-    hoverLine: "You are building a house, an apartment block, an extension, or a new roof.",
+      "Full tear-off and new build. Structure, decking, underlayment, flashing and finish — installed by our own crews, not brokered out.",
+    hoverLine: "You are building new, replacing an old roof, or roofing an extension.",
     /* the angle the house turns to when this card is focused (radians) */
     viewAngle: -0.55,
     roofTone: 0.82,
@@ -74,6 +83,60 @@ export const MODULES = {
 export const MODULE_ORDER = ["construction", "repair", "insurance"];
 
 /* ============================================================
+   The full service catalogue — what WCG actually offers, as a
+   turn-key roofing and restoration general contractor for the
+   DFW Metroplex. Rendered as a Services overview.
+   ============================================================ */
+export const SERVICE_CATEGORIES = [
+  {
+    code: "S-01",
+    label: "Residential Roofing",
+    blurb: "Roof replacement and long-term maintenance for homes, in every common covering.",
+    services: [
+      "Residential roof replacement",
+      "Asphalt shingles",
+      "Metal & composite",
+      "Ceramic tile",
+      "Roof maintenance plan",
+    ],
+  },
+  {
+    code: "S-02",
+    label: "Commercial Roofing",
+    blurb: "Low-slope and metal systems for commercial buildings, sized to the span and the use.",
+    services: [
+      "Commercial roof replacement",
+      "Single-ply roof systems",
+      "Modified bitumen",
+      "Sheet metal work",
+      "Roof maintenance plan",
+    ],
+  },
+  {
+    code: "S-03",
+    label: "Exterior Restoration",
+    blurb: "Turn-key exterior work that puts the building envelope back together after a loss.",
+    services: [
+      "Turn-key general contractor for exterior restoration",
+      "Masonry & siding replacement",
+      "Fascia & soffit replacement",
+      "Gutters & downspout replacement",
+    ],
+  },
+  {
+    code: "S-04",
+    label: "Interior Restoration",
+    blurb: "The inside put right too — from structure and systems through to the final finishes.",
+    services: [
+      "Turn-key general contractor for interior restoration",
+      "Drywall, painting & finishes",
+      "Countertops & cabinets",
+      "Electrical, mechanical & plumbing",
+    ],
+  },
+];
+
+/* ============================================================
    Landing preview sections — the same house, dressed for each
    module. This is where "one house, three roles" is actually
    demonstrated rather than described: a clean new metal roof,
@@ -81,12 +144,12 @@ export const MODULE_ORDER = ["construction", "repair", "insurance"];
    ============================================================ */
 export const MODULE_PREVIEW = {
   construction: {
-    heading: "From an empty plot to a finished roof.",
-    lead: "We build houses, apartment blocks and extensions, then roof them. Configure the roof below, or ask us about the whole build.",
+    heading: "Specify the roof before anyone climbs a ladder.",
+    lead: "Pick the shape, the covering and the finish. The model rebuilds as you choose, and the price moves with it.",
     highlights: [
-      "New houses, apartment blocks & extensions",
-      "Roof configurator with live pricing",
-      "One crew from foundations to ridge — nothing brokered out",
+      "Roof shapes, coverings and finishes — priced live",
+      "Written quote with the deck rate stated up front",
+      "Our own crews — nothing brokered out",
     ],
     cta: "Open the configurator",
     scene: {
@@ -97,8 +160,8 @@ export const MODULE_PREVIEW = {
       metalness: 0.85,
       tone: 0.88,
       spin: 0.1,
-      // a big, finished new build — no scaffold
-      modelScale: 1.18,
+      // a big, finished two-storey build with a garage wing
+      complex: true,
     },
   },
   repair: {
@@ -153,31 +216,6 @@ export const MODULE_PREVIEW = {
    pitch    -> ridge height multiplier
    hipInset -> how far the ridge is pulled in from the gable ends
    ============================================================ */
-/* What Construction actually builds — not just roofs. Shown on the
-   construction page above the configurator. */
-export const BUILD_TYPES = [
-  {
-    code: "B-01",
-    label: "Detached & family homes",
-    detail: "Single builds from the foundations up: groundworks, structure, roof and weathertight envelope, handed over ready to fit out.",
-  },
-  {
-    code: "B-02",
-    label: "Apartment blocks",
-    detail: "Low- and mid-rise residential blocks. Structured programme, phased handovers, and the roof and drainage detailed for a shared building.",
-  },
-  {
-    code: "B-03",
-    label: "Extensions & conversions",
-    detail: "Extra rooms, second storeys and loft conversions tied cleanly into the existing structure and roofline so nothing looks bolted on.",
-  },
-  {
-    code: "B-04",
-    label: "Commercial & mixed-use",
-    detail: "Units, workshops and small commercial shells, with long-span or flat-roof systems specified for the use and the span.",
-  },
-];
-
 export const ROOF_SHAPES = [
   {
     id: "gable",
@@ -198,16 +236,6 @@ export const ROOF_SHAPES = [
     multiplier: 1.19,
     spec: "8:12 pitch · ridge inset 42%",
     desc: "Slopes on all four sides. Noticeably better in wind and often rated for it, but more cuts, more hips, more labour.",
-  },
-  {
-    id: "flat",
-    label: "Flat",
-    note: "Low slope, membrane",
-    pitch: 0.055,
-    hipInset: 0,
-    multiplier: 0.88,
-    spec: "1/4:12 fall · membrane system",
-    desc: "Really a low-slope deck with a fall built in. Cheapest area to cover and usable above, but the detailing at edges has to be perfect.",
   },
 ];
 
@@ -259,7 +287,7 @@ export const FINISHES = [
   { id: "gloss", label: "Gloss", roughness: 0.16, multiplier: 1.11, spec: "High sheen" },
 ];
 
-export const AREA = { min: 60, max: 420, step: 10, default: 160 };
+export const AREA = { min: 1000, max: 20000, step: 100, default: 2000 };
 
 /* Fixed costs that do not scale with area, plus the range we show. */
 const MOBILISATION = 2400;

@@ -10,8 +10,6 @@ export function ModuleHero({ module, children }) {
     <section className="mhero">
       <div className="shell">
         <div className="mhero__meta">
-          <span className="anno--dim">{module.code}</span>
-          <span className="mhero__divider" aria-hidden="true" />
           <span className="anno">{module.label}</span>
         </div>
         <h1 className="mhero__title">{module.title}</h1>
@@ -132,7 +130,7 @@ export function Process({ steps, title, intro }) {
  * Hands the current configuration to the quote form, so the lead
  * arrives with a spec instead of a blank message box.
  */
-export function TakeToQuote({ module, summary, label = "Request a free estimate", className = "", variant = "solid" }) {
+export function TakeToQuote({ module, summary, label = "Request a free inspection", className = "", variant = "solid" }) {
   const { setBrief } = useQuote();
   const navigate = useNavigate();
 

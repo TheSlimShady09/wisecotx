@@ -8,12 +8,14 @@ import { useIsVisible, useMediaQuery, useNearViewport, usePrefersReducedMotion, 
 const Scene = lazy(() => import("../three/Scene.jsx"));
 
 export default function CanvasStage({
-  tagLeft,
-  tagRight,
   className = "",
   fallbackNote,
   forceStatic = false,
   staticOnPhone = false,
+  // tagLeft / tagRight are still accepted from call sites but no longer
+  // rendered — they land in `rest` and are harmlessly ignored
+  tagLeft: _tagLeft,
+  tagRight: _tagRight,
   ...house
 }) {
   const [ref, near] = useNearViewport();
@@ -50,9 +52,6 @@ export default function CanvasStage({
       ) : (
         <StaticHouse note={fallbackNote} />
       )}
-
-      {tagLeft ? <span className="stage__tag">{tagLeft}</span> : null}
-      {tagRight ? <span className="stage__tag stage__tag--right">{tagRight}</span> : null}
     </div>
   );
 }

@@ -128,20 +128,6 @@ body {
   overflow-x: hidden;
 }
 
-/* the drawing paper: a faint grid, drawn once on the body */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, var(--line-faint) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--line-faint) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 120% 90% at 50% 30%, #000 25%, transparent 78%);
-}
-
 #root {
   position: relative;
   z-index: var(--z-base);

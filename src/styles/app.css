@@ -1149,8 +1149,60 @@ main {
    ============================================================ */
 .foot {
   border-top: 1px solid var(--line);
-  padding-block: var(--gap-2xl) var(--gap-l);
+  padding-block: 0 var(--gap-l);
   margin-top: var(--gap-l);
+}
+
+/* ---------- infinite WCG marquee ---------- */
+.foot__marquee {
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+  margin-bottom: var(--gap-2xl);
+  /* fade the ends so words enter and leave rather than snapping at the edge */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.foot__marquee-track {
+  display: flex;
+  width: max-content;
+  animation: foot-marquee 26s linear infinite;
+}
+.foot__marquee-set {
+  display: flex;
+  flex: none;
+}
+.foot__marquee-word {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  padding-right: clamp(1.5rem, 4vw, 3.5rem);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 11vw, 8rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+}
+.foot__marquee-dot {
+  font-size: 0.3em;
+  color: var(--ink-faint);
+  transform: translateY(-0.15em);
+}
+@keyframes foot-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* one full set is exactly half the track, so this is a seamless loop */
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .foot__marquee-track {
+    animation: none;
+    justify-content: center;
+  }
 }
 .foot__top {
   display: grid;
@@ -1429,19 +1481,6 @@ main {
   overflow-y: auto;
   overscroll-behavior: contain;
 }
-/* the drawing paper again, but tighter — this screen is the sheet */
-.gate::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, var(--line-faint) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--line-faint) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse 100% 80% at 60% 45%, #000 20%, transparent 80%);
-}
-
 .gate__inner {
   position: relative;
   min-height: 100%;
@@ -1918,40 +1957,169 @@ main {
   }
 }
 
-/* ---------- construction: what we build ---------- */
-.builds {
+
+/* ---------- full service catalogue (landing) ---------- */
+.services {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
   gap: 0;
   margin-top: var(--gap-l);
   border-top: 1px solid var(--line);
 }
-.build {
-  padding: var(--gap-l) var(--gap-l) var(--gap-l) 0;
+.service {
+  padding: var(--gap-l) 0;
   border-bottom: 1px solid var(--line-faint);
 }
-/* a light vertical rule between columns, drawn only where two sit side by side */
-.build:nth-child(odd) {
-  padding-right: var(--gap-xl);
-}
 @media (min-width: 44rem) {
-  .build:nth-child(odd) {
+  .service:nth-child(odd) {
+    padding-right: var(--gap-xl);
     border-right: 1px solid var(--line-faint);
-    padding-left: 0;
   }
-  .build:nth-child(even) {
+  .service:nth-child(even) {
     padding-left: var(--gap-l);
   }
 }
-.build__code {
-  display: block;
+.service__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-s);
   margin-bottom: var(--gap-s);
 }
-.build__label {
+.service__label {
   font-size: var(--step-2);
-  margin-bottom: var(--gap-s);
 }
-.build__detail {
+.service__blurb {
   font-size: var(--step--1);
-  max-width: 46ch;
+  max-width: 44ch;
+  margin-bottom: var(--gap-m);
+}
+.service__list {
+  display: grid;
+  gap: 0;
+}
+.service__list li {
+  position: relative;
+  padding: 0.6rem 0 0.6rem 1.5rem;
+  border-top: 1px solid var(--line-faint);
+  color: var(--ink-muted);
+  font-size: var(--step--1);
+}
+.service__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.05rem;
+  width: 0.6rem;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+/* ---------- footer social ---------- */
+.foot__social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  margin-top: var(--gap-m);
+}
+.foot__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--ink-muted);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+.foot__social-link svg {
+  width: 20px;
+  height: 20px;
+}
+.foot__social-link:hover {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ---------- about / info (landing) ---------- */
+.about,
+.contact {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--gap-xl);
+  align-items: start;
+  margin-top: var(--gap-l);
+}
+.about__lead h2,
+.contact__head h2 {
+  font-size: var(--step-3);
+  max-width: 16ch;
+}
+.about__body .prose + .prose {
+  margin-top: var(--gap-m);
+}
+.about__facts,
+.contact__details {
+  margin-top: var(--gap-l);
+}
+.contact__actions {
+  margin-top: var(--gap-l);
+}
+
+@media (max-width: 900px) {
+  .about,
+  .contact {
+    grid-template-columns: 1fr;
+    gap: var(--gap-l);
+  }
+}
+
+/* ---------- gate intro splash ---------- */
+.gate__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-s);
+  width: 100%;
+  min-height: 100svh;
+  padding: var(--pad-x);
+  border: 0;
+  background: none;
+  color: var(--ink);
+  text-align: center;
+  cursor: pointer;
+}
+.gate__intro-mark svg {
+  width: clamp(46px, 7vw, 80px);
+  height: auto;
+  color: var(--ink);
+}
+.gate__intro-word {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(4.5rem, 22vw, 12rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+}
+.gate__intro-line {
+  width: min(58vw, 20rem);
+  height: 1px;
+  background: var(--line-strong);
+  transform-origin: center;
+  margin-block: var(--gap-xs);
+}
+.gate__intro-full {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 3.4vw, 1.7rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--ink-muted);
+}
+.gate__intro-hint {
+  margin-top: var(--gap-l);
 }

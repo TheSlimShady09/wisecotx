@@ -3,7 +3,6 @@ import { useState } from "react";
 import CanvasStage from "../components/CanvasStage.jsx";
 import Figure from "../components/Figure.jsx";
 import Reveal from "../components/Reveal.jsx";
-import { WhatsAppButton } from "../components/WhatsApp.jsx";
 import { Faq, ModuleHero, ModuleSwitch, OptionSet, SpecTable, TakeToQuote } from "../components/ModuleKit.jsx";
 import { COMPANY, DAMAGE, FAQ, MODULES, MODULE_ORDER } from "../lib/site.js";
 
@@ -99,10 +98,7 @@ export default function Repair() {
                 turns out you do not need us, we will say so.
               </p>
 
-              <div className="estimate__actions">
-                <TakeToQuote module="repair" summary={summary} label="Book a free inspection" />
-                <WhatsAppButton module="repair" summary={summary} label="Send a photo on WhatsApp" />
-              </div>
+              <TakeToQuote module="repair" summary={summary} label="Book a free inspection" />
             </div>
           </div>
         </div>

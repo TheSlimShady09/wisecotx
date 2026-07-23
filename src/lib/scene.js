@@ -30,6 +30,7 @@ export function stagePropsForModule(id) {
     targetAngle: scene.targetAngle ?? null,
     prop: scene.prop ?? null,
     modelScale: scene.modelScale ?? 1,
+    complex: scene.complex ?? false,
     hotspots,
     markerLabel,
   };

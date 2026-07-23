@@ -3,9 +3,19 @@ import { Link } from "react-router-dom";
 
 import CanvasStage from "../components/CanvasStage.jsx";
 import Reveal from "../components/Reveal.jsx";
-import { WhatsAppButton } from "../components/WhatsApp.jsx";
+import { SpecTable } from "../components/ModuleKit.jsx";
 import { stagePropsForModule } from "../lib/scene.js";
-import { ACCREDITATIONS, CREDENTIALS, MODULES, MODULE_ORDER, MODULE_PREVIEW, PROJECTS, TESTIMONIALS } from "../lib/site.js";
+import {
+  ACCREDITATIONS,
+  COMPANY,
+  CREDENTIALS,
+  MODULES,
+  MODULE_ORDER,
+  MODULE_PREVIEW,
+  PROJECTS,
+  SERVICE_CATEGORIES,
+  TESTIMONIALS,
+} from "../lib/site.js";
 
 function ChoiceCard({ id, active, onEnter, onLeave }) {
   const module = MODULES[id];
@@ -20,7 +30,6 @@ function ChoiceCard({ id, active, onEnter, onLeave }) {
       onFocus={() => onEnter(id)}
       onBlur={onLeave}
     >
-      <span className="choice__code anno--dim">{module.code}</span>
       <span className="choice__label">{module.label}</span>
       <span className="choice__tagline">{module.tagline}</span>
 
@@ -54,7 +63,7 @@ function ModuleSection({ id, index }) {
         <div className="mpreview__stage-col">
           <CanvasStage
             className="mpreview__stage"
-            tagLeft={`${module.code} · ${module.label}`}
+            tagLeft={module.label}
             tagRight={preview.scene.hotspotsFrom ? "Marked up" : "Specimen"}
             fallbackNote={`${module.label} — ${module.tagline}`}
             staticOnPhone
@@ -65,8 +74,6 @@ function ModuleSection({ id, index }) {
         <div className="mpreview__body">
           <Reveal>
             <div className="mpreview__meta">
-              <span className="anno--dim">{module.code}</span>
-              <span className="mpreview__divider" aria-hidden="true" />
               <span className="anno">{module.label}</span>
             </div>
             <h2 id={`${id}-title`} className="mpreview__title">
@@ -90,7 +97,6 @@ function ModuleSection({ id, index }) {
                 →
               </span>
             </Link>
-            <WhatsAppButton module={id} label="Ask on WhatsApp" />
           </Reveal>
         </div>
       </div>
@@ -112,8 +118,8 @@ export default function Landing() {
               with your roof?
             </h1>
             <p className="hero__sub">
-              One team for all three: we build roofs new, repair the ones that fail, and handle roofing claims as a
-              subcontractor for insurance carriers.
+              {COMPANY.fullName} — a turn-key roofing and restoration general contractor for the {COMPANY.region}. We
+              build, repair, and carry the insurance claim from first inspection to finished asset.
             </p>
           </div>
 
@@ -126,7 +132,7 @@ export default function Landing() {
               forceStatic
               tagLeft="Elevation"
               tagRight="WCG-STD-01"
-              fallbackNote="Wise Co Group — standard gable, chimney to the east"
+              fallbackNote="WCG — standard gable, chimney to the east"
             />
           </div>
 
@@ -141,6 +147,38 @@ export default function Landing() {
       {MODULE_ORDER.map((id, i) => (
         <ModuleSection key={id} id={id} index={i} />
       ))}
+
+      {/* ---------- full service catalogue ---------- */}
+      <section className="band" aria-labelledby="services-title">
+        <div className="shell">
+          <Reveal className="anno-rule">
+            <span className="anno">Services</span>
+          </Reveal>
+          <Reveal className="head">
+            <h2 id="services-title">Everything a roof and a restoration needs, under one contract.</h2>
+            <p>
+              Residential and commercial roofing, plus turn-key exterior and interior restoration — so a storm claim
+              becomes one job with one point of contact, not five trades to chase.
+            </p>
+          </Reveal>
+
+          <div className="services">
+            {SERVICE_CATEGORIES.map((cat, i) => (
+              <Reveal key={cat.code} delay={(i % 2) * 0.06} className="service">
+                <div className="service__head">
+                  <h3 className="service__label">{cat.label}</h3>
+                </div>
+                <p className="service__blurb prose">{cat.blurb}</p>
+                <ul className="service__list">
+                  {cat.services.map((s) => (
+                    <li key={s}>{s}</li>
+                  ))}
+                </ul>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ---------- credentials ---------- */}
       <section className="band" aria-labelledby="credentials-title">
@@ -224,6 +262,81 @@ export default function Landing() {
                 </figcaption>
               </Reveal>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- about / info ---------- */}
+      <section id="about" className="band" aria-labelledby="about-title">
+        <div className="shell">
+          <Reveal className="anno-rule">
+            <span className="anno">About</span>
+          </Reveal>
+          <div className="about">
+            <Reveal className="about__lead">
+              <h2 id="about-title">Started by builders, roofers, and insurance people.</h2>
+            </Reveal>
+            <Reveal delay={0.08} className="about__body">
+              <p className="prose">
+                {COMPANY.fullName} is a turn-key residential and commercial roofing and restoration general contractor
+                serving the {COMPANY.region}. We were started by local builders, roofers, and insurance experts to give
+                homeowners and business owners the value and quality they deserve.
+              </p>
+              <p className="prose">
+                Your home, business, and real estate are the foundation of your success — so we carry the complexity of
+                the insurance claim, the construction, and the restoration, and hand back a finished, successful asset on
+                an expedited timeframe.
+              </p>
+              <SpecTable
+                className="about__facts"
+                rows={[
+                  ["Company", COMPANY.fullName],
+                  ["Serving", COMPANY.region],
+                  ["Located", COMPANY.address.city],
+                  ["Hours", COMPANY.hours],
+                ]}
+              />
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- contact ---------- */}
+      <section id="contact" className="band" aria-labelledby="contact-title">
+        <div className="shell">
+          <Reveal className="anno-rule">
+            <span className="anno">Contact us</span>
+          </Reveal>
+          <div className="contact">
+            <Reveal className="contact__head">
+              <h2 id="contact-title">Book a free inspection.</h2>
+              <p className="prose">
+                Tell us what you are seeing and where. We reply by email within one business day — or call and we will
+                pick up.
+              </p>
+              <div className="btn-row contact__actions">
+                <Link to="/quote" className="btn btn--solid btn--lg">
+                  Request a free inspection
+                  <span className="btn-arrow" aria-hidden="true">
+                    →
+                  </span>
+                </Link>
+                <a className="btn btn--lg" href={`tel:${COMPANY.phone.replace(/[^\d+]/g, "")}`}>
+                  {COMPANY.phone}
+                </a>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.08} className="contact__details">
+              <SpecTable
+                rows={[
+                  ["Phone", <a key="p" href={`tel:${COMPANY.phone.replace(/[^\d+]/g, "")}`}>{COMPANY.phone}</a>],
+                  ["Email", <a key="e" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>],
+                  ["Address", `${COMPANY.address.line1}, ${COMPANY.address.city}`],
+                  ["Hours", COMPANY.hours],
+                ]}
+              />
+            </Reveal>
           </div>
         </div>
       </section>

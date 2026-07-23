@@ -5,7 +5,6 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Nav from "./components/Nav.jsx";
 import Footer from "./components/Footer.jsx";
 import EntryGate from "./components/EntryGate.jsx";
-import { WhatsAppFab } from "./components/WhatsApp.jsx";
 import { hasEnteredBefore } from "./lib/entry.js";
 import Landing from "./pages/Landing.jsx";
 import Construction from "./pages/Construction.jsx";
@@ -15,11 +14,11 @@ import Quote from "./pages/Quote.jsx";
 import { COMPANY, MODULES, MODULE_ORDER } from "./lib/site.js";
 
 const TITLES = {
-  "/": `${COMPANY.name} — roof construction, repair & insurance work`,
+  "/": `${COMPANY.fullName} (${COMPANY.name}) — Roofing & Restoration, ${COMPANY.region}`,
   "/construction": `New roofs — ${COMPANY.name}`,
   "/repair": `Roof repair — ${COMPANY.name}`,
   "/insurance": `Insurance subcontracting — ${COMPANY.name}`,
-  "/quote": `Free estimate — ${COMPANY.name}`,
+  "/quote": `Request an inspection — ${COMPANY.name}`,
 };
 
 function useRouteEffects() {
@@ -125,7 +124,6 @@ export default function App() {
         </main>
 
         <Footer />
-        <WhatsAppFab />
       </div>
     </>
   );

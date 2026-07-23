@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import CanvasStage from "../components/CanvasStage.jsx";
 import Reveal from "../components/Reveal.jsx";
-import { WhatsAppButton } from "../components/WhatsApp.jsx";
 import { Faq, ModuleHero, ModuleSwitch, OptionSet, Process, SpecTable, TakeToQuote } from "../components/ModuleKit.jsx";
 import { CARRIER_PROCESS, FAQ, MODULES, MODULE_ORDER, PERILS } from "../lib/site.js";
 
@@ -14,7 +13,7 @@ const CAPACITY = [
   ["General liability", "$5,000,000"],
   ["Workers' compensation", "$2,000,000"],
   ["Estimating platform", "Xactimate"],
-  ["Coverage area", "Six-county metro + adjacent"],
+  ["Coverage area", "DFW Metroplex"],
 ];
 
 function angleFor(peril) {
@@ -100,10 +99,7 @@ export default function Insurance() {
                 </ul>
               </div>
 
-              <div className="estimate__actions">
-                <TakeToQuote module="insurance" summary={summary} label="Request a scope sample" />
-                <WhatsAppButton module="insurance" summary={summary} label="Message the desk" />
-              </div>
+              <TakeToQuote module="insurance" summary={summary} label="Request a scope sample" />
             </div>
           </div>
         </div>
