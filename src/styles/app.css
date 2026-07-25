@@ -45,30 +45,19 @@ main {
   width: 100%;
 }
 
+/* transparent white logo, trimmed tight */
 .mark {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
   flex: none;
 }
-.mark__glyph {
-  width: 28px;
-  height: 22px;
-  color: var(--ink);
+.mark__img {
+  height: 40px;
+  width: auto;
   transition: transform var(--dur-slow) var(--ease);
 }
-.mark:hover .mark__glyph {
+.mark:hover .mark__img {
   transform: translateY(-2px);
-}
-.mark__text {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.0625rem;
-  letter-spacing: -0.03em;
-}
-.mark__thin {
-  font-weight: 400;
-  color: var(--ink-muted);
 }
 
 .nav__links {
@@ -825,6 +814,35 @@ main {
   color: var(--ink-muted);
   line-height: 1.55;
 }
+/* a caution: the fixed price is not final until WCG confirms it */
+.estimate__confirm {
+  display: flex;
+  gap: var(--gap-s);
+  align-items: flex-start;
+  padding: var(--gap-s);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+.estimate__confirm-mark {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+.estimate__confirm p {
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--ink);
+}
 
 /* ---------- spec table ---------- */
 .spec {
@@ -1253,6 +1271,16 @@ main {
   padding-top: var(--gap-m);
   border-top: 1px solid var(--line-faint);
 }
+.foot__powered {
+  border-bottom: 1px solid transparent;
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.foot__powered:hover {
+  color: var(--ink);
+  border-bottom-color: var(--line-strong);
+}
 
 /* ============================================================
    3D overlay label
@@ -1502,15 +1530,10 @@ main {
 .gate__mark {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: -0.03em;
 }
-.gate__mark svg {
-  width: 26px;
-  height: 20px;
+.gate__mark img {
+  height: 38px;
+  width: auto;
 }
 
 .gate__body {
@@ -1958,60 +1981,156 @@ main {
 }
 
 
-/* ---------- full service catalogue (landing) ---------- */
-.services {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
-  gap: 0;
+/* ---------- services slideshow (landing) ---------- */
+.sslide {
   margin-top: var(--gap-l);
   border-top: 1px solid var(--line);
 }
-.service {
-  padding: var(--gap-l) 0;
-  border-bottom: 1px solid var(--line-faint);
-}
-@media (min-width: 44rem) {
-  .service:nth-child(odd) {
-    padding-right: var(--gap-xl);
-    border-right: 1px solid var(--line-faint);
-  }
-  .service:nth-child(even) {
-    padding-left: var(--gap-l);
-  }
-}
-.service__head {
+.sslide__tabs {
   display: flex;
-  align-items: baseline;
-  gap: var(--gap-s);
-  margin-bottom: var(--gap-s);
-}
-.service__label {
-  font-size: var(--step-2);
-}
-.service__blurb {
-  font-size: var(--step--1);
-  max-width: 44ch;
-  margin-bottom: var(--gap-m);
-}
-.service__list {
-  display: grid;
+  flex-wrap: wrap;
   gap: 0;
 }
-.service__list li {
+.sslide__tab {
   position: relative;
-  padding: 0.6rem 0 0.6rem 1.5rem;
-  border-top: 1px solid var(--line-faint);
-  color: var(--ink-muted);
-  font-size: var(--step--1);
+  padding: var(--gap-m) var(--gap-m) var(--gap-m) 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  letter-spacing: -0.02em;
+  color: var(--ink-faint);
+  transition: color var(--dur) var(--ease);
 }
-.service__list li::before {
+.sslide__tab::after {
   content: "";
   position: absolute;
   left: 0;
-  top: 1.05rem;
-  width: 0.6rem;
+  top: -1px;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur) var(--ease);
+}
+.sslide__tab:hover {
+  color: var(--ink-muted);
+}
+.sslide__tab.is-active {
+  color: var(--ink);
+}
+.sslide__tab.is-active::after {
+  transform: scaleX(1);
+}
+
+.sslide__viewport {
+  border-top: 1px solid var(--line-faint);
+  overflow: hidden;
+}
+.sslide__slide {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--gap-xl);
+  align-items: start;
+  padding-block: var(--gap-l);
+  min-height: 16rem;
+}
+.sslide__num {
+  display: block;
+  margin-bottom: var(--gap-s);
+}
+.sslide__label {
+  font-size: var(--step-3);
+  margin-bottom: var(--gap-m);
+}
+.sslide__blurb {
+  font-size: var(--step-1);
+  color: var(--ink-muted);
+  max-width: 40ch;
+}
+.sslide__list {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--line-faint);
+}
+.sslide__list li {
+  position: relative;
+  padding: 0.8rem 0 0.8rem 1.6rem;
+  border-bottom: 1px solid var(--line-faint);
+  color: var(--ink-muted);
+}
+.sslide__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.35rem;
+  width: 0.7rem;
   height: 1px;
   background: var(--line-strong);
+}
+
+.sslide__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-m);
+  padding-top: var(--gap-m);
+  border-top: 1px solid var(--line-faint);
+}
+.sslide__arrow {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+.sslide__arrow:hover {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.sslide__dots {
+  display: flex;
+  gap: 0.5rem;
+}
+.sslide__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--line-strong);
+  transition:
+    background var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+.sslide__dot.is-active {
+  background: var(--accent);
+  transform: scale(1.25);
+}
+
+@media (max-width: 760px) {
+  .sslide__tabs {
+    gap: var(--gap-s) var(--gap-m);
+  }
+  .sslide__tab {
+    padding-block: var(--gap-s);
+    font-size: var(--step-0);
+  }
+  .sslide__slide {
+    grid-template-columns: 1fr;
+    gap: var(--gap-l);
+  }
 }
 
 /* ---------- footer social ---------- */
@@ -2094,17 +2213,11 @@ main {
   text-align: center;
   cursor: pointer;
 }
-.gate__intro-mark svg {
-  width: clamp(46px, 7vw, 80px);
+/* the logo already carries the roof mark and the WCG wordmark, so it is
+   the whole centrepiece */
+.gate__intro-logo {
+  width: clamp(13rem, 40vw, 26rem);
   height: auto;
-  color: var(--ink);
-}
-.gate__intro-word {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(4.5rem, 22vw, 12rem);
-  line-height: 0.9;
-  letter-spacing: -0.05em;
 }
 .gate__intro-line {
   width: min(58vw, 20rem);
@@ -2122,4 +2235,86 @@ main {
 }
 .gate__intro-hint {
   margin-top: var(--gap-l);
+}
+
+/* ============================================================
+   WORKS GALLERY
+   Photos and short clips from real jobs. Blueprint placeholders
+   stand in until real media is dropped into public/works/.
+   ============================================================ */
+.works {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: var(--gap-s);
+  margin-top: var(--gap-l);
+}
+.work__media {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-1);
+}
+.work__media img,
+.work__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--dur-slow) var(--ease);
+}
+.work:hover .work__media img {
+  transform: scale(1.04);
+}
+/* blueprint hatch placeholder */
+.work__placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--ink-faint);
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--surface-1),
+    var(--surface-1) 11px,
+    var(--surface-2) 11px,
+    var(--surface-2) 22px
+  );
+}
+.work__placeholder svg {
+  width: 2.6rem;
+  height: 2.6rem;
+}
+.work__badge {
+  position: absolute;
+  top: var(--gap-xs);
+  right: var(--gap-xs);
+  padding: 0.2rem 0.45rem;
+  background: rgba(11, 11, 12, 0.7);
+  border-radius: 2px;
+  font-size: 0.6rem;
+  color: var(--ink);
+}
+.work__cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: var(--gap-s);
+  background: linear-gradient(to top, rgba(11, 11, 12, 0.92), rgba(11, 11, 12, 0.45) 60%, transparent);
+  pointer-events: none;
+}
+.work__title {
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.work__spec {
+  font-size: 0.625rem;
 }

@@ -12,7 +12,8 @@ const GROUND_Y = -0.55;
    pulls back and lifts the look point for the two-storey complex build. */
 const FRAMES = {
   standard: { position: [6.0, 3.25, 7.3], look: [0, 0.7, 0], fov: 36, target: [0, 0.5, 0] },
-  tall: { position: [7.6, 4.4, 9.0], look: [0, 1.55, 0], fov: 34, target: [0, 1.4, 0] },
+  // pulled back and lifted for the big multi-wing, four-roof build
+  tall: { position: [8.8, 5.0, 10.6], look: [0, 1.7, 0], fov: 34, target: [0, 1.6, 0] },
 };
 
 /* Without OrbitControls a drei camera keeps its default orientation and

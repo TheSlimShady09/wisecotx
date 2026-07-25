@@ -159,9 +159,11 @@ export const MODULE_PREVIEW = {
       roughness: 0.32,
       metalness: 0.85,
       tone: 0.88,
-      spin: 0.1,
-      // a big, finished two-storey build with a garage wing
+      spin: 0.3,
+      // a big, finished two-storey build with a garage wing, a left wing
+      // and a rear ell — four separate roofs in all
       complex: true,
+      modelScale: 1.12,
     },
   },
   repair: {
@@ -180,9 +182,8 @@ export const MODULE_PREVIEW = {
       roughness: 0.8,
       metalness: 0,
       tone: 0.5,
-      targetAngle: -0.38,
       hotspotsFrom: { set: "damage", id: "wind" },
-      spin: 0,
+      spin: 0.3,
     },
   },
   insurance: {
@@ -201,10 +202,8 @@ export const MODULE_PREVIEW = {
       roughness: 0.9,
       metalness: 0,
       tone: 0.58,
-      targetAngle: -0.38,
       hotspotsFrom: { set: "perils", id: "hail" },
-      spin: 0,
-      prop: "magnifier",
+      spin: 0.3,
     },
   },
 };
@@ -496,6 +495,22 @@ export const PROJECTS = [
   { ref: "PRJ-0344", title: "Standing seam, Northgate Mews", spec: "24ga metal · 168 sq ft", module: "construction" },
   { ref: "PRJ-0329", title: "Flat deck renewal, Carter Yard", spec: "Membrane · 240 sq ft", module: "construction" },
   { ref: "PRJ-0301", title: "Wind loss, Fairmount Drive", spec: "Adjuster-approved · 11 days", module: "insurance" },
+];
+
+/* ============================================================
+   Works gallery — photos and short videos from real jobs.
+   Drop files into public/works/ and set `src` (and `poster` for
+   videos). While `src` is empty, a blueprint placeholder shows,
+   so the grid is presentable before the media arrives.
+   ============================================================ */
+export const WORKS = [
+  { id: "w1", title: "Roof of the week — Decatur, TX", spec: "50 square · full build + upgrade", type: "video", src: "/works/roof-of-the-week.mp4" },
+  { id: "w2", title: "WCG Roofing — DFW", spec: "GAF system", type: "video", src: "/works/wcg-roofing.mp4" },
+  { id: "w3", title: "Completed roof", spec: "Residential re-roof", type: "image", src: "/works/shot-1.png" },
+  { id: "w4", title: "Kick-off in Plano, TX", spec: "New week, new roof", type: "video", src: "/works/plano-monday.mp4" },
+  { id: "w5", title: "On-site sequence", spec: "Install", type: "video", src: "/works/sequence-01.mp4" },
+  { id: "w6", title: "Finished detail", spec: "Residential", type: "image", src: "/works/shot-2.png" },
+  { id: "w7", title: "Roofing in Decatur, TX", spec: "On site", type: "video", src: "/works/decatur-tx.mp4" },
 ];
 
 export const TESTIMONIALS = [

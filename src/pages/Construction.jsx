@@ -148,6 +148,15 @@ export default function Construction() {
                 A real range from current material and crew rates — not a placeholder. It lands within about 10% on a
                 straightforward roof. Valleys, deck condition and access move it, which is what the site visit is for.
               </p>
+              <div className="estimate__confirm" role="note">
+                <span className="estimate__confirm-mark" aria-hidden="true">
+                  !
+                </span>
+                <p>
+                  Indicative only — a fixed price cannot be set until WCG has verified the roof on site. Every quote is
+                  confirmed once before any work is booked.
+                </p>
+              </div>
               <TakeToQuote module="construction" summary={summary} label="Request an inspection for this spec" />
             </div>
           </div>

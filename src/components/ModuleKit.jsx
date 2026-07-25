@@ -162,7 +162,6 @@ export function ModuleSwitch({ current, modules, order }) {
         <div className="switch">
           {others.map((id) => (
             <Link key={id} to={`/${id}`} className="switch__card">
-              <span className="anno--dim">{modules[id].code}</span>
               <span className="switch__label">{modules[id].label}</span>
               <span className="switch__note">{modules[id].hoverLine}</span>
               <span className="switch__arrow btn-arrow" aria-hidden="true">

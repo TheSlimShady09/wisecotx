@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 
 import CanvasStage from "../components/CanvasStage.jsx";
 import Reveal from "../components/Reveal.jsx";
+import Works from "../components/Works.jsx";
+import ServicesSlideshow from "../components/ServicesSlideshow.jsx";
+import CountUp from "../components/CountUp.jsx";
 import { SpecTable } from "../components/ModuleKit.jsx";
 import { stagePropsForModule } from "../lib/scene.js";
 import {
@@ -13,7 +16,6 @@ import {
   MODULE_ORDER,
   MODULE_PREVIEW,
   PROJECTS,
-  SERVICE_CATEGORIES,
   TESTIMONIALS,
 } from "../lib/site.js";
 
@@ -162,21 +164,9 @@ export default function Landing() {
             </p>
           </Reveal>
 
-          <div className="services">
-            {SERVICE_CATEGORIES.map((cat, i) => (
-              <Reveal key={cat.code} delay={(i % 2) * 0.06} className="service">
-                <div className="service__head">
-                  <h3 className="service__label">{cat.label}</h3>
-                </div>
-                <p className="service__blurb prose">{cat.blurb}</p>
-                <ul className="service__list">
-                  {cat.services.map((s) => (
-                    <li key={s}>{s}</li>
-                  ))}
-                </ul>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal delay={0.08}>
+            <ServicesSlideshow />
+          </Reveal>
         </div>
       </section>
 
@@ -197,7 +187,7 @@ export default function Landing() {
             {CREDENTIALS.map((item, i) => (
               <Reveal key={item.label} delay={i * 0.07} className="stat">
                 <span className="stat__value mono-num">
-                  {item.value}
+                  <CountUp value={item.value} />
                   <span className="stat__unit">{item.unit}</span>
                 </span>
                 <span className="stat__label">{item.label}</span>
@@ -244,6 +234,9 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* ---------- works gallery ---------- */}
+      <Works />
 
       {/* ---------- testimonials ---------- */}
       <section className="band" aria-labelledby="voices-title">

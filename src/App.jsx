@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
@@ -54,32 +54,9 @@ export default function App() {
   const reduced = useReducedMotion();
   useRouteEffects();
 
-  /* The gate is the front door: arrive anywhere on the site root and you
-     pick one of the three before anything else. Evaluated once, so it
-     never re-opens mid-session. */
+  /* A WCG intro splash on first arrival at the site root, then straight
+     to the home page. Evaluated once, so it never re-opens mid-session. */
   const [gateOpen, setGateOpen] = useState(() => location.pathname === "/" && !hasEnteredBefore());
-
-  /* A choice at the gate lands you on that module's section, not on its
-     page — the section previews it in 3D and the page is one click on.
-     The double rAF is needed because the shell is display:none until the
-     first frame after this: you cannot scroll to an element that has no
-     box yet. */
-  const handleChoose = useCallback(
-    (moduleId) => {
-      setGateOpen(false);
-      if (!moduleId) return;
-
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => {
-          document.getElementById(moduleId)?.scrollIntoView({
-            behavior: reduced ? "auto" : "smooth",
-            block: "start",
-          });
-        }),
-      );
-    },
-    [reduced],
-  );
 
   return (
     <>
@@ -88,7 +65,7 @@ export default function App() {
       </a>
 
       <AnimatePresence>
-        {gateOpen ? <EntryGate key="gate" onChoose={handleChoose} /> : null}
+        {gateOpen ? <EntryGate key="gate" onDone={() => setGateOpen(false)} /> : null}
       </AnimatePresence>
 
       {/* `inert`, never display:none. Hiding this subtree breaks every

@@ -59,14 +59,32 @@ function Drawn({ args, position, rotation, color, roughness = 1, metalness = 0, 
    Roof — two coincident meshes so a covering change crossfades
    instead of popping, plus an analytic outline that morphs with
    the surface rather than being re-extracted every frame.
+
+   Parametric in size (halfW / halfD / ridge) and placement
+   (position / rotation), so the same component drives the main
+   roof and every wing roof — change the shape or the covering in
+   the configurator and all of them follow.
    ------------------------------------------------------------ */
-function Roof({ pitch, hipInset, textureKind, roughness, metalness, tone, edgeMaterial }) {
+function Roof({
+  pitch,
+  hipInset,
+  textureKind,
+  roughness,
+  metalness,
+  tone,
+  edgeMaterial,
+  halfW = W,
+  halfD = D,
+  ridge = RIDGE,
+  position,
+  rotation,
+}) {
   const baseRef = useRef();
   const overRef = useRef();
-  const shape = useRef({ h: pitch * RIDGE, inset: hipInset });
+  const shape = useRef({ h: pitch * ridge, inset: hipInset });
   const fade = useRef({ t: 1, current: textureKind });
 
-  const roof = useMemo(() => createRoofGeometry(W, D, pitch * RIDGE, hipInset), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const roof = useMemo(() => createRoofGeometry(halfW, halfD, pitch * ridge, hipInset), []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => () => roof.dispose(), [roof]);
 
   // seed the base material once; from here on it is ours, not React's
@@ -88,7 +106,7 @@ function Roof({ pitch, hipInset, textureKind, roughness, metalness, tone, edgeMa
   useFrame((_, dt) => {
     const step = Math.min(dt, 0.05);
 
-    shape.current.h = damp(shape.current.h, pitch * RIDGE, 4, step);
+    shape.current.h = damp(shape.current.h, pitch * ridge, 4, step);
     shape.current.inset = damp(shape.current.inset, hipInset, 4, step);
     roof.update(shape.current.h, shape.current.inset);
 
@@ -123,7 +141,7 @@ function Roof({ pitch, hipInset, textureKind, roughness, metalness, tone, edgeMa
   });
 
   return (
-    <>
+    <group position={position} rotation={rotation}>
       <mesh ref={baseRef} geometry={roof.surface} castShadow receiveShadow>
         <meshStandardMaterial flatShading side={THREE.DoubleSide} />
       </mesh>
@@ -140,7 +158,7 @@ function Roof({ pitch, hipInset, textureKind, roughness, metalness, tone, edgeMa
         />
       </mesh>
       <lineSegments geometry={roof.outline} material={edgeMaterial} renderOrder={4} />
-    </>
+    </group>
   );
 }
 
@@ -324,6 +342,10 @@ export default function House({
   );
   useEffect(() => () => edgeMaterial.dispose(), [edgeMaterial]);
 
+  // the covering + shape controls, shared by the main roof and every
+  // wing roof so they all change together in the configurator
+  const roofParams = { pitch, hipInset, textureKind, roughness, metalness, tone, edgeMaterial };
+
   useFrame((_, dt) => {
     if (!group.current) return;
     const step = Math.min(dt, 0.05);
@@ -491,20 +513,13 @@ export default function House({
           </group>
         ))}
 
-        {/* garage wing: a single-storey mass on the right with a lean-to
-            roof and a wide door — reads as a bigger, more complex build */}
+        {/* garage wing: a single-storey mass on the right with its own
+            gabled roof (editable) and a wide door */}
         {complex ? (
           <group position={[BODY_W + 0.9, 0, 0]}>
             <Drawn args={[1.8, 1.15, BODY_D * 1.5]} position={[0, 0.575, 0]} color="#37373c" edgeMaterial={edgeMaterial} castShadow receiveShadow />
-            {/* lean-to roof, sloping down away from the house */}
-            <Drawn
-              args={[1.95, 0.08, BODY_D * 1.5 + 0.2]}
-              position={[0, 1.2, 0]}
-              rotation={[0, 0, -0.12]}
-              color="#2c2c30"
-              edgeMaterial={edgeMaterial}
-              castShadow
-            />
+            {/* ridge runs along the garage depth; morphs and re-covers with the rest */}
+            <Roof {...roofParams} halfW={BODY_D * 0.82} halfD={0.94} ridge={0.5} position={[0, 1.15, 0]} rotation={[0, Math.PI / 2, 0]} />
             {/* garage door */}
             <Drawn args={[1.3, 0.86, 0.05]} position={[0, 0.5, BODY_D * 0.75 + 0.01]} color="#26262a" edgeMaterial={edgeMaterial} />
             {[-0.4, -0.13, 0.14, 0.41].map((y) => (
@@ -513,6 +528,34 @@ export default function House({
                 <meshStandardMaterial color="#3a3a40" roughness={0.9} flatShading />
               </mesh>
             ))}
+          </group>
+        ) : null}
+
+        {/* left wing — single storey with its own editable gabled roof */}
+        {complex ? (
+          <group position={[-(BODY_W + 0.85), 0, 0]}>
+            <Drawn args={[1.7, 1.35, BODY_D * 1.5]} position={[0, 0.675, 0]} color="#3a3a3f" edgeMaterial={edgeMaterial} castShadow receiveShadow />
+            <Roof {...roofParams} halfW={BODY_D * 0.78} halfD={0.92} ridge={0.62} position={[0, 1.35, 0]} rotation={[0, Math.PI / 2, 0]} />
+            {/* a window on the street-facing gable end */}
+            <Drawn args={[0.5, 0.62, 0.05]} position={[-0.85 - 0.02, 0.78, 0.3]} rotation={[0, -Math.PI / 2, 0]} color="#4c4c52" edgeMaterial={edgeMaterial} />
+            <mesh position={[-0.85 - 0.05, 0.78, 0.3]} rotation={[0, -Math.PI / 2, 0]}>
+              <boxGeometry args={[0.38, 0.5, 0.03]} />
+              <meshStandardMaterial color="#0d0d10" roughness={0.2} metalness={0.4} flatShading />
+            </mesh>
+          </group>
+        ) : null}
+
+        {/* rear wing — a back ell with its own editable gabled roof */}
+        {complex ? (
+          <group position={[0.5, 0, -(BODY_D + 0.75)]}>
+            <Drawn args={[1.5, 1.55, 1.5]} position={[0, 0.775, 0]} color="#38383d" edgeMaterial={edgeMaterial} castShadow receiveShadow />
+            <Roof {...roofParams} halfW={0.82} halfD={0.82} ridge={0.6} position={[0, 1.55, 0]} />
+            {/* rear window */}
+            <Drawn args={[0.52, 0.6, 0.05]} position={[0, 0.85, -0.75 - 0.02]} color="#4c4c52" edgeMaterial={edgeMaterial} />
+            <mesh position={[0, 0.85, -0.75 - 0.05]}>
+              <boxGeometry args={[0.4, 0.48, 0.03]} />
+              <meshStandardMaterial color="#0d0d10" roughness={0.2} metalness={0.4} flatShading />
+            </mesh>
           </group>
         ) : null}
       </group>
@@ -526,15 +569,7 @@ export default function House({
         <Drawn args={[0.06, 0.08, D * 2]} position={[W, -0.02, 0]} color="#33333a" edgeMaterial={edgeMaterial} />
         <Drawn args={[0.06, 0.08, D * 2]} position={[-W, -0.02, 0]} color="#33333a" edgeMaterial={edgeMaterial} />
 
-        <Roof
-          pitch={pitch}
-          hipInset={hipInset}
-          textureKind={textureKind}
-          roughness={roughness}
-          metalness={metalness}
-          tone={tone}
-          edgeMaterial={edgeMaterial}
-        />
+        <Roof {...roofParams} />
       </group>
 
       {/* chimney: stack, corbelled cap, and two pots */}

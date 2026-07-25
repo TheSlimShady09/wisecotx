@@ -6,11 +6,7 @@ import { COMPANY, MODULES, MODULE_ORDER } from "../lib/site.js";
 function Mark() {
   return (
     <Link to="/" className="mark" aria-label={`${COMPANY.name} — home`}>
-      <svg viewBox="0 0 28 22" aria-hidden="true" className="mark__glyph">
-        <path d="M2 12 L14 2 L26 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-        <path d="M6 20 L14 8 L22 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" opacity="0.45" />
-      </svg>
-      <span className="mark__text">WCG</span>
+      <img className="mark__img" src="/wcg-logo.png" alt={COMPANY.name} width="120" height="120" />
     </Link>
   );
 }

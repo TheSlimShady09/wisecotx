@@ -135,6 +135,14 @@ export default function Footer() {
           </span>
           <span className="anno--dim">{COMPANY.license}</span>
           <span className="anno--dim">Licensed · Bonded · Insured</span>
+          <a
+            className="anno--dim foot__powered"
+            href="https://neolink.al"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Powered by Neolink
+          </a>
         </div>
       </div>
     </footer>
