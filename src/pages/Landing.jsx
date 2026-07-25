@@ -68,7 +68,6 @@ function ModuleSection({ id, index }) {
             tagLeft={module.label}
             tagRight={preview.scene.hotspotsFrom ? "Marked up" : "Specimen"}
             fallbackNote={`${module.label} — ${module.tagline}`}
-            staticOnPhone
             {...stagePropsForModule(id)}
           />
         </div>

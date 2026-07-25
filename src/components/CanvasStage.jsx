@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 
 import StaticHouse from "./StaticHouse.jsx";
 import { useIsVisible, useMediaQuery, useNearViewport, usePrefersReducedMotion, useWebGL } from "../lib/hooks.js";
@@ -11,7 +11,6 @@ export default function CanvasStage({
   className = "",
   fallbackNote,
   forceStatic = false,
-  staticOnPhone = false,
   // tagLeft / tagRight are still accepted from call sites but no longer
   // rendered — they land in `rest` and are harmlessly ignored
   tagLeft: _tagLeft,
@@ -24,10 +23,26 @@ export default function CanvasStage({
   const reducedMotion = usePrefersReducedMotion();
   const phone = useMediaQuery("(max-width: 640px)");
 
-  // On phones we render at most one live canvas at a time: decorative
-  // stages (the landing sections) fall back to the drawing, and the ones
-  // that stay 3D run in a lighter power profile.
-  const canRender3D = !forceStatic && !(phone && staticOnPhone) && webgl === true && near;
+  /* Non-latching "is this near the viewport right now". On phones we use
+     it to unmount a canvas once it scrolls away, so only the stage you
+     are actually looking at holds a live WebGL context — the rest fall
+     back to the drawing. Desktops keep every canvas mounted (the latched
+     `near`), since holding a few contexts there is cheap. */
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return undefined;
+    }
+    const observer = new IntersectionObserver((entries) => setInView(entries[0]?.isIntersecting ?? false), {
+      rootMargin: "300px",
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [ref]);
+
+  const canRender3D = !forceStatic && webgl === true && near && (!phone || inView);
 
   return (
     <div ref={ref} className={`stage ${className}`}>
