@@ -6,6 +6,7 @@ import Reveal from "../components/Reveal.jsx";
 import Works from "../components/Works.jsx";
 import ServicesSlideshow from "../components/ServicesSlideshow.jsx";
 import CountUp from "../components/CountUp.jsx";
+import MapStage from "../components/MapStage.jsx";
 import { SpecTable } from "../components/ModuleKit.jsx";
 import { stagePropsForModule } from "../lib/scene.js";
 import {
@@ -290,6 +291,16 @@ export default function Landing() {
               />
             </Reveal>
           </div>
+
+          <Reveal delay={0.1} className="about__mapwrap">
+            <div className="about__map-head">
+              <span className="anno">Where we are</span>
+              <span className="anno--dim">
+                {COMPANY.address.line1}, {COMPANY.address.city}
+              </span>
+            </div>
+            <MapStage className="about__map" />
+          </Reveal>
         </div>
       </section>
 
