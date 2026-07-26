@@ -10,7 +10,7 @@
    IMPORTANT: restrict this token by URL in your Mapbox account
    (account.mapbox.com → token → URL restrictions) to your own domains. */
 const DEFAULT_TOKEN =
-  "cGsuZXlKMUlqb2ljbTloYm1KaGJHeGhJaXdpWVNJNkltTnRjekJxWTIxNU9EQnhiRGd5ZVhCdGFtSnNlRFJzY1hBaWZRLnNEYWw5M3g5RHZGZng2Nm55ZzVOWGc=";
+  "cGsuZXlKMUlqb2ljbTloYm1KaGJHeGhJaXdpWVNJNkltTnRjekZ2YURRNGNEQm5abXN5ZUhGMFoyeGhabnBrZDNFaWZRLl9LRG1HSmI3YU1kMEVhenNlN25mM0E=";
 
 function decodeToken(b64) {
   try {
