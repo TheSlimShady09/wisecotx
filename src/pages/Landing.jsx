@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import CanvasStage from "../components/CanvasStage.jsx";
+import HeroBlueprint from "../components/HeroBlueprint.jsx";
 import Reveal from "../components/Reveal.jsx";
 import Works from "../components/Works.jsx";
 import ServicesSlideshow from "../components/ServicesSlideshow.jsx";
@@ -126,16 +127,9 @@ export default function Landing() {
           </div>
 
           <div className="hero__stage-wrap">
-            {/* the drawing, not the model — the three sections below each
-                run a real 3D house, and four live canvases on one page is
-                three too many */}
-            <CanvasStage
-              className="hero__stage"
-              forceStatic
-              tagLeft="Elevation"
-              tagRight="WCG-STD-01"
-              fallbackNote="WCG — standard gable, chimney to the east"
-            />
+            {/* a blueprint that draws itself, in construction order — no
+                WebGL, and the three sections below carry the live 3D */}
+            <HeroBlueprint />
           </div>
 
           <div className="hero__choices" role="group" aria-label="Choose the help you need">

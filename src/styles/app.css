@@ -2425,3 +2425,27 @@ main {
 .work__spec {
   font-size: 0.625rem;
 }
+
+/* ---------- hero blueprint (self-drawing elevation) ---------- */
+.hero-bp {
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+.hero-bp__svg {
+  width: min(100%, 34rem);
+  height: auto;
+  max-height: 100%;
+  overflow: visible;
+}
+.hero-bp__labels text {
+  fill: currentColor;
+  stroke: none;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+}
+.hero-bp__tag {
+  color: var(--ink-dim);
+}
