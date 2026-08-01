@@ -146,6 +146,47 @@ export function getRoofTexture(kind) {
   return texture;
 }
 
+/** Water stain: a soft dark bloom with a couple of drip trails. */
+function drawStain(ctx) {
+  ctx.clearRect(0, 0, SIZE, SIZE);
+
+  const bloom = ctx.createRadialGradient(SIZE * 0.5, SIZE * 0.42, 0, SIZE * 0.5, SIZE * 0.42, SIZE * 0.46);
+  bloom.addColorStop(0, "rgba(18,16,12,0.82)");
+  bloom.addColorStop(0.5, "rgba(18,16,12,0.42)");
+  bloom.addColorStop(0.8, "rgba(18,16,12,0.14)");
+  bloom.addColorStop(1, "rgba(18,16,12,0)");
+  ctx.fillStyle = bloom;
+  ctx.fillRect(0, 0, SIZE, SIZE);
+
+  const drips = [0.42, 0.5, 0.58];
+  for (const x of drips) {
+    const drip = ctx.createLinearGradient(0, SIZE * 0.4, 0, SIZE);
+    drip.addColorStop(0, "rgba(18,16,12,0.5)");
+    drip.addColorStop(1, "rgba(18,16,12,0)");
+    ctx.fillStyle = drip;
+    ctx.fillRect(SIZE * x - 4, SIZE * 0.4, 8, SIZE * 0.6);
+  }
+}
+
+/**
+ * A transparent decal texture for damage marks (water stains, streaks) —
+ * blended over the roof covering rather than replacing it.
+ * @returns {THREE.CanvasTexture}
+ */
+export function getStainTexture() {
+  const key = "__stain";
+  if (cache.has(key)) return cache.get(key);
+
+  const { el, ctx } = canvas2d();
+  drawStain(ctx);
+
+  const texture = new THREE.CanvasTexture(el);
+  texture.colorSpace = THREE.SRGBColorSpace;
+
+  cache.set(key, texture);
+  return texture;
+}
+
 export function disposeRoofTextures() {
   for (const texture of cache.values()) texture.dispose();
   cache.clear();

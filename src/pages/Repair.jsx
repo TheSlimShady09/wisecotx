@@ -43,6 +43,8 @@ export default function Repair() {
               tagRight={`${fault.hotspots.length} location${fault.hotspots.length > 1 ? "s" : ""}`}
               fallbackNote={`${fault.label} — typical locations`}
               interactive
+              environment
+              prop="tarp"
               pitch={1}
               hipInset={0}
               textureKind="tiles"

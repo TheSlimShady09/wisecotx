@@ -1,6 +1,6 @@
-import { Suspense, useEffect, useRef } from "react";
+import { Component, Suspense, useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { ContactShadows, Grid, OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { ContactShadows, Environment, Grid, OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
 
 import House from "./House.jsx";
@@ -15,6 +15,20 @@ const FRAMES = {
   // pulled back and lifted for the big multi-wing, four-roof build
   tall: { position: [8.8, 5.0, 10.6], look: [0, 1.7, 0], fov: 34, target: [0, 1.6, 0] },
 };
+
+/* The environment preset is the one thing in this scene that fetches
+   from the network (drei's CDN). If that fetch fails — offline, CDN
+   down — this swallows it and renders nothing rather than taking the
+   whole canvas down with it. */
+class EnvironmentBoundary extends Component {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
 
 /* Without OrbitControls a drei camera keeps its default orientation and
    stares down -Z, leaving the house off to one side. On the still stages
@@ -41,6 +55,7 @@ export default function Scene({
   showGround = true,
   lowPower = false,
   complex = false,
+  environment = false,
   ...house
 }) {
   const frame = complex ? FRAMES.tall : FRAMES.standard;
@@ -88,6 +103,13 @@ export default function Scene({
       <directionalLight position={[5.5, 2, -6.5]} intensity={0.9} color="#ffffff" />
 
       <Suspense fallback={null}>
+        {/* reflections/ambient response for materials to react to — skipped
+            on phone so nothing extra is fetched or baked there */}
+        {environment && !lowPower ? (
+          <EnvironmentBoundary>
+            <Environment preset="city" resolution={256} />
+          </EnvironmentBoundary>
+        ) : null}
         <House {...house} complex={complex} reducedMotion={reducedMotion} />
       </Suspense>
 

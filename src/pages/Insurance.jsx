@@ -53,6 +53,7 @@ export default function Insurance() {
               tagRight="Inspection map"
               fallbackNote={`${peril.label} — typical inspection points`}
               interactive
+              prop="magnifier"
               pitch={1}
               hipInset={0.42}
               textureKind="shingles"

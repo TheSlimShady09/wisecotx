@@ -5,7 +5,7 @@ import * as THREE from "three";
 
 import { HOUSE } from "../lib/site.js";
 import { createRoofGeometry, hotspotToWorld } from "./roofGeometry.js";
-import { getRoofTexture } from "./textures.js";
+import { getRoofTexture, getStainTexture } from "./textures.js";
 
 const { halfWidth: W, halfDepth: D, wallHeight: WALL, eave: EAVE } = HOUSE;
 const BODY_W = W - EAVE;
@@ -213,6 +213,112 @@ function Marker({ spot, pitch, hipInset, label, delay = 0 }) {
 }
 
 /* ------------------------------------------------------------
+   Damage marks — the one thing in this model deliberately NOT
+   drawn in the clean white-outline idiom. The line drawing is the
+   house as built; damage reads by breaking that convention, and by
+   being the only place a warning colour appears on an otherwise
+   grayscale house. Only fault hotspots carry a `kind`, so this is
+   inert for every other module (Insurance's peril markers have
+   none, and Construction has no hotspots at all).
+   ------------------------------------------------------------ */
+const DAMAGE_COLOR = "#ff5722";
+
+function DamageMark({ spot, pitch, hipInset }) {
+  const ref = useRef();
+  const ringRef = useRef();
+  const clock = useRef(0);
+  const stain = useMemo(() => getStainTexture(), []);
+
+  useFrame((_, dt) => {
+    if (!ref.current) return;
+    const { position, normal } = hotspotToWorld(spot, W, D, pitch * RIDGE, hipInset);
+    ref.current.position.copy(position).addScaledVector(normal, 0.018);
+    ref.current.position.y += WALL;
+    ref.current.quaternion.setFromUnitVectors(FORWARD, normal);
+
+    // a slow warning pulse, distinct from the marker's own faster ring,
+    // so the damage itself keeps drawing the eye even once you've clocked it
+    clock.current += dt;
+    const wave = (clock.current % 1.6) / 1.6;
+    if (ringRef.current) {
+      ringRef.current.scale.setScalar(1 + wave * 0.9);
+      ringRef.current.material.opacity = (1 - wave) * 0.6;
+    }
+  });
+
+  let mark = null;
+  let ringRadius = 0.4;
+
+  if (spot.kind === "stain") {
+    ringRadius = 0.46;
+    mark = (
+      <mesh renderOrder={3}>
+        <planeGeometry args={[0.82, 1.02]} />
+        <meshBasicMaterial map={stain} transparent opacity={1} depthWrite={false} polygonOffset polygonOffsetFactor={-1} />
+      </mesh>
+    );
+  } else if (spot.kind === "streak") {
+    ringRadius = 0.5;
+    mark = (
+      <mesh renderOrder={3} rotation={[0, 0, Math.PI]}>
+        <planeGeometry args={[0.46, 1.5]} />
+        <meshBasicMaterial map={stain} transparent opacity={1} depthWrite={false} polygonOffset polygonOffsetFactor={-1} />
+      </mesh>
+    );
+  } else if (spot.kind === "gap") {
+    ringRadius = 0.34;
+    mark = (
+      <>
+        {/* warning rim framing the hole, so the loss reads before the eye finds the hole itself */}
+        <mesh position={[0, 0, 0.002]}>
+          <ringGeometry args={[0.19, 0.24, 4]} />
+          <meshBasicMaterial color={DAMAGE_COLOR} transparent opacity={0.85} side={THREE.DoubleSide} depthWrite={false} />
+        </mesh>
+        {/* exposed underlayment where a tile is missing */}
+        <mesh position={[0, 0, 0.006]}>
+          <planeGeometry args={[0.4, 0.29]} />
+          <meshStandardMaterial color="#0d0c0a" roughness={1} flatShading />
+        </mesh>
+        {/* a slipped tile, knocked askew rather than gone */}
+        <mesh position={[0.32, -0.17, 0.02]} rotation={[0, 0, 0.5]}>
+          <boxGeometry args={[0.32, 0.24, 0.03]} />
+          <meshStandardMaterial color="#8a8a8f" roughness={0.8} flatShading />
+        </mesh>
+      </>
+    );
+  } else if (spot.kind === "tear") {
+    ringRadius = 0.52;
+    mark = (
+      <group position={[0, -0.08, 0]} rotation={[-0.85, 0, 0]}>
+        {/* a lifted section, torn free and peeled well back off the deck */}
+        <mesh position={[0, 0.22, 0.01]}>
+          <boxGeometry args={[0.6, 0.44, 0.02]} />
+          <meshStandardMaterial color="#141210" roughness={1} flatShading side={THREE.DoubleSide} />
+        </mesh>
+        {/* the raw torn edge catches the warning colour */}
+        <mesh position={[0, 0.44, 0.011]}>
+          <boxGeometry args={[0.6, 0.05, 0.022]} />
+          <meshStandardMaterial color={DAMAGE_COLOR} roughness={0.6} flatShading />
+        </mesh>
+      </group>
+    );
+  }
+
+  if (!mark) return null;
+
+  return (
+    <group ref={ref}>
+      {/* a slow warning-coloured pulse under every damage mark */}
+      <mesh ref={ringRef} renderOrder={2}>
+        <ringGeometry args={[ringRadius, ringRadius * 1.08, 40]} />
+        <meshBasicMaterial color={DAMAGE_COLOR} transparent opacity={0.5} side={THREE.DoubleSide} depthWrite={false} />
+      </mesh>
+      {mark}
+    </group>
+  );
+}
+
+/* ------------------------------------------------------------
    Characterizing props — one telling object per module, so the
    three choices read as three different jobs, not one recoloured
    house. Drawn in the same white-line idiom as everything else.
@@ -297,7 +403,49 @@ function Magnifier() {
   );
 }
 
-const PROPS = { scaffold: Scaffold, magnifier: Magnifier };
+/** Repair: an emergency tarp roped down over one corner of the roof. */
+function Tarp() {
+  const { position, normal } = useMemo(
+    () => hotspotToWorld({ u: -0.62, v: 0.28, face: "front" }, W, D, RIDGE, 0),
+    [],
+  );
+  const groupPosition = useMemo(() => {
+    const p = position.clone().addScaledVector(normal, 0.03);
+    p.y += WALL;
+    return p;
+  }, [position, normal]);
+  const quaternion = useMemo(() => new THREE.Quaternion().setFromUnitVectors(FORWARD, normal), [normal]);
+
+  const corners = [
+    [-0.28, -0.24],
+    [0.28, -0.24],
+    [-0.28, 0.24],
+    [0.28, 0.24],
+  ];
+
+  return (
+    <group position={groupPosition} quaternion={quaternion}>
+      <mesh castShadow>
+        <planeGeometry args={[0.6, 0.52]} />
+        <meshStandardMaterial color="#3a6ea8" roughness={0.7} flatShading side={THREE.DoubleSide} />
+      </mesh>
+      {/* a fold line across the sheet, so it reads as material, not a painted patch */}
+      <mesh position={[0, 0.03, 0.006]}>
+        <boxGeometry args={[0.58, 0.02, 0.005]} />
+        <meshStandardMaterial color="#2c557f" roughness={0.75} flatShading />
+      </mesh>
+      {/* sandbags weighting each corner down against the wind */}
+      {corners.map(([x, y], i) => (
+        <mesh key={i} position={[x, y, 0.04]}>
+          <sphereGeometry args={[0.045, 8, 8]} />
+          <meshStandardMaterial color="#2a2a2e" roughness={0.9} flatShading />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+const PROPS = { scaffold: Scaffold, magnifier: Magnifier, tarp: Tarp };
 
 /* ------------------------------------------------------------ */
 export default function House({
@@ -596,6 +744,12 @@ export default function House({
           delay={i * 0.45}
         />
       ))}
+
+      {hotspots.map((spot, i) =>
+        spot.kind ? (
+          <DamageMark key={`dmg-${spot.face}-${spot.u}-${spot.v}-${i}`} spot={spot} pitch={pitch} hipInset={hipInset} />
+        ) : null,
+      )}
     </group>
   );
 }

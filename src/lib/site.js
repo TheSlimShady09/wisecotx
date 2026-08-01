@@ -326,7 +326,7 @@ export const DAMAGE = [
     urgency: "Same week",
     note: "Same week · from $450",
     range: [450, 1800],
-    hotspots: [{ u: -0.22, v: 0.62, face: "front" }],
+    hotspots: [{ u: -0.22, v: 0.62, face: "front", kind: "stain" }],
     symptom: "A stain on the ceiling, a drip in the attic, or damp along a chimney.",
     scope:
       "Nine times out of ten this is flashing, not the covering. We trace it back from the stain, open only the affected section, replace the flashing and underlayment, and re-lay the covering over it.",
@@ -340,8 +340,8 @@ export const DAMAGE = [
     note: "2–3 weeks · from $280",
     range: [280, 950],
     hotspots: [
-      { u: 0.34, v: 0.4, face: "front" },
-      { u: 0.52, v: 0.68, face: "front" },
+      { u: 0.34, v: 0.4, face: "front", kind: "gap" },
+      { u: 0.52, v: 0.68, face: "front", kind: "gap" },
     ],
     symptom: "Visible gaps, slipped tiles, or fragments in the gutter.",
     scope:
@@ -356,9 +356,9 @@ export const DAMAGE = [
     note: "Same-day dry-in · from $900",
     range: [900, 4200],
     hotspots: [
-      { u: -0.72, v: 0.82, face: "front" },
-      { u: -0.55, v: 0.5, face: "front" },
-      { u: -0.8, v: 0.35, face: "back" },
+      { u: -0.72, v: 0.82, face: "front", kind: "tear" },
+      { u: -0.55, v: 0.5, face: "front", kind: "tear" },
+      { u: -0.8, v: 0.35, face: "back", kind: "tear" },
     ],
     symptom: "A section stripped, ridge lifted, or edge trim peeled back after a storm.",
     scope:
@@ -373,8 +373,8 @@ export const DAMAGE = [
     note: "4 weeks · from $220",
     range: [220, 1100],
     hotspots: [
-      { u: 0.0, v: 0.04, face: "front" },
-      { u: 0.6, v: 0.04, face: "front" },
+      { u: 0.0, v: 0.04, face: "front", kind: "streak" },
+      { u: 0.6, v: 0.04, face: "front", kind: "streak" },
     ],
     symptom: "Water running behind the gutter, or rot in the fascia board.",
     scope:
