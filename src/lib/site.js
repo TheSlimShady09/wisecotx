@@ -20,7 +20,7 @@ export const COMPANY = {
   license: "Serving Dallas–Fort Worth, TX",
   social: {
     facebook: "#",
-    instagram: "#",
+    instagram: "https://www.instagram.com/wisecotx/",
     youtube: "#",
   },
 };
