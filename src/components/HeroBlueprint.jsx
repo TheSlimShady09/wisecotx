@@ -50,25 +50,14 @@ export default function HeroBlueprint() {
   const reduced = useReducedMotion();
   const [drawn, setDrawn] = useState(false);
 
+  // draw once when the page opens, then leave it standing
   useEffect(() => {
     if (reduced) {
       setDrawn(true);
       return undefined;
     }
-    let hold;
-    let redraw;
-    const loop = () => {
-      setDrawn(true);
-      hold = window.setTimeout(() => {
-        setDrawn(false);
-        redraw = window.setTimeout(loop, 1000); // brief erase, then draw again
-      }, 5200); // stay fully drawn a while
-    };
-    loop();
-    return () => {
-      window.clearTimeout(hold);
-      window.clearTimeout(redraw);
-    };
+    const id = requestAnimationFrame(() => setDrawn(true));
+    return () => cancelAnimationFrame(id);
   }, [reduced]);
 
   const state = drawn ? "visible" : "hidden";
@@ -92,7 +81,7 @@ export default function HeroBlueprint() {
         strokeLinejoin="round"
         strokeLinecap="round"
         variants={container}
-        initial="hidden"
+        initial={reduced ? "visible" : "hidden"}
         animate={state}
       >
         {PATHS.map(([d, opacity, width], i) => (

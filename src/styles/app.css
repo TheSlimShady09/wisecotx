@@ -263,6 +263,9 @@ main {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--gap-s);
+  /* each card keeps its own height, so expanding one does not stretch
+     the others — only the hovered card grows */
+  align-items: start;
 }
 
 .choice {
@@ -275,10 +278,11 @@ main {
   border-radius: var(--radius);
   background: linear-gradient(180deg, var(--surface-1), rgba(21, 21, 23, 0.35));
   overflow: hidden;
+  /* scale from the card itself; a transform never reflows its neighbours */
+  transform-origin: center;
   transition:
     border-color var(--dur) var(--ease),
     background var(--dur) var(--ease),
-    opacity var(--dur) var(--ease),
     transform var(--dur) var(--ease);
 }
 /* a hairline that draws itself across the top on focus */
@@ -294,16 +298,15 @@ main {
   transform-origin: left;
   transition: transform var(--dur-slow) var(--ease);
 }
+/* only the hovered/focused card enlarges; the other two are untouched */
 .choice.is-active {
   border-color: var(--line-strong);
   background: linear-gradient(180deg, var(--surface-2), var(--surface-1));
-  transform: translateY(-3px);
+  transform: scale(1.05);
+  z-index: var(--z-raised);
 }
 .choice.is-active::before {
   transform: scaleX(1);
-}
-.choice.is-dimmed {
-  opacity: 0.55;
 }
 
 .choice__code {
