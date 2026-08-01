@@ -589,7 +589,7 @@ export default function House({
                 <Drawn args={[0.56, 0.6, 0.05]} position={[0, 0, 0]} color="#4c4c52" edgeMaterial={edgeMaterial} />
                 <mesh position={[0, 0, 0.035]}>
                   <boxGeometry args={[0.44, 0.48, 0.03]} />
-                  <meshStandardMaterial color="#0d0d10" roughness={0.2} metalness={0.4} flatShading />
+                  <meshStandardMaterial color="#101011" roughness={0.72} metalness={0.08} flatShading />
                 </mesh>
                 <mesh position={[0, 0, 0.055]}>
                   <boxGeometry args={[0.028, 0.48, 0.01]} />
@@ -644,7 +644,7 @@ export default function House({
             <Drawn args={[0.56, 0.64, 0.05]} position={[0, 0, 0]} color="#4c4c52" edgeMaterial={edgeMaterial} />
             <mesh position={[0, 0, 0.035]}>
               <boxGeometry args={[0.44, 0.52, 0.03]} />
-              <meshStandardMaterial color="#0d0d10" roughness={0.2} metalness={0.4} flatShading />
+              <meshStandardMaterial color="#101011" roughness={0.72} metalness={0.08} flatShading />
             </mesh>
             {/* glazing bars, a full cross */}
             <mesh position={[0, 0, 0.055]}>
@@ -688,7 +688,7 @@ export default function House({
             <Drawn args={[0.5, 0.62, 0.05]} position={[-0.85 - 0.02, 0.78, 0.3]} rotation={[0, -Math.PI / 2, 0]} color="#4c4c52" edgeMaterial={edgeMaterial} />
             <mesh position={[-0.85 - 0.05, 0.78, 0.3]} rotation={[0, -Math.PI / 2, 0]}>
               <boxGeometry args={[0.38, 0.5, 0.03]} />
-              <meshStandardMaterial color="#0d0d10" roughness={0.2} metalness={0.4} flatShading />
+              <meshStandardMaterial color="#101011" roughness={0.72} metalness={0.08} flatShading />
             </mesh>
           </group>
         ) : null}
@@ -702,7 +702,7 @@ export default function House({
             <Drawn args={[0.52, 0.6, 0.05]} position={[0, 0.85, -0.75 - 0.02]} color="#4c4c52" edgeMaterial={edgeMaterial} />
             <mesh position={[0, 0.85, -0.75 - 0.05]}>
               <boxGeometry args={[0.4, 0.48, 0.03]} />
-              <meshStandardMaterial color="#0d0d10" roughness={0.2} metalness={0.4} flatShading />
+              <meshStandardMaterial color="#101011" roughness={0.72} metalness={0.08} flatShading />
             </mesh>
           </group>
         ) : null}
