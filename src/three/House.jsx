@@ -403,49 +403,7 @@ function Magnifier() {
   );
 }
 
-/** Repair: an emergency tarp roped down over one corner of the roof. */
-function Tarp() {
-  const { position, normal } = useMemo(
-    () => hotspotToWorld({ u: -0.62, v: 0.28, face: "front" }, W, D, RIDGE, 0),
-    [],
-  );
-  const groupPosition = useMemo(() => {
-    const p = position.clone().addScaledVector(normal, 0.03);
-    p.y += WALL;
-    return p;
-  }, [position, normal]);
-  const quaternion = useMemo(() => new THREE.Quaternion().setFromUnitVectors(FORWARD, normal), [normal]);
-
-  const corners = [
-    [-0.28, -0.24],
-    [0.28, -0.24],
-    [-0.28, 0.24],
-    [0.28, 0.24],
-  ];
-
-  return (
-    <group position={groupPosition} quaternion={quaternion}>
-      <mesh castShadow>
-        <planeGeometry args={[0.6, 0.52]} />
-        <meshStandardMaterial color="#3a6ea8" roughness={0.7} flatShading side={THREE.DoubleSide} />
-      </mesh>
-      {/* a fold line across the sheet, so it reads as material, not a painted patch */}
-      <mesh position={[0, 0.03, 0.006]}>
-        <boxGeometry args={[0.58, 0.02, 0.005]} />
-        <meshStandardMaterial color="#2c557f" roughness={0.75} flatShading />
-      </mesh>
-      {/* sandbags weighting each corner down against the wind */}
-      {corners.map(([x, y], i) => (
-        <mesh key={i} position={[x, y, 0.04]}>
-          <sphereGeometry args={[0.045, 8, 8]} />
-          <meshStandardMaterial color="#2a2a2e" roughness={0.9} flatShading />
-        </mesh>
-      ))}
-    </group>
-  );
-}
-
-const PROPS = { scaffold: Scaffold, magnifier: Magnifier, tarp: Tarp };
+const PROPS = { scaffold: Scaffold, magnifier: Magnifier };
 
 /* ------------------------------------------------------------ */
 export default function House({

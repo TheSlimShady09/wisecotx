@@ -44,7 +44,6 @@ export default function Repair() {
               fallbackNote={`${fault.label} — typical locations`}
               interactive
               environment
-              prop="tarp"
               pitch={1}
               hipInset={0}
               textureKind="tiles"
