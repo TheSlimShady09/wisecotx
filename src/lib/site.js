@@ -21,7 +21,7 @@ export const COMPANY = {
   social: {
     facebook: "#",
     instagram: "https://www.instagram.com/wisecotx/",
-    youtube: "#",
+    youtube: "https://www.youtube.com/@wisecontx",
   },
 };
 
