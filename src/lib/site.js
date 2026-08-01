@@ -19,7 +19,7 @@ export const COMPANY = {
   hours: "Mon–Sat, 7:00–19:00",
   license: "Serving Dallas–Fort Worth, TX",
   social: {
-    facebook: "#",
+    facebook: "https://www.facebook.com/wisecg",
     instagram: "https://www.instagram.com/wisecotx/",
     youtube: "https://www.youtube.com/@wisecontx",
   },
