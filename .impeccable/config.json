@@ -8,6 +8,12 @@
         "value": "inter",
         "createdAt": "2026-07-21T20:05:56.204Z",
         "reason": "Project brief explicitly specifies Inter as the body typeface"
+      },
+      {
+        "rule": "overused-font",
+        "value": "montserrat",
+        "createdAt": "2026-08-06T11:02:24.133Z",
+        "reason": "User explicitly requested Montserrat as the site font"
       }
     ]
   }

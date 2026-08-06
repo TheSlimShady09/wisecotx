@@ -74,8 +74,8 @@ ol {
   --line-faint: rgba(242, 241, 238, 0.06);
 
   /* type */
-  --font-display: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Montserrat", system-ui, -apple-system, sans-serif;
+  --font-body: "Montserrat", system-ui, -apple-system, sans-serif;
   --font-mono: "Space Mono", ui-monospace, "SFMono-Regular", monospace;
 
   --step--1: 0.8125rem;
