@@ -55,9 +55,10 @@ export default function MapStage({ className = "" }) {
   }, [ref]);
 
   // a real Mapbox dark map when a token is configured; otherwise the
-  // procedural blueprint map. Mapbox needs no WebGL gate of its own — it
-  // brings its own renderer — but we still only mount it once near/in view.
-  const useMapbox = Boolean(MAPBOX_TOKEN);
+  // procedural blueprint map. If Mapbox fails to initialise (auth, WebGL,
+  // whatever) we drop to the procedural map rather than showing an error.
+  const [mapboxFailed, setMapboxFailed] = useState(false);
+  const useMapbox = Boolean(MAPBOX_TOKEN) && !mapboxFailed;
   const mountNear = near && (!phone || inView);
   const canRender3D = mountNear && (useMapbox || webgl === true);
 
@@ -73,7 +74,7 @@ export default function MapStage({ className = "" }) {
       {canRender3D ? (
         <Suspense fallback={<StaticMap />}>
           {useMapbox ? (
-            <MapboxMap reducedMotion={reducedMotion} />
+            <MapboxMap reducedMotion={reducedMotion} onError={() => setMapboxFailed(true)} />
           ) : (
             <MapScene reducedMotion={reducedMotion} lowPower={phone} frameloop={visible ? "always" : "never"} />
           )}
