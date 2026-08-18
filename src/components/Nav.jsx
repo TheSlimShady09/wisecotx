@@ -3,6 +3,15 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 
 import { COMPANY, MODULES, MODULE_ORDER } from "../lib/site.js";
 
+/* Module pages (own routes) + homepage sections (hash anchors), so the
+   whole site is reachable from one menu instead of a long scroll. */
+const PAGES = MODULE_ORDER.map((id) => ({ label: MODULES[id].label, to: `/${id}`, note: MODULES[id].tagline }));
+const SECTIONS = [
+  { label: "Works", to: "/#works", note: "Recent jobs" },
+  { label: "About", to: "/#about", note: "Who we are" },
+  { label: "Contact", to: "/#contact", note: "Reach us" },
+];
+
 function Mark() {
   return (
     <Link to="/" className="mark" aria-label={`${COMPANY.name} — home`}>
@@ -38,10 +47,15 @@ export default function Nav() {
         <Mark />
 
         <nav className="nav__links" aria-label="Main">
-          {MODULE_ORDER.map((id) => (
-            <NavLink key={id} to={`/${id}`} className={({ isActive }) => `nav__link ${isActive ? "is-active" : ""}`}>
-              {MODULES[id].label}
+          {PAGES.map((p) => (
+            <NavLink key={p.to} to={p.to} className={({ isActive }) => `nav__link ${isActive ? "is-active" : ""}`}>
+              {p.label}
             </NavLink>
+          ))}
+          {SECTIONS.map((s) => (
+            <Link key={s.to} to={s.to} className="nav__link">
+              {s.label}
+            </Link>
           ))}
         </nav>
 
@@ -70,10 +84,10 @@ export default function Nav() {
 
       <div id="nav-drawer" className={`nav__drawer ${open ? "is-open" : ""}`} hidden={!open}>
         <div className="nav__drawer-inner">
-          {MODULE_ORDER.map((id) => (
-            <Link key={id} to={`/${id}`} className="nav__drawer-link">
-              <span>{MODULES[id].label}</span>
-              <span className="nav__drawer-note">{MODULES[id].tagline}</span>
+          {[...PAGES, ...SECTIONS].map((item) => (
+            <Link key={item.to} to={item.to} className="nav__drawer-link">
+              <span>{item.label}</span>
+              <span className="nav__drawer-note">{item.note}</span>
             </Link>
           ))}
           <Link to="/quote" className="btn btn--solid btn--lg nav__drawer-cta">

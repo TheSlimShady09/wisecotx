@@ -1,18 +1,21 @@
 import { COMPANY } from "./site.js";
 
 /* ============================================================
-   Lead delivery — by email, not WhatsApp.
+   Lead delivery — to the WCG inbox, with photo attachments.
 
-   Set FORM_ENDPOINT to a form-to-email service (e.g. a Formspree
-   endpoint "https://formspree.io/f/xxxxxx", or your own handler)
-   and submissions are POSTed there and delivered to your inbox
-   server-side — the visitor never leaves the page.
+   Uses FormSubmit (https://formsubmit.co) by default: a free,
+   no-signup form-to-email relay that supports file attachments,
+   so the inspection photos arrive in the inbox. The FIRST
+   submission triggers a one-time activation email to
+   COMPANY.email — click the link in it once and every later
+   submission (photos included) is delivered.
 
-   Left empty, the form falls back to opening the visitor's own
-   email client pre-addressed to COMPANY.email with every field
-   filled in, so it still lands in your inbox with no backend.
+   Set FORM_ENDPOINT to override with your own handler / another
+   service (it must accept multipart/form-data with files).
    ============================================================ */
 export const FORM_ENDPOINT = "";
+
+const FORMSUBMIT = `https://formsubmit.co/${encodeURIComponent(COMPANY.email)}`;
 
 const KV = (rows) =>
   rows
@@ -29,10 +32,7 @@ export function buildEmailBody(values, summaryRows = []) {
   ].filter(Boolean);
 
   if (values.message) lines.push("", "Message:", values.message);
-
-  if (summaryRows.length) {
-    lines.push("", "— Attached configuration —", ...KV(summaryRows));
-  }
+  if (summaryRows.length) lines.push("", "— Attached configuration —", ...KV(summaryRows));
 
   lines.push("", "Sent from the WCG website inspection form.");
   return lines.join("\n");
@@ -45,31 +45,35 @@ export function mailtoLink(values, summaryRows = []) {
 }
 
 /**
- * Delivers the enquiry to the business inbox.
- * @returns {Promise<{via: "server" | "mailto"}>}
- * @throws if a configured server endpoint rejects the request
+ * Sends the enquiry (and any photos) to the WCG inbox.
+ * @param {object} values form fields
+ * @param {Array<[string, string]>} summaryRows attached configuration
+ * @param {File[]} files inspection photos
+ * @returns {Promise<{via: "form"}>}
  */
-export async function sendEnquiry(values, summaryRows = []) {
-  if (FORM_ENDPOINT) {
-    const response = await fetch(FORM_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
-        location: values.location,
-        enquiry: values.module,
-        message: values.message,
-        configuration: KV(summaryRows).join("; "),
-        _subject: `Inspection request — ${values.name}`,
-      }),
-    });
-    if (!response.ok) throw new Error(`Form endpoint returned ${response.status}`);
-    return { via: "server" };
-  }
+export async function sendEnquiry(values, summaryRows = [], files = []) {
+  const endpoint = FORM_ENDPOINT || FORMSUBMIT;
 
-  // No backend configured: hand off to the visitor's mail client.
-  window.location.href = mailtoLink(values, summaryRows);
-  return { via: "mailto" };
+  const data = new FormData();
+  data.append("name", values.name);
+  data.append("email", values.email);
+  if (values.phone) data.append("phone", values.phone);
+  data.append("location", values.location);
+  data.append("enquiry", values.module);
+  if (values.message) data.append("message", values.message);
+  const config = KV(summaryRows).join("; ");
+  if (config) data.append("configuration", config);
+
+  // FormSubmit control fields
+  data.append("_subject", `Inspection request — ${values.name}`);
+  data.append("_captcha", "false");
+  data.append("_template", "table");
+
+  files.forEach((file, i) => data.append(`photo_${i + 1}`, file, file.name));
+
+  // no-cors: FormSubmit processes and emails the multipart body (files
+  // included); the opaque response can't be read, which is fine — a
+  // network failure still rejects and is caught by the caller.
+  await fetch(endpoint, { method: "POST", mode: "no-cors", body: data });
+  return { via: "form" };
 }

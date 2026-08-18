@@ -22,12 +22,24 @@ const TITLES = {
 };
 
 function useRouteEffects() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     document.title = TITLES[pathname] ?? COMPANY.name;
-  }, [pathname]);
+
+    // a menu link like /#about scrolls to that section; two rAFs so the
+    // page has painted (and the section has a box) before we scroll
+    if (hash) {
+      const id = hash.slice(1);
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }),
+      );
+      return;
+    }
+    window.scrollTo(0, 0);
+  }, [pathname, hash]);
 }
 
 function NotFound() {

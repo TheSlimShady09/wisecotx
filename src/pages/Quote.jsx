@@ -28,11 +28,43 @@ export default function Quote() {
   const [submitted, setSubmitted] = useState(false);
   const [reference, setReference] = useState(null);
   const [sending, setSending] = useState(false);
-  const [via, setVia] = useState("mailto");
+  const [sentCount, setSentCount] = useState(0);
   const [sendError, setSendError] = useState(false);
+  const [files, setFiles] = useState([]);
+  const [fileError, setFileError] = useState("");
   const successRef = useRef(null);
 
   const isB2B = values.module === "insurance";
+
+  const MAX_FILES = 6;
+  const MAX_TOTAL = 15 * 1024 * 1024; // 15 MB across all photos
+
+  const previews = useMemo(() => files.map((f) => ({ name: f.name, url: URL.createObjectURL(f) })), [files]);
+  useEffect(() => () => previews.forEach((p) => URL.revokeObjectURL(p.url)), [previews]);
+
+  const addFiles = (event) => {
+    const picked = Array.from(event.target.files || []).filter((f) => f.type.startsWith("image/"));
+    event.target.value = ""; // let the same file be re-picked after removal
+    setFiles((current) => {
+      const next = [...current];
+      for (const f of picked) {
+        if (next.length >= MAX_FILES) break;
+        if (!next.some((e) => e.name === f.name && e.size === f.size)) next.push(f);
+      }
+      const total = next.reduce((s, f) => s + f.size, 0);
+      setFileError(total > MAX_TOTAL ? "Photos add up to over 15 MB — remove one or two." : "");
+      return next;
+    });
+  };
+
+  const removeFile = (index) => {
+    setFiles((current) => {
+      const next = current.filter((_, i) => i !== index);
+      const total = next.reduce((s, f) => s + f.size, 0);
+      setFileError(total > MAX_TOTAL ? "Photos add up to over 15 MB — remove one or two." : "");
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (brief?.module) setValues((v) => ({ ...v, module: brief.module }));
@@ -58,7 +90,7 @@ export default function Quote() {
     const found = validate(values);
     setErrors(found);
 
-    if (Object.keys(found).length) {
+    if (Object.keys(found).length || fileError) {
       const first = document.querySelector(`[name="${Object.keys(found)[0]}"]`);
       first?.focus();
       return;
@@ -67,10 +99,9 @@ export default function Quote() {
     setSending(true);
     setSendError(false);
     try {
-      // Delivers by email — server-side if an endpoint is configured,
-      // otherwise via the visitor's mail client. Never WhatsApp.
-      const result = await sendEnquiry(values, summaryRows);
-      setVia(result.via);
+      // Delivers to the WCG inbox by email, with the photos attached.
+      await sendEnquiry(values, summaryRows, files);
+      setSentCount(files.length);
       setReference(`WCG-${Math.floor(100000 + Math.random() * 899999)}`);
       setSubmitted(true);
     } catch {
@@ -86,15 +117,12 @@ export default function Quote() {
         <div className="shell">
           <div className="done" tabIndex={-1} ref={successRef}>
             <span className="anno--dim">{reference}</span>
-            <h1 className="done__title">
-              {via === "mailto" ? "Almost there — send the email." : "Received. We will be in touch."}
-            </h1>
+            <h1 className="done__title">Received. We will be in touch.</h1>
             <p className="prose">
-              {via === "mailto"
-                ? `We have opened your email app with everything filled in, addressed to ${COMPANY.email}. Press send and it lands with our team.`
-                : isB2B
-                  ? "Your enquiry is in our inbox. Expect a reply by email with certificates, sample scopes and capacity within one business day."
-                  : `Your request is in our inbox. A member of the team will reply by email within one business day. If it is urgent, call ${COMPANY.phone}.`}
+              {isB2B
+                ? "Your enquiry is in our inbox. Expect a reply by email with certificates, sample scopes and capacity within one business day."
+                : `Your request is in our inbox. A member of the team will reply by email within one business day. If it is urgent, call ${COMPANY.phone}.`}
+              {sentCount > 0 ? ` We received ${sentCount} photo${sentCount > 1 ? "s" : ""} with it.` : ""}
             </p>
             {summaryRows.length ? <SpecTable className="done__spec" rows={summaryRows} /> : null}
             <div className="btn-row done__actions">
@@ -284,6 +312,55 @@ export default function Quote() {
                 }
               />
             </div>
+
+            {!isB2B ? (
+              <div className="field photos">
+                <label className="field__label" htmlFor="q-photos">
+                  Photos of the problem <span className="field__opt">optional</span>
+                </label>
+                <p className="photos__hint anno--dim">Show us where it is leaking, cracked or damaged — it speeds up the quote.</p>
+
+                <label className="photos__drop" htmlFor="q-photos">
+                  <input
+                    id="q-photos"
+                    name="photos"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    capture="environment"
+                    className="sr-only"
+                    onChange={addFiles}
+                  />
+                  <span className="photos__drop-icon" aria-hidden="true">
+                    +
+                  </span>
+                  <span className="photos__drop-text">
+                    {files.length ? "Add more photos" : "Add photos"}
+                    <span className="anno--dim">up to {MAX_FILES}, tap to choose or take one</span>
+                  </span>
+                </label>
+
+                {previews.length ? (
+                  <ul className="photos__grid">
+                    {previews.map((p, i) => (
+                      <li key={p.url} className="photos__item">
+                        <img src={p.url} alt={`Selected photo ${i + 1}`} />
+                        <button
+                          type="button"
+                          className="photos__remove"
+                          onClick={() => removeFile(i)}
+                          aria-label={`Remove ${p.name}`}
+                        >
+                          ×
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+
+                {fileError ? <span className="field__error">{fileError}</span> : null}
+              </div>
+            ) : null}
 
             <label className={`toggle toggle--consent ${errors.consent ? "is-invalid" : ""}`}>
               <input type="checkbox" name="consent" checked={values.consent} onChange={update("consent")} />

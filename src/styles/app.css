@@ -2452,3 +2452,105 @@ main {
 .hero-bp__tag {
   color: var(--ink-dim);
 }
+
+/* ---------- inspection photo upload ---------- */
+.photos__hint {
+  margin: -0.15rem 0 var(--gap-s);
+  font-size: var(--step--1);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-muted);
+}
+.photos__drop {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-s);
+  padding: var(--gap-m);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-1);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+.photos__drop:hover {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+.photos__drop-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--ink);
+}
+.photos__drop-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.9375rem;
+}
+.photos__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
+  gap: var(--gap-xs);
+  margin-top: var(--gap-s);
+}
+.photos__item {
+  position: relative;
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.photos__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.photos__remove {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11, 11, 12, 0.8);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+}
+.photos__remove:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ---------- menu anchors: keep headings clear of the fixed nav ---------- */
+section[id] {
+  scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+/* a fuller top menu needs a little more room on mid-width desktops */
+@media (max-width: 1180px) {
+  .nav__phone {
+    display: none;
+  }
+  .nav__links {
+    gap: var(--gap-s);
+  }
+  .nav__link {
+    font-size: 0.875rem;
+  }
+}
