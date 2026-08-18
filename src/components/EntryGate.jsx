@@ -75,7 +75,7 @@ export default function EntryGate({ onDone }) {
           animate={{ opacity: 1 }}
           transition={{ delay: reduced ? 0 : 0.6, duration: 0.6 }}
         >
-          {COMPANY.fullName}
+          {COMPANY.tagline}
         </motion.span>
       </div>
     </motion.div>

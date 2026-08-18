@@ -131,7 +131,7 @@ export default function Footer() {
 
         <div className="foot__base">
           <span className="anno--dim">
-            © {new Date().getFullYear()} {COMPANY.fullName} ({COMPANY.name})
+            © {new Date().getFullYear()} {COMPANY.name}
           </span>
           <span className="anno--dim">{COMPANY.license}</span>
           <span className="anno--dim">Licensed · Bonded · Insured</span>

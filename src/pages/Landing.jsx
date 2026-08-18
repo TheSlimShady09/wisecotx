@@ -121,8 +121,9 @@ export default function Landing() {
               with your roof?
             </h1>
             <p className="hero__sub">
-              {COMPANY.fullName} — a turn-key roofing and restoration general contractor for the {COMPANY.region}. We
-              build, repair, and carry the insurance claim from first inspection to finished asset.
+              {COMPANY.fullName} — a turn-key roofing and restoration general contractor serving the DFW metroplex. We
+              build, repair, and execute all insurance claim work turn-key from initial inspection to final completion.
+              Protecting your most valuable assets!
             </p>
           </div>
 

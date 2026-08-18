@@ -6,11 +6,10 @@
 export const COMPANY = {
   name: "WCG",
   short: "WCG",
-  fullName: "Wise Construction Group",
+  fullName: "WCG",
   tagline: "Roofing & Construction",
   phone: "214-500-7360",
-  /* No public email was supplied — this is a placeholder, replace it. */
-  email: "info@wiseconstructiongroup.com",
+  email: "vini@wisecogroup.com",
   address: {
     line1: "5810 Long Prairie Rd, Suite 700-367",
     city: "Flower Mound, TX 75028",

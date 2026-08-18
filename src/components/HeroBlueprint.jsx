@@ -75,7 +75,7 @@ export default function HeroBlueprint() {
         className="hero-bp__svg"
         viewBox="0 0 400 300"
         role="img"
-        aria-label="Wise Construction Group — standard gable elevation"
+        aria-label="WCG — standard gable elevation"
         fill="none"
         stroke="currentColor"
         strokeLinejoin="round"

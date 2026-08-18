@@ -14,7 +14,7 @@ import Quote from "./pages/Quote.jsx";
 import { COMPANY, MODULES, MODULE_ORDER } from "./lib/site.js";
 
 const TITLES = {
-  "/": `${COMPANY.fullName} (${COMPANY.name}) — Roofing & Restoration, ${COMPANY.region}`,
+  "/": `${COMPANY.name} — Roofing & Restoration, ${COMPANY.region}`,
   "/construction": `New roofs — ${COMPANY.name}`,
   "/repair": `Roof repair — ${COMPANY.name}`,
   "/insurance": `Insurance subcontracting — ${COMPANY.name}`,
