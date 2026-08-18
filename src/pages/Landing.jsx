@@ -17,7 +17,6 @@ import {
   MODULES,
   MODULE_ORDER,
   MODULE_PREVIEW,
-  PROJECTS,
   TESTIMONIALS,
 } from "../lib/site.js";
 
@@ -146,7 +145,7 @@ export default function Landing() {
       ))}
 
       {/* ---------- full service catalogue ---------- */}
-      <section className="band" aria-labelledby="services-title">
+      <section id="services" className="band" aria-labelledby="services-title">
         <div className="shell">
           <Reveal className="anno-rule">
             <span className="anno">Services</span>
@@ -205,32 +204,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ---------- projects ---------- */}
-      <section className="band" aria-labelledby="projects-title">
-        <div className="shell">
-          <Reveal className="anno-rule">
-            <span className="anno">Recent work</span>
-          </Reveal>
-          <Reveal className="head">
-            <h2 id="projects-title">Completed, signed off, warranted.</h2>
-          </Reveal>
-
-          <div className="projects">
-            {PROJECTS.map((project, i) => (
-              <Reveal key={project.ref} delay={(i % 3) * 0.06} className="project">
-                <Link to={`/${project.module}`} className="project__link">
-                  <span className="project__ref anno--dim">{project.ref}</span>
-                  <span className="project__title">{project.title}</span>
-                  <span className="project__spec anno">{project.spec}</span>
-                  <span className="project__module">{MODULES[project.module].label}</span>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------- works gallery ---------- */}
+      {/* ---------- projects gallery ---------- */}
       <Works />
 
       {/* ---------- testimonials ---------- */}
@@ -262,7 +236,7 @@ export default function Landing() {
           </Reveal>
           <div className="about">
             <Reveal className="about__lead">
-              <h2 id="about-title">Started by builders, roofers, and insurance people.</h2>
+              <h2 id="about-title">Started by builders, roofers, and insurance experts.</h2>
             </Reveal>
             <Reveal delay={0.08} className="about__body">
               <p className="prose">
@@ -290,9 +264,7 @@ export default function Landing() {
           <Reveal delay={0.1} className="about__mapwrap">
             <div className="about__map-head">
               <span className="anno">Where we are</span>
-              <span className="anno--dim">
-                {COMPANY.address.line1}, {COMPANY.address.city}
-              </span>
+              <span className="anno--dim">{COMPANY.address.city}</span>
             </div>
             <MapStage className="about__map" />
           </Reveal>
@@ -330,7 +302,7 @@ export default function Landing() {
                 rows={[
                   ["Phone", <a key="p" href={`tel:${COMPANY.phone.replace(/[^\d+]/g, "")}`}>{COMPANY.phone}</a>],
                   ["Email", <a key="e" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>],
-                  ["Address", `${COMPANY.address.line1}, ${COMPANY.address.city}`],
+                  ["Address", COMPANY.address.city],
                   ["Hours", COMPANY.hours],
                 ]}
               />

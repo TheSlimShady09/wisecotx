@@ -180,9 +180,7 @@ main {
   gap: 0;
 }
 .nav__drawer-link {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.35rem 1rem;
+  display: flex;
   align-items: baseline;
   padding-block: var(--gap-m);
   border-bottom: 1px solid var(--line-faint);
@@ -190,12 +188,9 @@ main {
   font-size: var(--step-2);
   letter-spacing: -0.03em;
 }
+/* the small sub-labels are dropped in the mobile menu — just the names */
 .nav__drawer-note {
-  grid-column: 2;
-  font-family: var(--font-body);
-  font-size: var(--step--1);
-  letter-spacing: 0;
-  color: var(--ink-muted);
+  display: none;
 }
 .nav__drawer-cta {
   margin-top: var(--gap-l);
@@ -2542,15 +2537,75 @@ main {
 section[id] {
   scroll-margin-top: calc(var(--nav-h) + 1rem);
 }
-/* a fuller top menu needs a little more room on mid-width desktops */
-@media (max-width: 1180px) {
+/* ---------- services dropdown ---------- */
+.nav__drop-wrap {
+  position: relative;
+}
+.nav__drop-btn {
+  gap: 0.3rem;
+}
+.nav__drop-caret {
+  font-size: 0.6em;
+  transition: transform var(--dur) var(--ease);
+}
+.nav__drop-wrap:hover .nav__drop-caret,
+.nav__drop-wrap:focus-within .nav__drop-caret {
+  transform: rotate(180deg);
+}
+.nav__drop {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 16rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0.4rem;
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease),
+    visibility var(--dur);
+  z-index: var(--z-nav);
+}
+.nav__drop-wrap:hover .nav__drop,
+.nav__drop-wrap:focus-within .nav__drop {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+.nav__drop-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.65rem 0.7rem;
+  border-radius: var(--radius);
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+.nav__drop-link:hover {
+  background: var(--surface-2);
+}
+.nav__drop-name {
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.nav__drop-note {
+  font-size: var(--step--1);
+  color: var(--ink-muted);
+}
+
+/* keep room for the phone number on mid-width desktops */
+@media (max-width: 1080px) {
   .nav__phone {
     display: none;
-  }
-  .nav__links {
-    gap: var(--gap-s);
-  }
-  .nav__link {
-    font-size: 0.875rem;
   }
 }

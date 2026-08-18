@@ -11,7 +11,6 @@ export const COMPANY = {
   phone: "214-500-7360",
   email: "vini@wisecogroup.com",
   address: {
-    line1: "5810 Long Prairie Rd, Suite 700-367",
     city: "Flower Mound, TX 75028",
   },
   region: "DFW Metroplex",

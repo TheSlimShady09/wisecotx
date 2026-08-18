@@ -103,7 +103,6 @@ export default function Footer() {
                 <li>
                   <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
                 </li>
-                <li className="foot__muted">{COMPANY.address.line1}</li>
                 <li className="foot__muted">{COMPANY.address.city}</li>
                 <li className="foot__muted">{COMPANY.hours}</li>
               </ul>

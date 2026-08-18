@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import { COMPANY, MODULES, MODULE_ORDER } from "../lib/site.js";
 
-/* Module pages (own routes) + homepage sections (hash anchors), so the
-   whole site is reachable from one menu instead of a long scroll. */
-const PAGES = MODULE_ORDER.map((id) => ({ label: MODULES[id].label, to: `/${id}`, note: MODULES[id].tagline }));
+/* The three module pages live under a "Services" dropdown, not as their
+   own top-level items. */
+const MODULE_MENU = MODULE_ORDER.map((id) => ({ label: MODULES[id].label, to: `/${id}`, note: MODULES[id].tagline }));
 const SECTIONS = [
-  { label: "Works", to: "/#works", note: "Recent jobs" },
+  { label: "Projects", to: "/#projects", note: "Recent jobs" },
   { label: "About", to: "/#about", note: "Who we are" },
   { label: "Contact", to: "/#contact", note: "Reach us" },
 ];
@@ -47,11 +47,22 @@ export default function Nav() {
         <Mark />
 
         <nav className="nav__links" aria-label="Main">
-          {PAGES.map((p) => (
-            <NavLink key={p.to} to={p.to} className={({ isActive }) => `nav__link ${isActive ? "is-active" : ""}`}>
-              {p.label}
-            </NavLink>
-          ))}
+          <div className="nav__drop-wrap">
+            <Link to="/#services" className="nav__link nav__drop-btn" aria-haspopup="true">
+              Services
+              <span className="nav__drop-caret" aria-hidden="true">
+                ▾
+              </span>
+            </Link>
+            <div className="nav__drop" role="menu">
+              {MODULE_MENU.map((m) => (
+                <Link key={m.to} to={m.to} className="nav__drop-link" role="menuitem">
+                  <span className="nav__drop-name">{m.label}</span>
+                  <span className="nav__drop-note">{m.note}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
           {SECTIONS.map((s) => (
             <Link key={s.to} to={s.to} className="nav__link">
               {s.label}
@@ -84,10 +95,9 @@ export default function Nav() {
 
       <div id="nav-drawer" className={`nav__drawer ${open ? "is-open" : ""}`} hidden={!open}>
         <div className="nav__drawer-inner">
-          {[...PAGES, ...SECTIONS].map((item) => (
+          {[{ label: "Services", to: "/#services" }, ...MODULE_MENU, ...SECTIONS].map((item) => (
             <Link key={item.to} to={item.to} className="nav__drawer-link">
               <span>{item.label}</span>
-              <span className="nav__drawer-note">{item.note}</span>
             </Link>
           ))}
           <Link to="/quote" className="btn btn--solid btn--lg nav__drawer-cta">

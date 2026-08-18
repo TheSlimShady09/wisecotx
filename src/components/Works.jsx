@@ -78,10 +78,10 @@ function WorkTile({ work }) {
 
 export default function Works() {
   return (
-    <section id="works" className="band" aria-labelledby="works-title">
+    <section id="projects" className="band" aria-labelledby="works-title">
       <div className="shell">
         <Reveal className="anno-rule">
-          <span className="anno">Works</span>
+          <span className="anno">Projects</span>
         </Reveal>
         <Reveal className="head">
           <h2 id="works-title">Roofs we have finished, and the work behind them.</h2>

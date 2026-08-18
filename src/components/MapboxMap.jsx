@@ -71,7 +71,7 @@ export default function MapboxMap({ reducedMotion = false, onError }) {
             .setLngLat(CENTER)
             .setPopup(
               new mapboxgl.Popup({ offset: 22, closeButton: false }).setHTML(
-                `<strong>${COMPANY.short}</strong><span>${COMPANY.address.line1}, ${COMPANY.address.city}</span>`,
+                `<strong>${COMPANY.short}</strong><span>${COMPANY.address.city}</span>`,
               ),
             )
             .addTo(map);
