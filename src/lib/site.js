@@ -13,7 +13,7 @@ export const COMPANY = {
   address: {
     city: "Flower Mound, TX 75028",
   },
-  region: "DFW Metroplex",
+  region: "DFW metroplex",
   hours: "Mon–Sat, 7:00–19:00",
   license: "Serving Dallas–Fort Worth, TX",
   social: {
@@ -83,7 +83,7 @@ export const MODULE_ORDER = ["construction", "repair", "insurance"];
 /* ============================================================
    The full service catalogue — what WCG actually offers, as a
    turn-key roofing and restoration general contractor for the
-   DFW Metroplex. Rendered as a Services overview.
+   DFW metroplex. Rendered as a Services overview.
    ============================================================ */
 export const SERVICE_CATEGORIES = [
   {

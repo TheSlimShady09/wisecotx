@@ -13,7 +13,7 @@ const CAPACITY = [
   ["General liability", "$5,000,000"],
   ["Workers' compensation", "$2,000,000"],
   ["Estimating platform", "Xactimate"],
-  ["Coverage area", "DFW Metroplex"],
+  ["Coverage area", "DFW metroplex"],
 ];
 
 function angleFor(peril) {

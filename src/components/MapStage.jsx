@@ -27,7 +27,7 @@ function StaticMap() {
           </g>
           <circle cx="200" cy="92" r="8" fill="#F2F1EE" />
         </svg>
-        <p className="fallback__note">DFW Metroplex · service area</p>
+        <p className="fallback__note">DFW metroplex · service area</p>
       </div>
     </div>
   );
