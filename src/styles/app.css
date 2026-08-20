@@ -2609,3 +2609,146 @@ section[id] {
     display: none;
   }
 }
+
+/* ============================================================
+   ROOFING SYSTEM (construction) — exploded 3D + legend
+   ============================================================ */
+.system {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: var(--gap-xl);
+  align-items: center;
+  margin-top: var(--gap-l);
+}
+.system__stage {
+  height: min(64vh, 34rem);
+}
+.system__stage-col {
+  min-width: 0;
+}
+.system__benefits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+}
+.system__benefit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-bottom: var(--gap-m);
+  border-bottom: 1px solid var(--line-faint);
+}
+.system__benefit-title {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.system__benefit-text {
+  color: var(--ink-muted);
+  font-size: var(--step--1);
+  line-height: 1.55;
+  max-width: 44ch;
+}
+.system__layers {
+  display: grid;
+  gap: 0;
+  margin-top: var(--gap-l);
+  border-top: 1px solid var(--line);
+}
+.system__layers li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-s);
+  padding-block: 0.6rem;
+  border-bottom: 1px solid var(--line-faint);
+  font-size: var(--step--1);
+  color: var(--ink-muted);
+}
+.system__layer-num {
+  color: var(--ink-faint);
+  font-size: 0.7rem;
+}
+
+/* 3D layer labels — the mono callout tags */
+.roofsys-tag {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 0.2rem 0.45rem;
+  background: rgba(11, 11, 12, 0.82);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transform: translateY(-50%);
+}
+.roofsys-tag--left {
+  transform: translate(-100%, -50%);
+}
+.roofsys-tag--vent {
+  background: var(--accent);
+  color: var(--bg);
+  transform: translate(-50%, -50%);
+}
+.roofsys-tag.is-active {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+/* Info card that opens below the model when a layer is clicked */
+.roofsys-info {
+  margin-top: var(--gap-s);
+  padding: 1.1rem 1.25rem;
+  min-height: 6.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--surface, rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--line);
+  border-radius: 4px;
+  transition: border-left-color 0.25s ease;
+}
+.roofsys-info.is-open {
+  border-left-color: var(--accent);
+}
+.roofsys-info__hint {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.roofsys-info__role {
+  display: block;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.roofsys-info__title {
+  margin: 0.3rem 0 0.5rem;
+  font-size: var(--step-1);
+}
+.roofsys-info__text {
+  margin: 0;
+  max-width: 60ch;
+  font-size: var(--step--1);
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+@media (max-width: 980px) {
+  .system {
+    grid-template-columns: 1fr;
+    gap: var(--gap-l);
+  }
+  .system__stage {
+    height: 52vh;
+    min-height: 20rem;
+  }
+}
