@@ -46,7 +46,7 @@ export const MODULES = {
     /* the angle the house turns to when this card is focused (radians) */
     viewAngle: -0.55,
     roofTone: 0.82,
-    cta: "Configure your roof",
+    cta: "Explore the roof system",
   },
   repair: {
     id: "repair",
@@ -142,14 +142,14 @@ export const SERVICE_CATEGORIES = [
    ============================================================ */
 export const MODULE_PREVIEW = {
   construction: {
-    heading: "Specify the roof before anyone climbs a ladder.",
-    lead: "Pick the shape, the covering and the finish. The model rebuilds as you choose, and the price moves with it.",
+    heading: "A roof isn't one layer. It's a system.",
+    lead: "Turn the 3D model and click any layer — decking, ice & water shield, underlayment, starter, shingles, hip & ridge — to see the exact job it does. This is the full WCG build, deck to ridge.",
     highlights: [
-      "Roof shapes, coverings and finishes — priced live",
-      "Written quote with the deck rate stated up front",
-      "Our own crews — nothing brokered out",
+      "Interactive 3D — click any layer to see what it does",
+      "The full system: deck, underlayment, shingles, ridge & ventilation",
+      "Free on-site inspection · our own crews, nothing brokered out",
     ],
-    cta: "Open the configurator",
+    cta: "Explore the roof system",
     scene: {
       pitch: 1,
       hipInset: 0,
