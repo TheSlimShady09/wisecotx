@@ -208,7 +208,13 @@ export default function RoofSystemScene({
         gl.toneMappingExposure = 1.05;
       }}
     >
-      <PerspectiveCamera makeDefault fov={32} position={[6.8, 6.0, 9.2]} near={0.1} far={60} />
+      <PerspectiveCamera
+        makeDefault
+        fov={lowPower ? 36 : 32}
+        position={lowPower ? [7.4, 6.6, 10.4] : [6.8, 6.0, 9.2]}
+        near={0.1}
+        far={60}
+      />
 
       <ambientLight intensity={0.42} />
       <directionalLight

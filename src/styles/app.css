@@ -2748,7 +2748,28 @@ section[id] {
     gap: var(--gap-l);
   }
   .system__stage {
-    height: 52vh;
-    min-height: 20rem;
+    height: clamp(20rem, 50vh, 30rem);
+  }
+}
+
+/* Phones — tighter stage, comfortable card, no URL-bar jump */
+@media (max-width: 560px) {
+  .system {
+    gap: var(--gap-m);
+    margin-top: var(--gap-m);
+  }
+  .system__stage {
+    height: 22rem;
+  }
+  .system__benefit-text,
+  .system__benefit-title {
+    max-width: none;
+  }
+  .roofsys-info {
+    padding: 0.9rem 1rem;
+    min-height: 7.5rem;
+  }
+  .roofsys-info__text {
+    max-width: none;
   }
 }
