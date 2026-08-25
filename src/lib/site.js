@@ -459,8 +459,9 @@ export const CREDENTIALS = [
 ];
 
 export const ACCREDITATIONS = [
-  "Licence GBC2035843",
+  "Licensed GC #GBC-2035843",
   "GAF Master Elite contractor",
+  "Owens Corning Preferred Contractor",
   "Xactimate certified estimators",
   "Manufacturer-backed warranties",
 ];
