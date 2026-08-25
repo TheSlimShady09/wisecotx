@@ -92,17 +92,6 @@ export default function Construction() {
         steps={BUILD_STEPS}
       />
 
-      <section className="band band--tight">
-        <div className="shell">
-          <Reveal className="pledge">
-            <p className="pledge__text">
-              Open the roof, find the decking sound, and your price goes <em>down</em> — never up. Every board we call
-              out, we show you the photo first.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
       <Faq items={FAQ.construction} />
       <ModuleSwitch current="construction" modules={MODULES} order={MODULE_ORDER} />
     </>
