@@ -16,7 +16,6 @@ const SYSTEM_LAYERS = [
   "Synthetic underlayment",
   "Starter shingles",
   "Architectural shingles",
-  "Hip & ridge shingles",
   "Intake & exhaust ventilation",
 ];
 

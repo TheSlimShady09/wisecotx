@@ -10,9 +10,9 @@ import { ROOF_LAYERS } from "../lib/roofLayers.js";
    The roofing system, exploded — modelled after the classic
    "total protection" cutaway: a pitched slope with the layers
    stepped back so every course shows its edge at the eave
-   (decking → ice & water → underlayment → starter → shingles →
-   hip & ridge), the timber rafters exposed underneath, and the
-   intake / exhaust ventilation. Grayscale, generated, labelled.
+   (decking → ice & water → underlayment → starter → shingles),
+   with the timber rafters exposed underneath.
+   Grayscale, generated, labelled.
    Drag to orbit.
    ============================================================ */
 
@@ -20,6 +20,7 @@ const W = 3.0; // span across the eave (X)
 const EAVE = 2.15; // eave edge at +Z
 const RIDGE = 2.0; // ridge edge at -Z
 const STEP = 0.64; // how far each layer is stepped back up-slope
+const STRIP = 0.55; // run of the strip course at the peak
 const NGAP = 0.46; // gap between layers along the slope normal
 const TILT = -0.5; // the whole slope tips toward the camera
 const damp = THREE.MathUtils.damp;
@@ -38,7 +39,8 @@ function Layer({ layer, edgeMaterial, progress, selected, dimmed, onSelect }) {
   const [hovered, setHovered] = useState(false);
 
   // full-cascade dimensions: each layer's eave is stepped back up-slope
-  const zEave = layer.ridgeOnly ? -RIDGE + 0.55 : EAVE - layer.i * STEP;
+  // strip courses sit at the top of the cascade, up by the peak
+  const zEave = layer.stripAtPeak ? -RIDGE + STRIP : EAVE - layer.i * STEP;
   const zRidge = -RIDGE;
   const length = zEave - zRidge;
   const centerZ = (zEave + zRidge) / 2;
@@ -129,23 +131,6 @@ function Plate({ z, edgeMaterial }) {
   );
 }
 
-function Vent({ z, y, side, edgeMaterial, progress }) {
-  const ref = useRef();
-  const geo = useDisposable(() => new THREE.BoxGeometry(0.85, 0.09, 0.26), []);
-  const edges = useDisposable(() => new THREE.EdgesGeometry(geo), [geo]);
-  useFrame(() => {
-    if (ref.current) ref.current.position.y = y * progress.current;
-  });
-  return (
-    <group ref={ref} position={[W * 0.24 * side, y, z]}>
-      <mesh geometry={geo} castShadow>
-        <meshStandardMaterial color="#70707a" roughness={0.5} metalness={0.5} flatShading />
-      </mesh>
-      <lineSegments geometry={edges} material={edgeMaterial} renderOrder={3} />
-    </group>
-  );
-}
-
 function Assembly({ reducedMotion, selectedId, onSelect }) {
   const progress = useRef(reducedMotion ? 1 : 0);
   const edgeMaterial = useDisposable(
@@ -156,8 +141,6 @@ function Assembly({ reducedMotion, selectedId, onSelect }) {
   useFrame((_, dt) => {
     progress.current = damp(progress.current, 1, 2.2, Math.min(dt, 0.05));
   });
-
-  const topY = LAYERS.length * NGAP;
 
   return (
     <group rotation={[TILT, 0, 0]}>
@@ -180,10 +163,6 @@ function Assembly({ reducedMotion, selectedId, onSelect }) {
           onSelect={onSelect}
         />
       ))}
-
-      {/* ventilation */}
-      <Vent label="Exhaust vent" z={-RIDGE + 0.35} y={topY + 0.15} side={1} edgeMaterial={edgeMaterial} progress={progress} />
-      <Vent label="Intake vent" z={EAVE - 0.2} y={0.02} side={-1} edgeMaterial={edgeMaterial} progress={progress} />
     </group>
   );
 }

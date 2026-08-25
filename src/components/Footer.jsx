@@ -35,22 +35,6 @@ const SOCIAL = [
 export default function Footer() {
   return (
     <footer className="foot">
-      {/* infinite marquee — two identical sets, the track slides one full
-          set's width and repeats, so the loop is seamless */}
-      <div className="foot__marquee" aria-hidden="true">
-        <div className="foot__marquee-track">
-          {[0, 1].map((set) => (
-            <div className="foot__marquee-set" key={set}>
-              {Array.from({ length: 6 }).map((_, i) => (
-                <span className="foot__marquee-word" key={i}>
-                  WCG
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-
       <div className="shell shell--wide">
         <div className="foot__top">
           <div className="foot__pitch">

@@ -1165,61 +1165,10 @@ main {
    ============================================================ */
 .foot {
   border-top: 1px solid var(--line);
-  padding-block: 0 var(--gap-l);
+  padding-block: var(--gap-2xl) var(--gap-l);
   margin-top: var(--gap-l);
 }
 
-/* ---------- infinite WCG marquee ---------- */
-.foot__marquee {
-  overflow: hidden;
-  border-bottom: 1px solid var(--line);
-  padding-block: clamp(1.5rem, 4vw, 3rem);
-  margin-bottom: var(--gap-2xl);
-  /* fade the ends so words enter and leave rather than snapping at the edge */
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-}
-.foot__marquee-track {
-  display: flex;
-  width: max-content;
-  animation: foot-marquee 26s linear infinite;
-}
-.foot__marquee-set {
-  display: flex;
-  flex: none;
-}
-.foot__marquee-word {
-  display: inline-flex;
-  align-items: center;
-  gap: clamp(1.5rem, 4vw, 3.5rem);
-  padding-right: clamp(1.5rem, 4vw, 3.5rem);
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(3rem, 11vw, 8rem);
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: var(--accent);
-}
-.foot__marquee-dot {
-  font-size: 0.3em;
-  color: var(--ink-faint);
-  transform: translateY(-0.15em);
-}
-@keyframes foot-marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    /* one full set is exactly half the track, so this is a seamless loop */
-    transform: translateX(-50%);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .foot__marquee-track {
-    animation: none;
-    justify-content: center;
-  }
-}
 .foot__top {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);

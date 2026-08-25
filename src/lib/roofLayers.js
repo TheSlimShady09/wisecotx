@@ -31,7 +31,7 @@ export const ROOF_LAYERS = [
     label: "Starter shingles",
     role: "The sealed first course",
     desc: "A dedicated strip along the eaves and rakes with a factory adhesive line. It locks down the first row of shingles and is the difference between a roof that holds in a storm and one that peels.",
-    i: 3, t: 0.06, color: 0.36, rough: 0.9, tex: "shingles", side: -1,
+    i: 3, t: 0.06, color: 0.36, rough: 0.9, tex: "shingles", side: -1, stripAtPeak: true,
   },
   {
     id: "field",
@@ -39,13 +39,6 @@ export const ROOF_LAYERS = [
     role: "The weather surface",
     desc: "The layer you see — dimensional, laminate shingles that are wind-rated and warrantied by the manufacturer. Laid in the engineered pattern, they shed decades of Texas sun, hail and rain.",
     i: 4, t: 0.08, color: 0.44, rough: 0.9, tex: "shingles", side: -1,
-  },
-  {
-    id: "ridge",
-    label: "Hip & ridge shingles",
-    role: "The capped peak",
-    desc: "Pre-formed caps that bend over the hips and ridge, sealing the highest, most exposed joints and finishing the roofline. They also cap the exhaust ventilation running along the ridge.",
-    i: 5, t: 0.09, color: 0.4, rough: 0.9, tex: "shingles", side: -1, ridgeOnly: true,
   },
 ];
 
