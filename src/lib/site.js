@@ -460,8 +460,6 @@ export const CREDENTIALS = [
 
 export const ACCREDITATIONS = [
   "State licensed GC #4471-RF",
-  "Fully insured & bonded",
-  "OSHA 30 certified crews",
   "GAF Master Elite contractor",
   "Xactimate certified estimators",
   "Manufacturer-backed warranties",

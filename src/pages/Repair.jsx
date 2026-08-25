@@ -124,7 +124,7 @@ export default function Repair() {
               <ul className="compare__list">
                 <li>The deck is saturated or delaminating</li>
                 <li>Granule loss is general rather than in patches</li>
-                <li>Repairs would exceed about 40% of a new roof</li>
+                <li>Repairs would exceed about 70% of a new roof</li>
                 <li>Your insurer has already approved a full scope</li>
               </ul>
             </Reveal>
