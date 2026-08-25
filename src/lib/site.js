@@ -321,8 +321,8 @@ export const DAMAGE = [
     id: "leak",
     label: "Active leak",
     code: "F-01",
-    urgency: "Same week",
-    note: "Same week · from $450",
+    urgency: "Same day",
+    note: "Same day · from $450",
     range: [450, 1800],
     hotspots: [{ u: -0.22, v: 0.62, face: "front", kind: "stain" }],
     symptom: "A stain on the ceiling, a drip in the attic, or damp along a chimney.",
@@ -334,8 +334,8 @@ export const DAMAGE = [
     id: "tiles",
     label: "Broken / missing tiles",
     code: "F-02",
-    urgency: "2–3 weeks",
-    note: "2–3 weeks · from $280",
+    urgency: "Same day",
+    note: "Same day · from $280",
     range: [280, 950],
     hotspots: [
       { u: 0.34, v: 0.4, face: "front", kind: "gap" },
@@ -350,8 +350,8 @@ export const DAMAGE = [
     id: "wind",
     label: "Wind / storm damage",
     code: "F-03",
-    urgency: "Emergency",
-    note: "Same-day dry-in · from $900",
+    urgency: "Same day",
+    note: "Same day dry-in · from $900",
     range: [900, 4200],
     hotspots: [
       { u: -0.72, v: 0.82, face: "front", kind: "tear" },
@@ -362,22 +362,6 @@ export const DAMAGE = [
     scope:
       "Emergency dry-in first — we get a membrane over the opening the same day. Then a documented scope with photographs, which is what your insurer will want if you are claiming.",
     signs: ["Missing sections after a storm", "Lifted ridge or hip caps", "Torn edge flashing"],
-  },
-  {
-    id: "gutter",
-    label: "Gutter & edge",
-    code: "F-04",
-    urgency: "4 weeks",
-    note: "4 weeks · from $220",
-    range: [220, 1100],
-    hotspots: [
-      { u: 0.0, v: 0.04, face: "front", kind: "streak" },
-      { u: 0.6, v: 0.04, face: "front", kind: "streak" },
-    ],
-    symptom: "Water running behind the gutter, or rot in the fascia board.",
-    scope:
-      "Re-hang or replace the run, fit new drip edge so water cannot track behind it, and cut out any fascia that has gone soft. Cheap now, expensive if left.",
-    signs: ["Water sheeting behind the gutter", "Soft or stained fascia", "Standing water in the run"],
   },
 ];
 
