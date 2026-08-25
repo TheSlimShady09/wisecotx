@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import CanvasStage from "../components/CanvasStage.jsx";
-import Figure from "../components/Figure.jsx";
 import Reveal from "../components/Reveal.jsx";
 import { Faq, ModuleHero, ModuleSwitch, OptionSet, SpecTable, TakeToQuote } from "../components/ModuleKit.jsx";
 import { COMPANY, DAMAGE, FAQ, MODULES, MODULE_ORDER } from "../lib/site.js";
@@ -20,7 +19,6 @@ export default function Repair() {
     ["Reported fault", fault.label],
     ["Fault code", fault.code],
     ["Response target", fault.urgency],
-    ["Typical range", `$${fault.range[0]} – $${fault.range[1]}`],
   ];
 
   return (
@@ -71,12 +69,7 @@ export default function Repair() {
                 rows={[
                   ["Fault code", fault.code],
                   ["Response", fault.urgency],
-                  [
-                    "Typical cost",
-                    <>
-                      $<Figure value={fault.range[0]} /> – $<Figure value={fault.range[1]} />
-                    </>,
-                  ],
+                  ["Locations", `${fault.hotspots.length}`],
                 ]}
               />
 
@@ -95,8 +88,8 @@ export default function Repair() {
               </div>
 
               <p className="estimate__caveat">
-                Ranges cover the ordinary version of each fault. We confirm on site before any work starts, and if it
-                turns out you do not need us, we will say so.
+                Every fault is confirmed on site before any work starts — and if it turns out you do not need us, we
+                will say so.
               </p>
 
               <TakeToQuote module="repair" summary={summary} label="Book a free inspection" />

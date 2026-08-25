@@ -322,8 +322,7 @@ export const DAMAGE = [
     label: "Active leak",
     code: "F-01",
     urgency: "Same day",
-    note: "Same day · from $450",
-    range: [450, 1800],
+    note: "Same day",
     hotspots: [{ u: -0.22, v: 0.62, face: "front", kind: "stain" }],
     symptom: "A stain on the ceiling, a drip in the attic, or damp along a chimney.",
     scope:
@@ -335,8 +334,7 @@ export const DAMAGE = [
     label: "Broken / missing tiles",
     code: "F-02",
     urgency: "Same day",
-    note: "Same day · from $280",
-    range: [280, 950],
+    note: "Same day",
     hotspots: [
       { u: 0.34, v: 0.4, face: "front", kind: "gap" },
       { u: 0.52, v: 0.68, face: "front", kind: "gap" },
@@ -351,8 +349,7 @@ export const DAMAGE = [
     label: "Wind / storm damage",
     code: "F-03",
     urgency: "Same day",
-    note: "Same day dry-in · from $900",
-    range: [900, 4200],
+    note: "Same day dry-in",
     hotspots: [
       { u: -0.72, v: 0.82, face: "front", kind: "tear" },
       { u: -0.55, v: 0.5, face: "front", kind: "tear" },
