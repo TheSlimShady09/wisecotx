@@ -146,6 +146,59 @@ export function getRoofTexture(kind) {
   return texture;
 }
 
+/** Running-bond brick: staggered courses with a raked mortar joint. */
+function drawBrick(ctx) {
+  ctx.fillStyle = "#a8a8a8";
+  ctx.fillRect(0, 0, SIZE, SIZE);
+
+  const rows = 16;
+  const cols = 6;
+  const h = SIZE / rows;
+  const w = SIZE / cols;
+
+  for (let r = 0; r < rows; r += 1) {
+    const y = r * h;
+    const offset = r % 2 ? w / 2 : 0;
+
+    for (let c = -1; c <= cols; c += 1) {
+      const x = c * w + offset;
+      // every brick gets its own value, which is what stops the wall
+      // reading as a printed pattern at distance
+      const v = 0.72 + (((r * 5 + c * 11) % 7) / 7) * 0.28;
+      ctx.fillStyle = `rgba(${v * 205},${v * 200},${v * 196},1)`;
+      ctx.fillRect(x + 1.5, y + 1.5, w - 3, h - 3);
+    }
+
+    // the raked bed joint, darker than the head joints
+    ctx.fillStyle = "rgba(0,0,0,0.32)";
+    ctx.fillRect(0, y + h - 1.5, SIZE, 1.5);
+  }
+}
+
+/**
+ * Brick veneer for the walls — the cladding almost every new build in
+ * the metroplex carries, drawn in the same grayscale modulation as the
+ * roof coverings so the palette stays in the tokens.
+ * @returns {THREE.CanvasTexture}
+ */
+export function getBrickTexture() {
+  const key = "__brick";
+  if (cache.has(key)) return cache.get(key);
+
+  const { el, ctx } = canvas2d();
+  drawBrick(ctx);
+
+  const texture = new THREE.CanvasTexture(el);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(1, 1);
+  texture.anisotropy = 4;
+  texture.colorSpace = THREE.SRGBColorSpace;
+
+  cache.set(key, texture);
+  return texture;
+}
+
 /** Water stain: a soft dark bloom with a couple of drip trails. */
 function drawStain(ctx) {
   ctx.clearRect(0, 0, SIZE, SIZE);

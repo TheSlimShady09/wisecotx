@@ -31,6 +31,7 @@ export function stagePropsForModule(id) {
     prop: scene.prop ?? null,
     modelScale: scene.modelScale ?? 1,
     complex: scene.complex ?? false,
+    roofOnly: scene.roofOnly ?? false,
     hotspots,
     markerLabel,
   };

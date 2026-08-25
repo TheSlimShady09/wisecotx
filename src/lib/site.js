@@ -153,15 +153,15 @@ export const MODULE_PREVIEW = {
     scene: {
       pitch: 1,
       hipInset: 0,
-      textureKind: "metal",
-      roughness: 0.32,
-      metalness: 0.85,
-      tone: 0.88,
+      textureKind: "shingles",
+      roughness: 0.92,
+      metalness: 0,
+      tone: 0.44,
       spin: 0.3,
-      // a big, finished two-storey build with a garage wing, a left wing
-      // and a rear ell — four separate roofs in all
-      complex: true,
-      modelScale: 1.12,
+      // the roof on its own, big in frame — this section is about the
+      // roofing system, so there is no house under it to look at
+      roofOnly: true,
+      modelScale: 1.5,
     },
   },
   repair: {

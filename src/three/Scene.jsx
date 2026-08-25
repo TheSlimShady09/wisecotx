@@ -14,6 +14,8 @@ const FRAMES = {
   standard: { position: [6.0, 3.25, 7.3], look: [0, 0.7, 0], fov: 36, target: [0, 0.5, 0] },
   // pulled back and lifted for the big multi-wing, four-roof build
   tall: { position: [8.8, 5.0, 10.6], look: [0, 1.7, 0], fov: 34, target: [0, 1.6, 0] },
+  // the roof shown on its own: closer and lower, so it fills the frame
+  roof: { position: [6.6, 3.2, 7.9], look: [0, 0.5, 0], fov: 36, target: [0, 0.45, 0] },
 };
 
 /* The environment preset is the one thing in this scene that fetches
@@ -58,7 +60,7 @@ export default function Scene({
   environment = false,
   ...house
 }) {
-  const frame = complex ? FRAMES.tall : FRAMES.standard;
+  const frame = house.roofOnly ? FRAMES.roof : complex ? FRAMES.tall : FRAMES.standard;
   return (
     <Canvas
       className="canvas-host"
