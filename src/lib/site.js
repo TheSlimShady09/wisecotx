@@ -459,7 +459,7 @@ export const CREDENTIALS = [
 ];
 
 export const ACCREDITATIONS = [
-  "State licensed GC #4471-RF",
+  "Licence GBC2035843",
   "GAF Master Elite contractor",
   "Xactimate certified estimators",
   "Manufacturer-backed warranties",
