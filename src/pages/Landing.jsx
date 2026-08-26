@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import CanvasStage from "../components/CanvasStage.jsx";
 import Reveal from "../components/Reveal.jsx";
+import Social from "../components/Social.jsx";
 import Works from "../components/Works.jsx";
 import ServicesSlideshow from "../components/ServicesSlideshow.jsx";
 import CountUp from "../components/CountUp.jsx";
@@ -259,6 +260,7 @@ export default function Landing() {
                   ["Hours", COMPANY.hours],
                 ]}
               />
+              <Social className="contact__social" />
             </Reveal>
           </div>
         </div>
