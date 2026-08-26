@@ -242,10 +242,10 @@ main {
 .hero__grid {
   display: grid;
   grid-template-rows: auto auto;
-  /* with the elevation gone the hero is two blocks — heading at the top
-     of the viewport, the three choices sitting on the fold */
-  align-content: space-between;
-  gap: var(--gap-xl) var(--gap-l);
+  /* with the elevation gone the hero is two blocks — heading and the
+     three choices, held together in the middle of the viewport */
+  align-content: center;
+  gap: var(--gap-l);
   width: 100%;
   min-height: 0;
 }
@@ -256,7 +256,9 @@ main {
 }
 .hero__head h1 {
   font-size: var(--step-5);
-  max-width: 16ch;
+  /* wide enough for the explicit break to hold both halves on one line
+     each — at 16ch the first half wrapped and made a third line */
+  max-width: 24ch;
   text-align: center;
 }
 
