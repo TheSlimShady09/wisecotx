@@ -133,3 +133,36 @@ export function useMediaQuery(query) {
 
   return matches;
 }
+
+const THEME_KEY = "wcg-theme";
+
+/** The active sheet, plus a toggle. An explicit choice is written to
+    `data-theme` on <html> and remembered; with nothing chosen the page
+    follows the OS, so this only latches once the visitor picks one. */
+export function useTheme() {
+  const [theme, setTheme] = useState("dark");
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: light)");
+    const sync = () => {
+      const chosen = document.documentElement.dataset.theme;
+      setTheme(chosen || (mq.matches ? "light" : "dark"));
+    };
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  const toggle = () => {
+    const next = theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem(THEME_KEY, next);
+    } catch {
+      /* private mode — the choice just does not survive the session */
+    }
+    setTheme(next);
+  };
+
+  return [theme, toggle];
+}

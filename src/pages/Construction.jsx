@@ -42,7 +42,7 @@ export default function Construction() {
         </div>
       </ModuleHero>
 
-      <section className="band" aria-labelledby="system-title">
+      <section className="band sheet--flip" aria-labelledby="system-title">
         <div className="shell shell--wide">
           <Reveal className="anno-rule">
             <span className="anno">The roofing system</span>

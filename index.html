@@ -3,7 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0B0B0C" />
+    <meta name="theme-color" content="#0B0B0C" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+
+    <!-- Restore the saved sheet before first paint, so the page never
+         flashes the wrong one. Nothing saved = follow the OS. -->
+    <script>
+      try {
+        var t = localStorage.getItem("wcg-theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
 
     <!-- Favicon (shown next to the result on Google) -->
     <link rel="icon" type="image/png" href="/wcg-logo.png" />

@@ -112,7 +112,7 @@ export default function Insurance() {
         steps={CARRIER_PROCESS}
       />
 
-      <section className="band" aria-labelledby="capacity-title">
+      <section className="band sheet--flip" aria-labelledby="capacity-title">
         <div className="shell">
           <Reveal className="head">
             <h2 id="capacity-title">Capacity, cover and cycle times.</h2>

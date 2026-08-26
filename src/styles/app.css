@@ -34,7 +34,7 @@ main {
     border-color var(--dur) var(--ease);
 }
 .nav--scrolled {
-  background: rgba(11, 11, 12, 0.86);
+  background: var(--chrome);
   backdrop-filter: blur(14px);
   border-bottom-color: var(--line-faint);
 }
@@ -54,6 +54,8 @@ main {
 .mark__img {
   height: 40px;
   width: auto;
+  /* the mark is drawn in white — the light sheet flips it */
+  filter: var(--mark-filter);
   transition: transform var(--dur-slow) var(--ease);
 }
 .mark:hover .mark__img {
@@ -116,6 +118,33 @@ main {
   gap: var(--gap-m);
   flex: none;
 }
+/* ---------- sheet toggle ---------- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.theme-toggle:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+.theme-toggle--drawer {
+  width: 100%;
+  height: 44px;
+  margin-top: var(--gap-s);
+}
+
 .nav__phone {
   color: var(--ink-muted);
   transition: color var(--dur-fast) var(--ease);
@@ -212,8 +241,11 @@ main {
 }
 .hero__grid {
   display: grid;
-  grid-template-rows: auto minmax(16rem, 1fr) auto;
-  gap: var(--gap-l);
+  grid-template-rows: auto auto;
+  /* with the elevation gone the hero is two blocks — heading at the top
+     of the viewport, the three choices sitting on the fold */
+  align-content: space-between;
+  gap: var(--gap-xl) var(--gap-l);
   width: 100%;
   min-height: 0;
 }
@@ -234,23 +266,6 @@ main {
   max-width: 34ch;
   font-size: var(--step-0);
   padding-bottom: 0.4rem;
-}
-
-.hero__stage-wrap {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-.hero__stage {
-  flex: 1;
-  min-height: 0;
-}
-.hero__readout {
-  flex: none;
-  margin-top: var(--gap-m);
-  text-align: center;
-  min-height: 1.2em;
-  transition: color var(--dur) var(--ease);
 }
 
 /* ---------- the three choices ---------- */
@@ -1286,19 +1301,12 @@ main {
     min-height: 0;
     padding-block: var(--gap-m) var(--gap-xl);
   }
-  .hero__grid {
-    grid-template-rows: auto auto auto;
-  }
   .hero__head {
     display: block;
   }
   .hero__sub {
     margin-top: var(--gap-m);
     max-width: 46ch;
-  }
-  .hero__stage {
-    height: 46vh;
-    min-height: 17rem;
   }
   .hero__choices {
     grid-template-columns: 1fr;
@@ -1481,6 +1489,7 @@ main {
 .gate__mark img {
   height: 38px;
   width: auto;
+  filter: var(--mark-filter);
 }
 
 .gate__body {
@@ -1788,7 +1797,7 @@ main {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 8px 30px var(--shadow);
   opacity: 0;
   transform: translateY(14px) scale(0.96);
   pointer-events: none;
@@ -2161,7 +2170,7 @@ main {
   align-items: center;
   gap: 0.1rem;
   padding: 0.3rem 0.6rem;
-  background: rgba(11, 11, 12, 0.82);
+  background: var(--chip);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
   backdrop-filter: blur(4px);
@@ -2178,7 +2187,7 @@ main {
   letter-spacing: 0.06em;
 }
 
-/* ---------- real Mapbox dark map ---------- */
+/* ---------- real Mapbox map ---------- */
 .stage--map .stage__frame {
   z-index: var(--z-raised);
 }
@@ -2202,7 +2211,7 @@ main {
   border-top: 1px solid var(--line);
 }
 .mapbox .mapboxgl-ctrl button .mapboxgl-ctrl-icon {
-  filter: invert(1);
+  filter: var(--ctrl-filter);
 }
 /* white location pin drawn in CSS */
 .mapbox-pin {
@@ -2212,7 +2221,7 @@ main {
   border: 2px solid var(--bg);
   border-radius: 50% 50% 50% 0;
   transform: rotate(-45deg);
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0 4px var(--ring);
   cursor: pointer;
 }
 .mapbox .mapboxgl-popup-content {
@@ -2272,6 +2281,7 @@ main {
 .gate__intro-logo {
   width: clamp(13rem, 40vw, 26rem);
   height: auto;
+  filter: var(--mark-filter);
 }
 .gate__intro-line {
   width: min(58vw, 20rem);
@@ -2349,7 +2359,7 @@ main {
   background: rgba(11, 11, 12, 0.7);
   border-radius: 2px;
   font-size: 0.6rem;
-  color: var(--ink);
+  color: #f2f1ee;
 }
 .work__cap {
   position: absolute;
@@ -2361,6 +2371,7 @@ main {
   gap: 0.15rem;
   padding: var(--gap-s);
   background: linear-gradient(to top, rgba(11, 11, 12, 0.92), rgba(11, 11, 12, 0.45) 60%, transparent);
+  color: #f2f1ee;
   pointer-events: none;
 }
 .work__title {
@@ -2371,30 +2382,6 @@ main {
 }
 .work__spec {
   font-size: 0.625rem;
-}
-
-/* ---------- hero blueprint (self-drawing elevation) ---------- */
-.hero-bp {
-  display: grid;
-  place-items: center;
-  color: var(--ink);
-  padding: clamp(1rem, 3vw, 2.5rem);
-}
-.hero-bp__svg {
-  width: min(100%, 34rem);
-  height: auto;
-  max-height: 100%;
-  overflow: visible;
-}
-.hero-bp__labels text {
-  fill: currentColor;
-  stroke: none;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 1.5px;
-}
-.hero-bp__tag {
-  color: var(--ink-dim);
 }
 
 /* ---------- inspection photo upload ---------- */
@@ -2469,7 +2456,7 @@ main {
   align-items: center;
   justify-content: center;
   background: rgba(11, 11, 12, 0.8);
-  color: var(--ink);
+  color: #f2f1ee;
   border: 1px solid var(--line);
   border-radius: 50%;
   font-size: 0.95rem;
@@ -2512,7 +2499,7 @@ section[id] {
   background: var(--surface-1);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 12px 34px var(--shadow-soft);
   opacity: 0;
   visibility: hidden;
   transform: translateY(6px);
@@ -2624,8 +2611,8 @@ section[id] {
   display: inline-block;
   white-space: nowrap;
   padding: 0.2rem 0.45rem;
-  background: rgba(11, 11, 12, 0.82);
-  border: 1px solid var(--line);
+  background: var(--chip);
+  border: 1px solid var(--line-strong);
   border-radius: 2px;
   font-family: var(--font-mono);
   font-size: 0.6rem;

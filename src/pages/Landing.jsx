@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import CanvasStage from "../components/CanvasStage.jsx";
-import HeroBlueprint from "../components/HeroBlueprint.jsx";
 import Reveal from "../components/Reveal.jsx";
 import Works from "../components/Works.jsx";
 import ServicesSlideshow from "../components/ServicesSlideshow.jsx";
@@ -126,12 +125,6 @@ export default function Landing() {
             </p>
           </div>
 
-          <div className="hero__stage-wrap">
-            {/* a blueprint that draws itself, in construction order — no
-                WebGL, and the three sections below carry the live 3D */}
-            <HeroBlueprint />
-          </div>
-
           <div className="hero__choices" role="group" aria-label="Choose the help you need">
             {MODULE_ORDER.map((id) => (
               <ChoiceCard key={id} id={id} active={active} onEnter={setActive} onLeave={() => setActive(null)} />
@@ -165,7 +158,7 @@ export default function Landing() {
       </section>
 
       {/* ---------- credentials ---------- */}
-      <section className="band" aria-labelledby="credentials-title">
+      <section className="band sheet--flip" aria-labelledby="credentials-title">
         <div className="shell">
           <Reveal className="head">
             <h2 id="credentials-title">
@@ -229,7 +222,7 @@ export default function Landing() {
       </section>
 
       {/* ---------- about / info ---------- */}
-      <section id="about" className="band" aria-labelledby="about-title">
+      <section id="about" className="band sheet--flip" aria-labelledby="about-title">
         <div className="shell">
           <Reveal className="anno-rule">
             <span className="anno">About</span>

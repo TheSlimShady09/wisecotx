@@ -20,12 +20,12 @@ function StaticMap() {
               <path key={`v${x}`} d={`M${x} 30 L${x} 250`} />
             ))}
           </g>
-          <circle cx="200" cy="150" r="46" fill="none" stroke="#F2F1EE" strokeWidth="1" opacity="0.4" />
-          <circle cx="200" cy="150" r="78" fill="none" stroke="#F2F1EE" strokeWidth="1" opacity="0.22" />
-          <g fill="none" stroke="#F2F1EE" strokeWidth="1.6">
+          <circle cx="200" cy="150" r="46" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.4" />
+          <circle cx="200" cy="150" r="78" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.22" />
+          <g fill="none" stroke="currentColor" strokeWidth="1.6">
             <path d="M200 150 L200 96" />
           </g>
-          <circle cx="200" cy="92" r="8" fill="#F2F1EE" />
+          <circle cx="200" cy="92" r="8" fill="currentColor" />
         </svg>
         <p className="fallback__note">DFW metroplex · service area</p>
       </div>

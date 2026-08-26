@@ -98,7 +98,7 @@ export default function Repair() {
         </div>
       </section>
 
-      <section className="band" aria-labelledby="honest-title">
+      <section className="band sheet--flip" aria-labelledby="honest-title">
         <div className="shell">
           <Reveal className="head">
             <h2 id="honest-title">Most roofs sent to us for replacement did not need replacing.</h2>

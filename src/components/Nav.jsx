@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+import { useTheme } from "../lib/hooks.js";
 import { COMPANY, MODULES, MODULE_ORDER } from "../lib/site.js";
 
 /* The three module pages live under a "Services" dropdown, not as their
@@ -11,6 +12,27 @@ const SECTIONS = [
   { label: "About", to: "/#about", note: "Who we are" },
   { label: "Contact", to: "/#contact", note: "Reach us" },
 ];
+
+/* Sun / moon in the same hairline weight as the rest of the drawings. */
+function ThemeToggle({ className = "" }) {
+  const [theme, toggle] = useTheme();
+  const dark = theme === "dark";
+  return (
+    <button type="button" className={`theme-toggle ${className}`} onClick={toggle} title={dark ? "Light mode" : "Dark mode"}>
+      <span className="sr-only">{dark ? "Switch to light mode" : "Switch to dark mode"}</span>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+        {dark ? (
+          <path d="M20.5 14.3A8.5 8.5 0 0 1 9.7 3.5a8.5 8.5 0 1 0 10.8 10.8Z" strokeLinejoin="round" />
+        ) : (
+          <g>
+            <circle cx="12" cy="12" r="4.2" />
+            <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6" strokeLinecap="round" />
+          </g>
+        )}
+      </svg>
+    </button>
+  );
+}
 
 function Mark() {
   return (
@@ -71,6 +93,7 @@ export default function Nav() {
         </nav>
 
         <div className="nav__end">
+          <ThemeToggle />
           <a className="nav__phone anno" href={`tel:${COMPANY.phone.replace(/[^\d+]/g, "")}`}>
             {COMPANY.phone}
           </a>
@@ -106,6 +129,7 @@ export default function Nav() {
           <a className="anno nav__drawer-phone" href={`tel:${COMPANY.phone.replace(/[^\d+]/g, "")}`}>
             {COMPANY.phone} · {COMPANY.hours}
           </a>
+          <ThemeToggle className="theme-toggle--drawer" />
         </div>
       </div>
     </header>

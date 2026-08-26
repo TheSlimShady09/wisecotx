@@ -13,7 +13,7 @@ function StaticSystem() {
     <div className="fallback">
       <div>
         <svg viewBox="0 0 320 220" role="img" aria-label="Exploded diagram of a roof system's layers">
-          <g stroke="#F2F1EE" strokeWidth="1.2" fill="none">
+          <g stroke="currentColor" strokeWidth="1.2" fill="none">
             {LAYERS.map((_, i) => {
               const y = 30 + i * 28;
               return <path key={i} d={`M70 ${y} l90 -26 l90 26 l-90 26 Z`} opacity={0.35 + i * 0.09} />;
