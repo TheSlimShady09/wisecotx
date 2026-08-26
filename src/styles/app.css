@@ -2575,7 +2575,7 @@ section[id] {
 }
 .system__benefit-text {
   color: var(--ink-muted);
-  font-size: var(--step--1);
+  font-size: var(--step-0);
   line-height: 1.55;
   max-width: 44ch;
 }
@@ -2589,14 +2589,18 @@ section[id] {
   display: flex;
   align-items: baseline;
   gap: var(--gap-s);
-  padding-block: 0.6rem;
+  padding-block: 0.7rem;
   border-bottom: 1px solid var(--line-faint);
-  font-size: var(--step--1);
+  font-size: var(--step-0);
   color: var(--ink-muted);
 }
 .system__layer-num {
   color: var(--ink-faint);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
+}
+/* the orbit/click hint under the model, sized with the rest of this page */
+.system__stage-col .config__hint {
+  font-size: 0.8rem;
 }
 
 /* 3D layer labels — the mono callout tags */
@@ -2608,7 +2612,7 @@ section[id] {
   border: 1px solid var(--line-strong);
   border-radius: 2px;
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink);
@@ -2647,14 +2651,14 @@ section[id] {
 }
 .roofsys-info__hint {
   font-family: var(--font-mono);
-  font-size: 0.66rem;
+  font-size: 0.78rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-faint);
 }
 .roofsys-info__role {
   display: block;
-  font-size: 0.62rem;
+  font-size: 0.74rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
@@ -2666,7 +2670,7 @@ section[id] {
 .roofsys-info__text {
   margin: 0;
   max-width: 60ch;
-  font-size: var(--step--1);
+  font-size: var(--step-0);
   line-height: 1.55;
   color: var(--ink-muted);
 }
