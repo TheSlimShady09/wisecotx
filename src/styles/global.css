@@ -169,8 +169,9 @@ ol {
 }
 
 /* ---------- theme swap ----------
-   `data-theme` on <html> is the explicit choice (the nav toggle, restored
-   before first paint). With nothing set, the OS preference decides. */
+   The dark sheet is the brand's own, so it is what everyone gets. The
+   light one is opt-in: the nav toggle writes `data-theme` on <html> and
+   the boot script restores it before first paint. */
 :root[data-theme="light"] {
   --bg: var(--l-bg);
   --surface-1: var(--l-surface-1);
@@ -192,30 +193,6 @@ ol {
   --mark-filter: var(--l-mark-filter);
   --ctrl-filter: var(--l-ctrl-filter);
   color-scheme: light;
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --bg: var(--l-bg);
-    --surface-1: var(--l-surface-1);
-    --surface-2: var(--l-surface-2);
-    --surface-3: var(--l-surface-3);
-    --ink: var(--l-ink);
-    --ink-muted: var(--l-ink-muted);
-    --ink-dim: var(--l-ink-dim);
-    --ink-faint: var(--l-ink-faint);
-    --accent: var(--l-accent);
-    --line: var(--l-line);
-    --line-strong: var(--l-line-strong);
-    --line-faint: var(--l-line-faint);
-    --chrome: var(--l-chrome);
-    --chip: var(--l-chip);
-    --shadow: var(--l-shadow);
-    --shadow-soft: var(--l-shadow-soft);
-    --ring: var(--l-ring);
-    --mark-filter: var(--l-mark-filter);
-    --ctrl-filter: var(--l-ctrl-filter);
-    color-scheme: light;
-  }
 }
 
 /* ---------- flipped slabs ----------
@@ -267,29 +244,34 @@ ol {
   --mark-filter: var(--d-mark-filter);
   --ctrl-filter: var(--d-ctrl-filter);
 }
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) .sheet--flip {
-    --bg: var(--d-bg);
-    --surface-1: var(--d-surface-1);
-    --surface-2: var(--d-surface-2);
-    --surface-3: var(--d-surface-3);
-    --ink: var(--d-ink);
-    --ink-muted: var(--d-ink-muted);
-    --ink-dim: var(--d-ink-dim);
-    --ink-faint: var(--d-ink-faint);
-    --accent: var(--d-accent);
-    --line: var(--d-line);
-    --line-strong: var(--d-line-strong);
-    --line-faint: var(--d-line-faint);
-    --chrome: var(--d-chrome);
-    --chip: var(--d-chip);
-    --shadow: var(--d-shadow);
-    --shadow-soft: var(--d-shadow-soft);
-    --ring: var(--d-ring);
-    --mark-filter: var(--d-mark-filter);
-    --ctrl-filter: var(--d-ctrl-filter);
-  }
+/* ---------- the bar stays on the dark sheet ----------
+   The nav is the one piece of chrome that never changes with the page,
+   so on the light sheet it keeps its black bar and white mark. */
+:root[data-theme="light"] .nav {
+  --bg: var(--d-bg);
+  --surface-1: var(--d-surface-1);
+  --surface-2: var(--d-surface-2);
+  --surface-3: var(--d-surface-3);
+  --ink: var(--d-ink);
+  --ink-muted: var(--d-ink-muted);
+  --ink-dim: var(--d-ink-dim);
+  --ink-faint: var(--d-ink-faint);
+  --accent: var(--d-accent);
+  --line: var(--d-line);
+  --line-strong: var(--d-line-strong);
+  --line-faint: var(--d-line-faint);
+  --chrome: var(--d-chrome);
+  --chip: var(--d-chip);
+  --shadow: var(--d-shadow);
+  --shadow-soft: var(--d-shadow-soft);
+  --ring: var(--d-ring);
+  --mark-filter: var(--d-mark-filter);
+  --ctrl-filter: var(--d-ctrl-filter);
+  background: var(--bg);
+  color: var(--ink);
+  border-bottom-color: var(--line-faint);
 }
+
 /* the slab's own edge does the separating */
 .sheet--flip + .band,
 .band + .sheet--flip {

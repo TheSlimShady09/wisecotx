@@ -3,11 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0B0B0C" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0B0B0C" />
 
     <!-- Restore the saved sheet before first paint, so the page never
-         flashes the wrong one. Nothing saved = follow the OS. -->
+         flashes the wrong one. Nothing saved = the dark sheet. -->
     <script>
       try {
         var t = localStorage.getItem("wcg-theme");
