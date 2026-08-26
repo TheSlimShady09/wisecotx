@@ -163,7 +163,7 @@ export default function Landing() {
         <div className="shell">
           <Reveal className="head">
             <h2 id="credentials-title">
-              Eighteen years on other people&rsquo;s roofs, and a licence we would rather not lose.
+              Twelve years on other people&rsquo;s roofs, and a reputation we would rather not lose.
             </h2>
             <p>
               Everything below is verifiable. Ask for the certificates before you sign anything, with us or with anyone
