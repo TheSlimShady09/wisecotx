@@ -60,7 +60,11 @@ function ModuleSection({ id, index }) {
   const preview = MODULE_PREVIEW[id];
 
   return (
-    <section id={id} className={`mpreview ${index % 2 ? "mpreview--flip" : ""}`} aria-labelledby={`${id}-title`}>
+    <section
+      id={id}
+      className={`mpreview ${index % 2 ? "mpreview--flip" : ""} ${id === "construction" ? "mpreview--roomy" : ""}`}
+      aria-labelledby={`${id}-title`}
+    >
       <div className="shell shell--wide mpreview__grid">
         <div className="mpreview__stage-col">
           <CanvasStage
