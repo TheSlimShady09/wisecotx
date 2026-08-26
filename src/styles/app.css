@@ -237,8 +237,8 @@ main {
 .hero {
   min-height: calc(100svh - var(--nav-h));
   display: flex;
-  /* the heading sits just under the bar, not floated off it */
-  padding-block: var(--gap-m) var(--gap-xl);
+  /* an inch of clearance under the bar before the heading */
+  padding-block: calc(var(--gap-m) + 1in) var(--gap-xl);
 }
 .hero__grid {
   display: grid;
