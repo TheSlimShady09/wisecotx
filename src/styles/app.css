@@ -1839,6 +1839,11 @@ main {
   /* the fixed nav must not cover the heading when we scroll here */
   scroll-margin-top: var(--nav-h);
 }
+/* construction opens the trio, so it carries more air around it than the
+   two sections that follow */
+.mpreview--roomy {
+  padding-block: 2in;
+}
 .mpreview__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
