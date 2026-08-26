@@ -83,7 +83,7 @@ export default function Works() {
         <Reveal className="anno-rule">
           <span className="anno">Projects</span>
         </Reveal>
-        <Reveal className="head">
+        <Reveal className="head head--oneline">
           <h2 id="works-title">Roofs we have finished, and the work behind them.</h2>
           <p>Photographs and short clips from recent jobs across the {COMPANY.region}.</p>
         </Reveal>

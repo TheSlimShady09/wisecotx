@@ -431,6 +431,10 @@ section {
   font-size: var(--step-1);
   max-width: 52ch;
 }
+/* a short intro that should sit on a single line, not break at 52ch */
+.head--oneline p {
+  max-width: none;
+}
 
 /* ---------- buttons ---------- */
 .btn {
