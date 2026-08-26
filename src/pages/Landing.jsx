@@ -160,12 +160,12 @@ export default function Landing() {
       {/* ---------- credentials ---------- */}
       <section className="band sheet--flip" aria-labelledby="credentials-title">
         <div className="shell">
-          <Reveal className="head">
+          <Reveal className="head head--oneline">
             <h2 id="credentials-title">
               Twelve years on other people&rsquo;s roofs, and a reputation we would rather not lose.
             </h2>
             <p>
-              Explore your options and verify before you sign anything, with WCG or with anyone else.
+              Explore your options before you sign anything, with WCG or with anyone else.
             </p>
           </Reveal>
 
