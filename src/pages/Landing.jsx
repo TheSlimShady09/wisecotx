@@ -120,11 +120,6 @@ export default function Landing() {
               <br />
               with your roof?
             </h1>
-            <p className="hero__sub">
-              {COMPANY.fullName} — a turn-key roofing and restoration general contractor serving the DFW metroplex. We
-              build, repair, and execute all insurance claim work turn-key from initial inspection to final completion.
-              Protecting your most valuable assets!
-            </p>
           </div>
 
           <div className="hero__choices" role="group" aria-label="Choose the help you need">

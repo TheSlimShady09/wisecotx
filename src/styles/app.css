@@ -252,20 +252,12 @@ main {
 
 .hero__head {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--gap-m) var(--gap-xl);
+  justify-content: center;
 }
 .hero__head h1 {
   font-size: var(--step-5);
   max-width: 16ch;
-}
-.hero__sub {
-  color: var(--ink-muted);
-  max-width: 34ch;
-  font-size: var(--step-0);
-  padding-bottom: 0.4rem;
+  text-align: center;
 }
 
 /* ---------- the three choices ---------- */
@@ -1300,13 +1292,6 @@ main {
   .hero {
     min-height: 0;
     padding-block: var(--gap-m) var(--gap-xl);
-  }
-  .hero__head {
-    display: block;
-  }
-  .hero__sub {
-    margin-top: var(--gap-m);
-    max-width: 46ch;
   }
   .hero__choices {
     grid-template-columns: 1fr;
