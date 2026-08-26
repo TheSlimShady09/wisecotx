@@ -440,18 +440,10 @@ export const CARRIER_PROCESS = [
 
 /* ---------- trust ---------- */
 export const CREDENTIALS = [
-  { value: "12", unit: "yrs", label: "Trading since 2014" },
-  { value: "2,400+", unit: "", label: "Roofs completed" },
-  { value: "$5M", unit: "", label: "General liability cover" },
-  { value: "4.9", unit: "/5", label: "Across 380 reviews" },
-];
-
-export const ACCREDITATIONS = [
-  "Licensed GC #GBC-2035843",
-  "GAF Master Elite contractor",
-  "Owens Corning Preferred Contractor",
-  "Xactimate certified estimators",
-  "Manufacturer-backed warranties",
+  { value: "12", unit: "yrs", label: "Building since 2014" },
+  { value: "100+", unit: "", label: "Projects completed" },
+  { value: "$2M", unit: "", label: "General liability cover" },
+  { value: "5.0", unit: "/5", label: "Customer rating" },
 ];
 
 export const PROJECTS = [

@@ -10,7 +10,6 @@ import MapStage from "../components/MapStage.jsx";
 import { SpecTable } from "../components/ModuleKit.jsx";
 import { stagePropsForModule } from "../lib/scene.js";
 import {
-  ACCREDITATIONS,
   COMPANY,
   CREDENTIALS,
   MODULES,
@@ -182,19 +181,6 @@ export default function Landing() {
               </Reveal>
             ))}
           </div>
-
-          <Reveal delay={0.1}>
-            <ul className="cred-list">
-              {ACCREDITATIONS.map((item) => (
-                <li key={item}>
-                  <span aria-hidden="true" className="cred-list__tick">
-                    ✓
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </Reveal>
         </div>
       </section>
 

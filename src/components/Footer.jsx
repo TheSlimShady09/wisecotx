@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { ACCREDITATIONS, COMPANY, MODULES, MODULE_ORDER } from "../lib/site.js";
+import { COMPANY, MODULES, MODULE_ORDER } from "../lib/site.js";
 
 /* Monochrome social glyphs — drawn in the page's own ink to hold the
    strictly-grayscale palette. */
@@ -68,14 +68,6 @@ export default function Footer() {
                 <li>
                   <Link to="/quote">Free inspection</Link>
                 </li>
-              </ul>
-            </div>
-            <div>
-              <p className="anno--dim foot__col-head">Credentials</p>
-              <ul className="foot__list foot__list--plain">
-                {ACCREDITATIONS.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
               </ul>
             </div>
             <div>
