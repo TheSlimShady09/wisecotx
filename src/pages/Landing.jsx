@@ -83,13 +83,15 @@ function ModuleSection({ id, index }) {
             <p className="mpreview__lead">{preview.lead}</p>
           </Reveal>
 
-          <Reveal delay={0.08}>
-            <ul className="mpreview__points">
-              {preview.highlights.map((point) => (
-                <li key={point}>{point}</li>
-              ))}
-            </ul>
-          </Reveal>
+          {preview.highlights.length ? (
+            <Reveal delay={0.08}>
+              <ul className="mpreview__points">
+                {preview.highlights.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+            </Reveal>
+          ) : null}
 
           <Reveal delay={0.14} className="btn-row mpreview__actions">
             <Link to={`/${id}`} className="btn btn--solid btn--lg">

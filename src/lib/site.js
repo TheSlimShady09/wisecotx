@@ -143,12 +143,8 @@ export const SERVICE_CATEGORIES = [
 export const MODULE_PREVIEW = {
   construction: {
     heading: "A roof isn't one layer. It's a system.",
-    lead: "Turn the 3D model and click any layer — decking, ice & water shield, underlayment, starter, shingles, hip & ridge — to see the exact job it does. This is the full WCG build, deck to ridge.",
-    highlights: [
-      "Interactive 3D — click any layer to see what it does",
-      "The full system: deck, underlayment, shingles, ridge & ventilation",
-      "Free on-site inspection · our own crews, nothing brokered out",
-    ],
+    lead: "Decking, ice & water shield, underlayment, starter, shingles, hip & ridge — every layer has an exact job to do. This is the full WCG build, deck to ridge.",
+    highlights: [],
     cta: "Explore the roof system",
     scene: {
       pitch: 1,
