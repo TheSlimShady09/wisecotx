@@ -523,7 +523,8 @@ main {
 }
 .mhero__title {
   font-size: var(--step-4);
-  max-width: 18ch;
+  /* wide enough to break in two, not three */
+  max-width: 26ch;
 }
 .mhero__blurb {
   margin-top: var(--gap-m);
@@ -1877,7 +1878,7 @@ main {
 }
 .mpreview__title {
   font-size: var(--step-3);
-  max-width: 18ch;
+  max-width: 26ch;
 }
 .mpreview__lead {
   margin-top: var(--gap-m);
@@ -2125,7 +2126,7 @@ main {
 .about__lead h2,
 .contact__head h2 {
   font-size: var(--step-3);
-  max-width: 16ch;
+  max-width: 28ch;
 }
 .about__body .prose + .prose {
   margin-top: var(--gap-m);

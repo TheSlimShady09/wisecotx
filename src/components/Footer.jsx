@@ -35,7 +35,7 @@ const SOCIAL = [
 export default function Footer() {
   return (
     <footer className="foot">
-      <div className="shell shell--wide">
+      <div className="shell">
         <div className="foot__top">
           <div className="foot__pitch">
             <h2 className="foot__title">Get it inspected before you commit.</h2>

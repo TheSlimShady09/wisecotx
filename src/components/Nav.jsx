@@ -65,7 +65,7 @@ export default function Nav() {
 
   return (
     <header className={`nav ${scrolled ? "nav--scrolled" : ""}`}>
-      <div className="nav__inner shell shell--wide">
+      <div className="nav__inner shell">
         <Mark />
 
         <nav className="nav__links" aria-label="Main">

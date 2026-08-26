@@ -371,10 +371,6 @@ p {
   margin-inline: auto;
   padding-inline: var(--pad-x);
 }
-.shell--wide {
-  max-width: 96rem;
-}
-
 section {
   position: relative;
 }
@@ -421,7 +417,8 @@ section {
 
 /* ---------- section heading pair ---------- */
 .head {
-  max-width: 54rem;
+  /* the full column — at 54rem these headings ran to three lines */
+  max-width: none;
 }
 .head p {
   margin-top: var(--gap-m);

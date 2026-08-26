@@ -65,7 +65,7 @@ function ModuleSection({ id, index }) {
       className={`mpreview ${index % 2 ? "mpreview--flip" : ""} ${id === "construction" ? "mpreview--roomy" : ""}`}
       aria-labelledby={`${id}-title`}
     >
-      <div className="shell shell--wide mpreview__grid">
+      <div className="shell mpreview__grid">
         <div className="mpreview__stage-col">
           <CanvasStage
             className="mpreview__stage"
@@ -117,7 +117,7 @@ export default function Landing() {
   return (
     <>
       <section className="hero" aria-labelledby="hero-title">
-        <div className="hero__grid shell shell--wide">
+        <div className="hero__grid shell">
           <div className="hero__head">
             <h1 id="hero-title">
               Where do you need help

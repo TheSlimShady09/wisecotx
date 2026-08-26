@@ -33,7 +33,7 @@ export default function Repair() {
       </ModuleHero>
 
       <section className="config" aria-labelledby="fault-title">
-        <div className="shell shell--wide config__grid">
+        <div className="shell config__grid">
           <div className="config__stage-col">
             <CanvasStage
               className="config__stage"
