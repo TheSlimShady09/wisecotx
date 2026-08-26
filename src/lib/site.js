@@ -541,7 +541,7 @@ export const FAQ = {
     },
     {
       q: "Do you handle the insurance paperwork?",
-      a: "We document everything to the standard carriers expect — timestamped photographs, moisture readings, a written scope — and we deal with your adjuster directly if you want us to.",
+      a: "We handle insurance claims turn-key, we document everything to the standards carriers expect — estimates, photographs, moisture readings, a complete scope — and we deal with your insurance adjusters directly.",
     },
   ],
   insurance: [
