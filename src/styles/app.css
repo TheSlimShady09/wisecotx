@@ -235,10 +235,11 @@ main {
    HERO — the entry screen
    ============================================================ */
 .hero {
-  min-height: calc(100svh - var(--nav-h));
+  /* no forced viewport height — with the heading and three cards the
+     leftover was dead space above the first section */
   display: flex;
   /* an inch of clearance under the bar before the heading */
-  padding-block: calc(var(--gap-m) + 1in) var(--gap-xl);
+  padding-block: calc(var(--gap-m) + 1in) var(--gap-2xl);
 }
 .hero__grid {
   display: grid;
