@@ -1409,8 +1409,8 @@ main {
     padding-block: var(--gap-xl);
   }
   .mpreview__stage {
-    height: 40vh;
-    min-height: 14rem;
+    height: 48vh;
+    min-height: 18rem;
   }
   .mpreview__title {
     font-size: var(--step-2);
@@ -1847,8 +1847,9 @@ main {
 }
 .mpreview__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: clamp(2rem, 5vw, 4.5rem);
+  /* the model takes the larger half — it is the point of the section */
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
   align-items: center;
 }
 /* alternate the side so three sections read as a rhythm, not a stack */
@@ -1857,7 +1858,7 @@ main {
 }
 
 .mpreview__stage {
-  height: min(56vh, 30rem);
+  height: min(74vh, 40rem);
 }
 
 .mpreview__body {
@@ -1923,7 +1924,7 @@ main {
     order: 0;
   }
   .mpreview__stage {
-    height: min(46vh, 24rem);
+    height: min(58vh, 30rem);
   }
   .mpreview__title {
     max-width: none;
