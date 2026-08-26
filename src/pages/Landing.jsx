@@ -165,8 +165,7 @@ export default function Landing() {
               Twelve years on other people&rsquo;s roofs, and a reputation we would rather not lose.
             </h2>
             <p>
-              Everything below is verifiable. Ask for the certificates before you sign anything, with us or with anyone
-              else.
+              Explore your options and verify before you sign anything, with WCG or with anyone else.
             </p>
           </Reveal>
 
