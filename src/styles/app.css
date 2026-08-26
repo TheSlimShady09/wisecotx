@@ -1953,6 +1953,29 @@ main {
   }
 }
 
+/* ---------- slim footer ---------- */
+.foot {
+  border-top: 1px solid var(--line-faint);
+  margin-top: var(--gap-2xl);
+  padding-block: var(--gap-m);
+}
+.foot__base {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-xs) var(--gap-l);
+  justify-content: space-between;
+}
+.foot__powered {
+  border-bottom: 1px solid transparent;
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.foot__powered:hover {
+  color: var(--ink);
+  border-bottom-color: var(--line-strong);
+}
+
 /* ---------- social row (contact) ---------- */
 .social {
   display: flex;

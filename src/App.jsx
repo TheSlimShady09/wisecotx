@@ -3,6 +3,7 @@ import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import Nav from "./components/Nav.jsx";
+import Footer from "./components/Footer.jsx";
 import EntryGate from "./components/EntryGate.jsx";
 import { hasEnteredBefore } from "./lib/entry.js";
 import Landing from "./pages/Landing.jsx";
@@ -110,6 +111,8 @@ export default function App() {
             </motion.div>
           </AnimatePresence>
         </main>
+
+        <Footer />
       </div>
     </>
   );
