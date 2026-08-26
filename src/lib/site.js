@@ -163,11 +163,7 @@ export const MODULE_PREVIEW = {
   repair: {
     heading: "Show us where it hurts.",
     lead: "Pick what you are seeing and the model marks where that fault normally starts. Most of them are cheaper than you fear.",
-    highlights: [
-      "Same-day dry-in for active leaks",
-      "We quote the repair, not the replacement, when a repair will hold",
-      "Documented to the standard insurers expect",
-    ],
+    highlights: [],
     cta: "Locate the damage",
     scene: {
       pitch: 1,
@@ -183,11 +179,7 @@ export const MODULE_PREVIEW = {
   insurance: {
     heading: "Scope you can put straight into the file.",
     lead: "Test squares, impact counts and matched photography on every slope — with a repair-versus-replace opinion we will stand behind.",
-    highlights: [
-      "Inspection inside 72 hours, report in 3–5 days",
-      "Xactimate-aligned, supplements itemised separately",
-      "$5M general liability, fully bonded",
-    ],
+    highlights: [],
     cta: "Review the process",
     scene: {
       pitch: 1,
