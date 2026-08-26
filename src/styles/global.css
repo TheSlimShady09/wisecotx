@@ -144,7 +144,8 @@ ol {
   --gap-m: 1.5rem;
   --gap-l: 2.5rem;
   --gap-xl: 4rem;
-  --gap-2xl: 6.5rem;
+  /* section padding — an inch a side, so two sections sit 2in apart */
+  --gap-2xl: 1in;
   --gap-3xl: 9rem;
 
   --shell: 78rem;
