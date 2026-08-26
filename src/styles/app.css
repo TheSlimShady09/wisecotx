@@ -237,15 +237,16 @@ main {
 .hero {
   min-height: calc(100svh - var(--nav-h));
   display: flex;
-  padding-block: var(--gap-l) var(--gap-xl);
+  /* the heading sits just under the bar, not floated off it */
+  padding-block: var(--gap-m) var(--gap-xl);
 }
 .hero__grid {
   display: grid;
   grid-template-rows: auto auto;
-  /* with the elevation gone the hero is two blocks — heading and the
-     three choices, held together in the middle of the viewport */
-  align-content: center;
-  gap: var(--gap-l);
+  /* with the elevation gone the hero is two blocks — the heading close
+     under the bar, then air before the three choices */
+  align-content: start;
+  gap: var(--gap-2xl);
   width: 100%;
   min-height: 0;
 }
