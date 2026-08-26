@@ -199,12 +199,8 @@ export default function Landing() {
               <p className="prose">
                 {COMPANY.fullName} is a turn-key residential and commercial roofing and restoration general contractor
                 serving the {COMPANY.region}. We were started by local builders, roofers, and insurance experts to give
-                homeowners and business owners the value and quality they deserve.
-              </p>
-              <p className="prose">
-                Your home, business, and real estate are the foundation of your success — so we carry the complexity of
-                the insurance claim, the construction, and the restoration, and hand back a finished, successful asset on
-                an expedited timeframe.
+                homeowners and business owners the value and quality they deserve. Your home, business, and real estate
+                are the foundation of your success.
               </p>
               <SpecTable
                 className="about__facts"
