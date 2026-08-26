@@ -1840,10 +1840,13 @@ main {
   /* the fixed nav must not cover the heading when we scroll here */
   scroll-margin-top: var(--nav-h);
 }
-/* construction opens the trio, so it carries more air around it than the
-   two sections that follow */
-.mpreview--roomy {
+/* construction opens the trio: more air around it than the two sections
+   that follow, and a smaller model than theirs */
+.mpreview--construction {
   padding-block: 2in;
+}
+.mpreview--construction .mpreview__stage {
+  height: min(44vh, 23rem);
 }
 .mpreview__grid {
   display: grid;

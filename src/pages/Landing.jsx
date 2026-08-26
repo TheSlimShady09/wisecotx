@@ -62,7 +62,7 @@ function ModuleSection({ id, index }) {
   return (
     <section
       id={id}
-      className={`mpreview ${index % 2 ? "mpreview--flip" : ""} ${id === "construction" ? "mpreview--roomy" : ""}`}
+      className={`mpreview ${index % 2 ? "mpreview--flip" : ""} ${id === "construction" ? "mpreview--construction" : ""}`}
       aria-labelledby={`${id}-title`}
     >
       <div className="shell mpreview__grid">
