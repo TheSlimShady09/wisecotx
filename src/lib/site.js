@@ -440,7 +440,7 @@ export const CARRIER_PROCESS = [
 
 /* ---------- trust ---------- */
 export const CREDENTIALS = [
-  { value: "18", unit: "yrs", label: "Trading since 2008" },
+  { value: "12", unit: "yrs", label: "Trading since 2014" },
   { value: "2,400+", unit: "", label: "Roofs completed" },
   { value: "$5M", unit: "", label: "General liability cover" },
   { value: "4.9", unit: "/5", label: "Across 380 reviews" },
