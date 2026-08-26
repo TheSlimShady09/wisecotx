@@ -15,7 +15,6 @@ import {
   MODULES,
   MODULE_ORDER,
   MODULE_PREVIEW,
-  TESTIMONIALS,
 } from "../lib/site.js";
 
 function ChoiceCard({ id, active, onEnter, onLeave }) {
@@ -185,27 +184,6 @@ export default function Landing() {
 
       {/* ---------- projects gallery ---------- */}
       <Works />
-
-      {/* ---------- testimonials ---------- */}
-      <section className="band" aria-labelledby="voices-title">
-        <div className="shell">
-          <Reveal className="head">
-            <h2 id="voices-title">What they said afterwards.</h2>
-          </Reveal>
-
-          <div className="voices">
-            {TESTIMONIALS.map((item, i) => (
-              <Reveal key={item.name} delay={i * 0.08} className="voice" as="figure">
-                <blockquote className="voice__quote">{item.quote}</blockquote>
-                <figcaption className="voice__by">
-                  <span className="voice__name">{item.name}</span>
-                  <span className="anno--dim">{item.role}</span>
-                </figcaption>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ---------- about / info ---------- */}
       <section id="about" className="band sheet--flip" aria-labelledby="about-title">

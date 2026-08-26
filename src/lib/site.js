@@ -471,30 +471,6 @@ export const WORKS = [
   { id: "w7", title: "Roofing in Decatur, TX", spec: "On site", type: "video", src: "/works/decatur-tx.mp4" },
 ];
 
-export const TESTIMONIALS = [
-  {
-    quote:
-      "They found the leak in twenty minutes after two other firms told us the whole roof had to come off. It was a flashing detail. Cost us four hundred dollars.",
-    name: "Marianne D.",
-    role: "Homeowner, Ashcombe",
-    module: "repair",
-  },
-  {
-    quote:
-      "The estimate we saw online was within about six percent of the final invoice, and nothing was added quietly along the way. That is rarer than it should be.",
-    name: "Tobias R.",
-    role: "Homeowner, Northgate",
-    module: "construction",
-  },
-  {
-    quote:
-      "Their scopes come in clean. Photographs are labelled, supplements are separated out, and the cycle time holds. We route storm volume to them first.",
-    name: "Claims Operations",
-    role: "Regional carrier, name withheld",
-    module: "insurance",
-  },
-];
-
 export const FAQ = {
   construction: [
     {

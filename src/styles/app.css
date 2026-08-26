@@ -452,40 +452,6 @@ main {
 }
 
 /* ============================================================
-   TESTIMONIALS
-   ============================================================ */
-.voices {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-  gap: var(--gap-l);
-  margin-top: var(--gap-l);
-}
-.voice {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-m);
-  padding-top: var(--gap-m);
-  border-top: 1px solid var(--line);
-}
-.voice__quote {
-  font-family: var(--font-display);
-  font-size: var(--step-1);
-  font-weight: 400;
-  line-height: 1.4;
-  letter-spacing: -0.015em;
-  text-wrap: pretty;
-}
-.voice__by {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  margin-top: auto;
-}
-.voice__name {
-  font-size: var(--step--1);
-}
-
-/* ============================================================
    MODULE HERO
    ============================================================ */
 .mhero {
