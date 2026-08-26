@@ -14,7 +14,7 @@ export const COMPANY = {
     city: "Flower Mound, TX 75028",
   },
   region: "DFW metroplex",
-  hours: "Mon–Sat, 7:00–19:00",
+  hours: "Mon–Sat, 7am–6pm · Emergency 24/7",
   license: "Serving Dallas–Fort Worth, TX",
   social: {
     facebook: "https://www.facebook.com/wisecg",
