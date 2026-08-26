@@ -1188,7 +1188,7 @@ main {
 .foot__title {
   font-size: var(--step-3);
   margin-bottom: var(--gap-m);
-  max-width: 16ch;
+  max-width: 20ch;
 }
 .foot__actions {
   margin-top: var(--gap-l);
@@ -1459,7 +1459,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: var(--gap-l);
-  max-width: 96rem;
+  max-width: var(--shell);
   margin-inline: auto;
   padding: clamp(1.25rem, 3vw, 2.25rem) var(--pad-x) clamp(1.5rem, 3vw, 2.5rem);
 }

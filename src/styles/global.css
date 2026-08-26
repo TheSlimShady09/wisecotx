@@ -417,8 +417,13 @@ section {
 
 /* ---------- section heading pair ---------- */
 .head {
-  /* the full column — at 54rem these headings ran to three lines */
   max-width: none;
+}
+/* Section headings run long — at step-4 the worst of them took three
+   lines. One step down, capped at 44ch, every one of them breaks in two. */
+.head h2 {
+  font-size: var(--step-3);
+  max-width: 44ch;
 }
 .head p {
   margin-top: var(--gap-m);
