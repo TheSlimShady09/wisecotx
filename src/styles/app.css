@@ -332,7 +332,8 @@ main {
   line-height: 1.05;
 }
 .choice__tagline {
-  color: var(--ink-muted);
+  /* full ink, not the muted ramp — these read as grey otherwise */
+  color: var(--ink);
   font-size: var(--step--1);
 }
 
@@ -361,7 +362,7 @@ main {
   padding-top: var(--gap-s);
   border-top: 1px solid var(--line-faint);
   margin-top: var(--gap-xs);
-  color: var(--ink-muted);
+  color: var(--ink);
   font-size: var(--step--1);
   line-height: 1.5;
 }
