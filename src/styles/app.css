@@ -279,16 +279,21 @@ main {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  padding: var(--gap-m);
+  padding: var(--gap-l) var(--gap-m) var(--gap-m);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: linear-gradient(180deg, var(--surface-1), rgba(21, 21, 23, 0.35));
+  /* softer than the blueprint's 3px — these are the one place on the
+     page a visitor is meant to want to touch */
+  border-radius: 10px;
+  /* a flat surface: the old gradient ended in a hardcoded dark, which
+     read as a muddy grey once the light sheet arrived */
+  background: var(--surface-1);
   overflow: hidden;
   /* scale from the card itself; a transform never reflows its neighbours */
   transform-origin: center;
   transition:
     border-color var(--dur) var(--ease),
     background var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
     transform var(--dur) var(--ease);
 }
 /* a hairline that draws itself across the top on focus */
@@ -298,7 +303,7 @@ main {
   top: 0;
   left: 0;
   right: 0;
-  height: 1px;
+  height: 2px;
   background: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
@@ -307,7 +312,8 @@ main {
 /* only the hovered/focused card enlarges; the other two are untouched */
 .choice.is-active {
   border-color: var(--line-strong);
-  background: linear-gradient(180deg, var(--surface-2), var(--surface-1));
+  background: var(--surface-2);
+  box-shadow: 0 14px 40px var(--shadow);
   transform: scale(1.05);
   z-index: var(--z-raised);
 }
